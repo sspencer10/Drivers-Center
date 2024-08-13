@@ -6,7 +6,7 @@ struct SpeedometerView: View {
     @StateObject var carPlay: LocationManager
     
     let minValue = 0.0
-    let maxValue = 120.0
+    let maxValue = 125.0
     
     var body: some View {
         
