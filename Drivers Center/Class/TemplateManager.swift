@@ -47,6 +47,7 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
     @AppStorage("current_f", store: UserDefaults(suiteName: "group.DBJQ6YJG82.com.rightdevllc.CarSample2")) var current_f: Double = 0.0
     
     var url: URL!
+    var url2: URL!
     var myTimer: Timer?
     
     override init() {
@@ -154,6 +155,14 @@ extension TemplateManager {
             }
         }
     
+    func openWeather(listItem: CPListItem) {
+        listItem.handler = { item, completion in
+            // opens map url
+            self.carplayScene?.open(self.url2, options: nil, completionHandler: nil)
+            completion()
+        }
+    }
+    
     
     func myTemplate() -> CPListTemplate {
         Task {
@@ -197,11 +206,20 @@ extension TemplateManager {
             Task {
                 await wvm.fetchWeather()
             }
-            //weatherViewModel.fetchWeather(for: ationString)
-            //if let weather = weatherViewModel.weather {
+
+            // if google maps installed
+            if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
+                let urlString = "comgooglemaps://?center=\(lm.latitude),\(lm.longitude)&zoom=14&views=traffic"
+                url = URL(string: urlString)
+            // else open Apple Maps
+            } else {
+                let urlString = "https://maps.apple.com/?daddr=\(lm.latitude),\(lm.longitude)&dirflg=d"
+                url = URL(string: urlString)
+            }
             
-            let urlString = "comgooglemaps://?center=\(lm.latitude),\(lm.longitude)&zoom=14&views=traffic"
-            url = URL(string: urlString)
+            let radarString = "myradar://?lat=\(lm.latitude)&lon=\(lm.longitude)&zoom=14&views=traffic"
+            url2 = URL(string: radarString)
+            
             
             let listItem = CPListItem(text: String(format: "%.1f", lm.speed, " MPH"), detailText: lm.directionString)
             listItem.setImage(UIImage(systemName: "speedometer")!)
@@ -210,8 +228,11 @@ extension TemplateManager {
             let listItem2 = CPListItem(text: ("\(String(wvm.temp))"), detailText: ("\(String(format: "%.0f", wvm.today_min))°/\(String(format: "%.0f", wvm.today_max))°"))
             listItem2.setImage(UIImage(systemName: "thermometer.sun")!)
             listItem2.userInfo = "2"
+            if (UIApplication.shared.canOpenURL(URL(string:"myradar://")!)) {
+                openWeather(listItem: listItem2)
+            }
             
-            let listItem3 = CPListItem(text: ("\(altitudeString)"), detailText: "Altitude")
+            let listItem3 = CPListItem(text: String(format: "%.1f", lm.altitude, " FT"), detailText: "Altitude")
             listItem3.setImage(UIImage(systemName: "mountain.2.circle")!)
             listItem3.userInfo = "3"
             
