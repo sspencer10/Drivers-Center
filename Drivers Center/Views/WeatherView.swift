@@ -2,8 +2,8 @@ import SwiftUI
 
 struct WeatherView: View {
     
-    @ObservedObject private var viewModel = WeatherViewModel()
-    @StateObject private var templateManager = LocationManager()
+    @StateObject private var viewModel = WeatherViewModel()
+    @StateObject private var templateManager = LocationManager.shared
     @State private var city: String = ""
     @State private var q: String = ""
     @State private var x: String = ""
@@ -17,7 +17,7 @@ struct WeatherView: View {
     
     var body: some View {
         ZStack {
-
+            
             
             ScrollView {
                 if viewModel.showFirstView {
@@ -191,23 +191,17 @@ struct WeatherView: View {
             .foregroundColor(Color("text"))
             .coordinateSpace(name: "pullToRefresh")
             .onAppear {
-                templateManager.setup()
-                let location = viewModel.getLoc()
-                print("Location: \(location)")
-                Task {
-                    await viewModel.fetchWeather()
-                    if (location != "42.1673839, -92.0156213") {
-                        viewModel.showFirstView = false
-                        viewModel.showSecondView = true
-                    }
-                }
-                viewModel.onMySubmit()
+                //templateManager.setup()
             }
+            
+            //viewModel.onMySubmit()
+            
         }
         .padding(.bottom,80)
         //.padding(.top, 50)
     }
 }
+
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {

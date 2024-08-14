@@ -31,6 +31,7 @@
 		6B0A85852C6A98170097265A /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85812C6A98170097265A /* WeatherViewModel.swift */; };
 		6B0A85862C6A98170097265A /* CarplayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85822C6A98170097265A /* CarplayContentView.swift */; };
 		6B0A858A2C6A99C00097265A /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85892C6A99C00097265A /* LocationManager.swift */; };
+		6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA88A862C6AFB00007844C1 /* CarPlay.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,8 @@
 		6B0A85822C6A98170097265A /* CarplayContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarplayContentView.swift; sourceTree = "<group>"; };
 		6B0A85882C6A99600097265A /* Drivers-Center-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Drivers-Center-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6B0A85892C6A99C00097265A /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		6BA88A842C6AFAE3007844C1 /* Drivers Center.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Drivers Center.entitlements"; sourceTree = "<group>"; };
+		6BA88A862C6AFB00007844C1 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +82,7 @@
 			children = (
 				6B0A854B2C6A95030097265A /* Drivers Center */,
 				6B0A854A2C6A95030097265A /* Products */,
+				6BA88A852C6AFB00007844C1 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +97,7 @@
 		6B0A854B2C6A95030097265A /* Drivers Center */ = {
 			isa = PBXGroup;
 			children = (
+				6BA88A842C6AFAE3007844C1 /* Drivers Center.entitlements */,
 				6B0A85882C6A99600097265A /* Drivers-Center-Info.plist */,
 				6B0A854C2C6A95030097265A /* Drivers_CenterApp.swift */,
 				6B0A85872C6A981D0097265A /* Class */,
@@ -151,6 +157,14 @@
 				6B0A85892C6A99C00097265A /* LocationManager.swift */,
 			);
 			path = Class;
+			sourceTree = "<group>";
+		};
+		6BA88A852C6AFB00007844C1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6BA88A862C6AFB00007844C1 /* CarPlay.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -375,20 +389,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Drivers Center/Drivers Center.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Drivers Center/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = ZUL32453KR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Drivers-Center-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Drivers Center";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Allow for background location to get speed";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required to get speed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -407,20 +426,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Drivers Center/Drivers Center.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Drivers Center/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = ZUL32453KR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Drivers-Center-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Drivers Center";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Allow for background location to get speed";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required to get speed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

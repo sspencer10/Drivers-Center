@@ -97,6 +97,6 @@ struct CompassView : View {
 
 struct CompassView_Previews: PreviewProvider {
     static var previews: some View {
-        CompassView(carPlay: LocationManager())
+        CompassView(carPlay: LocationManager.shared)
     }
 }

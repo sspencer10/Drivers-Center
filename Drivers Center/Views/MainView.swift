@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     @State private var tabSelection = 1
-    @StateObject var templateManager = TemplateManager()
+    @StateObject var locationManager = LocationManager.shared
     var body: some View {
 
             ZStack(alignment: .bottom) {
@@ -12,7 +12,7 @@ struct MainView: View {
                             Label("Weather", systemImage: "sun.max.fill")
                         }
                         .tag(1)
-                    SpeedometerView(carPlay: LocationManager())
+                    SpeedometerView(carPlay: LocationManager.shared, wvm: WeatherViewModel())
                         .tabItem {
                             Label("Speed", systemImage: "gauge.with.dots.needle.33percent")
                         }
@@ -23,12 +23,12 @@ struct MainView: View {
                         }
                         .tag(3)
                     
-                    CompassView(carPlay: LocationManager())
+                    CompassView(carPlay: LocationManager.shared)
                         .tabItem {
                             Label("Compass", systemImage: "binoculars.circle")
                         }
                         .tag(4)
-                    ElevationView(carPlay: LocationManager())
+                    ElevationView(carPlay: LocationManager.shared)
                         .tabItem {
                             Label("Elevation", systemImage: "mountain.2.circle")
                         }
@@ -36,9 +36,11 @@ struct MainView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
-                TabButtons(selectedTab: $tabSelection, carPlay: LocationManager())
+                TabButtons(selectedTab: $tabSelection, carPlay: LocationManager.shared)
             }
-        }
+            .onAppear {
+                //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
+            }        }
     
 }
 

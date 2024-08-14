@@ -2,7 +2,10 @@ import Foundation
 import SwiftUI
 
 class WeatherViewModel: ObservableObject {
-    @ObservedObject var lm = LocationManager()
+    
+    public static var shared = WeatherViewModel()
+    
+    var lm = LocationManager.shared
     @Published var weather: WeatherResponse?
     @Published var loc: String?
     @Published var min: Double?
@@ -18,10 +21,19 @@ class WeatherViewModel: ObservableObject {
     @Published var today_min: Double = 0.0
     @Published var today_max: Double = 0.0
     
-    var timer: Timer?
-
+    
+    var timer: Timer
+    init() {
+        timer = Timer()
+        Task {
+            await fetchWeather()
+        }
+    }
+    
     func fetchWeather() async {
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=fac0be0f592847258ad230125240108&q=Vinton,IA&alerts=yes&days=7"
+        print("FetchWeather")
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=fac0be0f592847258ad230125240108&q=\(lm.latitude), \(lm.longitude)&alerts=yes&days=7"
+        print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else { return }
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -34,6 +46,11 @@ class WeatherViewModel: ObservableObject {
                         self.day = decodedData.current.is_day
                         print(self.count)
                         self.onMySubmit()
+                        self.today_min = decodedData.forecast.forecastday[0].day.mintemp_f
+                        self.today_max = decodedData.forecast.forecastday[0].day.maxtemp_f
+                        self.showFirstView = false
+                        self.showSecondView = true
+                        print("urlString: done")
                     }
                 } catch {
                     print("Error decoding data: \(error)")
@@ -51,8 +68,10 @@ class WeatherViewModel: ObservableObject {
             UserDefaults.standard.setValue(loc, forKeyPath: "loc")
         }
         if (UserDefaults.standard.string(forKey: "loc") != nil) {
+            print(UserDefaults.standard.string(forKey: "loc") ?? "42.167383, -92.015621")
             return UserDefaults.standard.string(forKey: "loc")!
         } else {
+            print("42.1673839, -92.0156213")
             return "42.1673839, -92.0156213"
         }
     }
@@ -70,17 +89,14 @@ class WeatherViewModel: ObservableObject {
     func onMySubmit() {
         showSecondView = true
         showFirstView = false
-        if (timer != nil) {
-            timer?.invalidate()
-        }
+        timer.invalidate()
         print("fetch weather")
         if (getLoc() != "42.1673839, -92.0156213") {
             timer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) {
                 [self] timer in
                 Task {
                     await fetchWeather()
-                    showSecondView = true
-                    showFirstView = false
+
                 }
             }
         } else {
@@ -88,8 +104,7 @@ class WeatherViewModel: ObservableObject {
                 [self] timer in
                 Task {
                     await fetchWeather()
-                    showSecondView = true
-                    showFirstView = false
+
                 }
             }
         }

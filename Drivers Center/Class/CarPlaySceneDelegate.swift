@@ -5,6 +5,41 @@ Abstract:
 `CarPlaySceneDelegate` is the delegate for the `CPTemplateApplicationScene` on the CarPlay display.
 */
 /*
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    </array>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>CPTemplateApplicationSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneClassName</key>
+                    <string>CPTemplateApplicationScene</string>
+                    <key>UISceneConfigurationName</key>
+                    <string>CarPlay Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>$(PRODUCT_MODULE_NAME).CarPlaySceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>location</string>
+        <string>processing</string>
+    </array>
+</dict>
+</plist>
+*/
+
 import CarPlay
 import UIKit
 
@@ -25,12 +60,14 @@ class CarPlaySceneDelegate: NSObject {
     func sceneDidDisconnect(_ scene: UIScene) {
         if scene.session.configuration.name == "TemplateSceneConfiguration" {
             print("Template application scene did disconnect.")
+            //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
         }
     }
     
     func sceneDidBecomeActive(_ scene: UIScene) {
         if scene.session.configuration.name == "TemplateSceneConfiguration" {
             print("Template application scene did become active.")
+            //UserDefaults.standard.setValue(true, forKey: "isCarPlay")
         }
     }
     
@@ -57,4 +94,4 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         print("Template application scene did disconnect.")
     }
 }
-*/
+
