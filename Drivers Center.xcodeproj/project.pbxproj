@@ -31,7 +31,6 @@
 		6B0A85852C6A98170097265A /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85812C6A98170097265A /* WeatherViewModel.swift */; };
 		6B0A85862C6A98170097265A /* CarplayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85822C6A98170097265A /* CarplayContentView.swift */; };
 		6B0A858A2C6A99C00097265A /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85892C6A99C00097265A /* LocationManager.swift */; };
-		6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA88A862C6AFB00007844C1 /* CarPlay.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,7 +69,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
