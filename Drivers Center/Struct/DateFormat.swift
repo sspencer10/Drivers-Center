@@ -24,6 +24,16 @@ extension String {
         return daySuffix(date: modDay)
     }
     
+    func toDayOfWeek() -> String {
+        guard let date = self.toDate() else { return self }
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "EEE"
+        let day = dateFormatter.string(from: date)
+        //let modDay = deleteLeadingZeros(inputStr: day)
+        return "\(day)"
+    }
+    
     func deleteLeadingZeros(inputStr: String) -> String {
       var resultStr = inputStr
         

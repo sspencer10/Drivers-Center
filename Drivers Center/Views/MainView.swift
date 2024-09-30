@@ -2,17 +2,20 @@ import SwiftUI
 
 struct MainView: View {
     @State private var tabSelection = 1
+    @State var carplay: Bool = false
     @StateObject var locationManager = LocationManager.shared
+    @StateObject var tm = TemplateManager()
     var body: some View {
-
-            ZStack(alignment: .bottom) {
+        
+        ZStack(alignment: .bottom) {
+            if !carplay {
                 TabView(selection: $tabSelection) {
                     WeatherView()
                         .tabItem {
                             Label("Weather", systemImage: "sun.max.fill")
                         }
                         .tag(1)
-                    SpeedometerView(carPlay: LocationManager.shared, wvm: WeatherViewModel())
+                    RetroSpeedometerView(lm: LocationManager.shared)
                         .tabItem {
                             Label("Speed", systemImage: "gauge.with.dots.needle.33percent")
                         }
@@ -28,19 +31,30 @@ struct MainView: View {
                             Label("Compass", systemImage: "binoculars.circle")
                         }
                         .tag(4)
-                    ElevationView(carPlay: LocationManager.shared)
+                    MusicView(viewModel: MediaItemViewModel())
                         .tabItem {
-                            Label("Elevation", systemImage: "mountain.2.circle")
+                            Label("Music", systemImage: "play.circle")
                         }
                         .tag(5)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
                 TabButtons(selectedTab: $tabSelection, carPlay: LocationManager.shared)
+            } else {
+                Text("CarPlay Active")
             }
-            .onAppear {
-                //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
-            }        }
+
+        }.onAppear {
+            //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
+        }
+        .onChange(of: tm.isCarPlay) {
+            if tm.isCarPlay {
+                carplay = true
+            } else {
+                carplay = false
+            }
+        }
+    }
     
 }
 
@@ -48,6 +62,8 @@ struct MainView: View {
 struct TabButtons: View {
     @Binding var selectedTab: Int
     @StateObject var carPlay: LocationManager
+    @StateObject var tm = TemplateManager()
+
     @State var showingPopover = false
     
     var body: some View {
@@ -101,9 +117,7 @@ struct TabButtons: View {
                 
                     
             }
-            .onLongPressGesture(perform: {
-                showingPopover = true
-            })
+
             
             Spacer()
             VStack() {
@@ -123,13 +137,13 @@ struct TabButtons: View {
             
             Spacer()
             VStack() {
-                Image(systemName: "mountain.2.circle")
+                Image(systemName: "play.circle")
                     .foregroundColor(selectedTab == 5 ? .red : .gray)
                     .scaleEffect(1.5)
                     .onTapGesture {
                         selectedTab = 5
                     }
-                Text("\nElevation")
+                Text("\nMusic")
                     .font(.caption)
                     .foregroundColor(selectedTab == 5 ? .red : .gray)
                     .onTapGesture {

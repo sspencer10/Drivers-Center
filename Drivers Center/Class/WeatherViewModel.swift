@@ -20,6 +20,8 @@ class WeatherViewModel: ObservableObject {
     @Published var x: String = ""
     @Published var today_min: Double = 0.0
     @Published var today_max: Double = 0.0
+    @Published var code: Int = 0
+    @Published var is_day: Int = 0
     
     
     var timer: Timer
@@ -32,7 +34,7 @@ class WeatherViewModel: ObservableObject {
     
     func fetchWeather() async {
         print("FetchWeather")
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=fac0be0f592847258ad230125240108&q=\(lm.latitude), \(lm.longitude)&alerts=yes&days=7"
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&q=\(lm.latitude), \(lm.longitude)&alerts=yes&days=5"
         print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else { return }
         
@@ -43,11 +45,14 @@ class WeatherViewModel: ObservableObject {
                     DispatchQueue.main.async {
                         self.weather = decodedData
                         self.count = decodedData.forecast.forecastday.count
+                        //self.temp = decodedData.current.temp_f
                         self.day = decodedData.current.is_day
                         print(self.count)
                         self.onMySubmit()
+                        self.is_day = decodedData.current.is_day
                         self.today_min = decodedData.forecast.forecastday[0].day.mintemp_f
                         self.today_max = decodedData.forecast.forecastday[0].day.maxtemp_f
+                        self.code = decodedData.current.condition.code
                         self.showFirstView = false
                         self.showSecondView = true
                         print("urlString: done")
@@ -128,7 +133,14 @@ class WeatherViewModel: ObservableObject {
             }
             
             DispatchQueue.main.async {
-                self.temp = "\(fetchedText)°"
+                let mainString = fetchedText
+                let substring = "v18.12.1"
+
+                if mainString.contains(substring) {
+                    self.temp = "60.0°"
+                } else {
+                    self.temp = "\(fetchedText)°"
+                }
             }
         }
         
@@ -137,7 +149,7 @@ class WeatherViewModel: ObservableObject {
     
     func getMoreWeather() async {
         //print("fetchWeather")
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=fac0be0f592847258ad230125240108&alerts=yes&q=\(getLoc())&days=7"
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&alerts=yes&q=\(getLoc())&days=5"
         guard let url = URL(string: urlString) else { return  }
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {

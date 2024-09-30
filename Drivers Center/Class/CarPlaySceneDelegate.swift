@@ -86,6 +86,10 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
         print("Template application scene did connect.")
         templateManager.connect(interfaceController, scene: templateApplicationScene)
+        let maxItemCount = CPListTemplate.maximumItemCount
+        print("Maximum items allowed: \(maxItemCount)")
+        UserDefaults.standard.set(maxItemCount, forKey: "maxItemCount")
+        
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,

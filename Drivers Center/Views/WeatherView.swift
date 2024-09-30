@@ -4,6 +4,7 @@ struct WeatherView: View {
     
     @StateObject private var viewModel = WeatherViewModel()
     @StateObject private var templateManager = LocationManager.shared
+    @StateObject var tm = TemplateManager()
     @State private var city: String = ""
     @State private var q: String = ""
     @State private var x: String = ""
@@ -11,11 +12,13 @@ struct WeatherView: View {
     @FocusState private var focused: Bool // 1. create a @FocusState here
     @State var searchText = ""
     @State var showFirstView = true
-
+    @State var carPlay: Bool = false
     @State var showSecondView = false
 
     
     var body: some View {
+        
+        if !(carPlay) {
         ZStack {
             
             
@@ -23,6 +26,11 @@ struct WeatherView: View {
                 if viewModel.showFirstView {
                     ProgressView()
                     Text("Getting location...")
+                        .onAppear {
+                            Task {
+                                await viewModel.fetchWeather()
+                            }
+                        }
                 } else {
                     if let weather = viewModel.weather {
                         PullToRefresh(coordinateSpaceName: "pullToRefresh") {
@@ -76,7 +84,7 @@ struct WeatherView: View {
                                     
                                     Spacer()
                                     VStack {
-                                        Text("\(weather.forecast.forecastday[0].date.toMMDDFormat())")
+                                        Text("\(weather.forecast.forecastday[0].date.toDayOfWeek())")
                                             .font(.system(size: 15))
                                         if let url = URL(string: "https:\(weather.forecast.forecastday[0].day.condition.icon)") {
                                             AsyncImage(url: url) { image in
@@ -97,7 +105,7 @@ struct WeatherView: View {
                                     }
                                     Spacer()
                                     VStack {
-                                        Text("\(weather.forecast.forecastday[1].date.toMMDDFormat())")
+                                        Text("\(weather.forecast.forecastday[1].date.toDayOfWeek())")
                                             .font(.system(size: 15))
                                         if let url = URL(string: "https:\(weather.forecast.forecastday[1].day.condition.icon)") {
                                             AsyncImage(url: url) { image in
@@ -118,7 +126,7 @@ struct WeatherView: View {
                                     }
                                     Spacer()
                                     VStack {
-                                        Text("\(weather.forecast.forecastday[2].date.toMMDDFormat())")
+                                        Text("\(weather.forecast.forecastday[2].date.toDayOfWeek())")
                                             .font(.system(size: 15))
                                         if let url = URL(string: "https:\(weather.forecast.forecastday[2].day.condition.icon)") {
                                             AsyncImage(url: url) { image in
@@ -139,7 +147,7 @@ struct WeatherView: View {
                                     }
                                     Spacer()
                                     VStack {
-                                        Text("\(weather.forecast.forecastday[3].date.toMMDDFormat())")
+                                        Text("\(weather.forecast.forecastday[3].date.toDayOfWeek())")
                                             .font(.system(size: 15))
                                         if let url = URL(string: "https:\(weather.forecast.forecastday[3].day.condition.icon)") {
                                             AsyncImage(url: url) { image in
@@ -160,7 +168,7 @@ struct WeatherView: View {
                                     }
                                     Spacer()
                                     VStack {
-                                        Text("\(weather.forecast.forecastday[4].date.toMMDDFormat())")
+                                        Text("\(weather.forecast.forecastday[4].date.toDayOfWeek())")
                                             .font(.system(size: 15))
                                         if let url = URL(string: "https:\(weather.forecast.forecastday[4].day.condition.icon)") {
                                             AsyncImage(url: url) { image in
@@ -193,12 +201,32 @@ struct WeatherView: View {
             .onAppear {
                 //templateManager.setup()
             }
+            .onChange(of: tm.isCarPlay) {
+                if tm.isCarPlay {
+                    carPlay = true
+                } else {
+                    carPlay = false
+                }
+            }
             
             //viewModel.onMySubmit()
             
         }
         .padding(.bottom,80)
         //.padding(.top, 50)
+    } else {
+        ZStack {
+            Color.black // Set the entire background to black
+                .edgesIgnoringSafeArea(.all)
+            VStack {
+                Text("CarPlay is Active")
+                    .font(.system(size: 24)) // Set font size to 24 points
+            }
+        }
+        .foregroundColor(.white)
+    }
+        
+        
     }
 }
 

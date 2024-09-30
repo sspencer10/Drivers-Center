@@ -12,28 +12,49 @@ struct MapsView: View {
     private let minValue = 0.0
     private let maxValue = 120.0
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
+    @State var carPlay2: Bool = false
 
     var body: some View {
-        GeometryReader { geom in
-            ZStack {
-                VStack {
-                    
+        
+        if !(carPlay2) {
+            GeometryReader { geom in
+                ZStack {
                     VStack {
-                       
-                        Map(position: $position) {
-                            //UserAnnotation()
+                        
+                        VStack {
+                            
+                            Map(position: $position) {
+                                //UserAnnotation()
+                            }
+                            .tint(.red)
+                            .mapControls {
+                                MapUserLocationButton()
+                                MapCompass()
+                            }
                         }
-                        .tint(.red)
-                        .mapControls {
-                            MapUserLocationButton()
-                            MapCompass()
-                        }
+                        .padding(.bottom, 80)
                     }
-                    .padding(.bottom, 80)
+                    
                 }
-                
             }
+            .onChange(of: carPlay.isCarPlay) {
+                if carPlay.isCarPlay {
+                    carPlay2 = true
+                } else {
+                    carPlay2 = false
+                }
+            }
+        } else {
+            ZStack {
+                Color.black // Set the entire background to black
+                    .edgesIgnoringSafeArea(.all)
+                VStack {
+                    Text("CarPlay is Active")
+                        .font(.system(size: 24)) // Set font size to 24 points
+                }
         }
+        .foregroundColor(.white)
+    }
     }
 }
 struct MapsView_Previews: PreviewProvider {

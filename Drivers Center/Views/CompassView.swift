@@ -72,26 +72,47 @@ struct CompassMarkerView: View {
 }
 
 struct CompassView : View {
-    @StateObject var carPlay: LocationManager
+    @StateObject var carPlay = LocationManager.shared
+    @StateObject var tm = TemplateManager()
+    @State var carPlay2: Bool = false
 
     var body: some View {
-        
-        VStack {
-            Capsule()
-                .frame(width: 5,
-                       height: 50)
-
-            ZStack {
-                ForEach(Marker.markers(), id: \.self) { marker in
-                    CompassMarkerView(marker: marker,
-                                      compassDegress: self.carPlay.degrees)
+            if !(carPlay2) {
+                VStack {
+                    
+                    Capsule()
+                        .frame(width: 5,
+                               height: 50)
+                    
+                    ZStack {
+                        ForEach(Marker.markers(), id: \.self) { marker in
+                            CompassMarkerView(marker: marker,
+                                              compassDegress: self.carPlay.degrees)
+                        }
+                    }
+                    .frame(width: 300,
+                           height: 300)
+                    .rotationEffect(Angle(degrees: self.carPlay.degrees))
+                    .statusBar(hidden: true)
                 }
+                .onChange(of: tm.isCarPlay) {
+                    if tm.isCarPlay {
+                        carPlay2 = true
+                    } else {
+                        carPlay2 = false
+                    }
+                }
+            } else {
+                    ZStack {
+                        Color.black // Set the entire background to black
+                            .edgesIgnoringSafeArea(.all)
+                        VStack {
+                            Text("CarPlay is Active")
+                                .font(.system(size: 24)) // Set font size to 24 points
+                        }
+                }
+                .foregroundColor(.white)
             }
-            .frame(width: 300,
-                   height: 300)
-            .rotationEffect(Angle(degrees: self.carPlay.degrees))
-            .statusBar(hidden: true)
-        }
     }
 }
 

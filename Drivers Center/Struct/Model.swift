@@ -30,6 +30,7 @@ struct CurrentWeather: Codable {
 struct WeatherCondition: Codable {
     let text: String
     let icon: String
+    let code: Int
 }
 
 struct Forecast: Codable {

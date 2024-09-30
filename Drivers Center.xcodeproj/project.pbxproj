@@ -32,6 +32,18 @@
 		6B0A85862C6A98170097265A /* CarplayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85822C6A98170097265A /* CarplayContentView.swift */; };
 		6B0A858A2C6A99C00097265A /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0A85892C6A99C00097265A /* LocationManager.swift */; };
 		6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BA88A862C6AFB00007844C1 /* CarPlay.framework */; };
+		6B3C21C32C83C8D200A064A4 /* ListTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3C21C22C83C8D200A064A4 /* ListTemplate.swift */; };
+		6B5635222C6FBB3D0090FAC7 /* SiriIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5635212C6FBB3D0090FAC7 /* SiriIntents.swift */; };
+		6B5635242C6FFD800090FAC7 /* SendMsg.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5635232C6FFD800090FAC7 /* SendMsg.swift */; };
+		6B56352A2C7023CD0090FAC7 /* SendLocationIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5635292C7023CD0090FAC7 /* SendLocationIntentHandler.swift */; };
+		6B56352C2C7026CC0090FAC7 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B56352B2C7026CC0090FAC7 /* Intents.framework */; };
+		6BE0984A2C702D2200F7781B /* SendLocationIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE098492C702D2200F7781B /* SendLocationIntent.swift */; };
+		6BE4D5A72C843B840029B971 /* GarageStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE4D5A62C843B840029B971 /* GarageStatus.swift */; };
+		6BF296672C8885A500456ACC /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF296662C8885A500456ACC /* Music.swift */; };
+		6BF296692C88C36400456ACC /* MusicObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF296682C88C36400456ACC /* MusicObserver.swift */; };
+		6BF2967B2C88E00B00456ACC /* Retrospeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF2967A2C88E00B00456ACC /* Retrospeed.swift */; };
+		6BF2967D2C88F27800456ACC /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF2967C2C88F27800456ACC /* MusicView.swift */; };
+		6BF2967F2C88F60200456ACC /* PlayNext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF2967E2C88F60200456ACC /* PlayNext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,8 +73,20 @@
 		6B0A85822C6A98170097265A /* CarplayContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarplayContentView.swift; sourceTree = "<group>"; };
 		6B0A85882C6A99600097265A /* Drivers-Center-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Drivers-Center-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6B0A85892C6A99C00097265A /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		6B3C21C22C83C8D200A064A4 /* ListTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTemplate.swift; sourceTree = "<group>"; };
+		6B5635212C6FBB3D0090FAC7 /* SiriIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriIntents.swift; sourceTree = "<group>"; };
+		6B5635232C6FFD800090FAC7 /* SendMsg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMsg.swift; sourceTree = "<group>"; };
+		6B5635292C7023CD0090FAC7 /* SendLocationIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLocationIntentHandler.swift; sourceTree = "<group>"; };
+		6B56352B2C7026CC0090FAC7 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		6BA88A842C6AFAE3007844C1 /* Drivers Center.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Drivers Center.entitlements"; sourceTree = "<group>"; };
 		6BA88A862C6AFB00007844C1 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		6BE098492C702D2200F7781B /* SendLocationIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLocationIntent.swift; sourceTree = "<group>"; };
+		6BE4D5A62C843B840029B971 /* GarageStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarageStatus.swift; sourceTree = "<group>"; };
+		6BF296662C8885A500456ACC /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
+		6BF296682C88C36400456ACC /* MusicObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicObserver.swift; sourceTree = "<group>"; };
+		6BF2967A2C88E00B00456ACC /* Retrospeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Retrospeed.swift; sourceTree = "<group>"; };
+		6BF2967C2C88F27800456ACC /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
+		6BF2967E2C88F60200456ACC /* PlayNext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayNext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B56352C2C7026CC0090FAC7 /* Intents.framework in Frameworks */,
 				6B27E2022C6C7538006CB89C /* CarPlay.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,6 +105,7 @@
 		6B0A85402C6A95030097265A = {
 			isa = PBXGroup;
 			children = (
+				6BE098492C702D2200F7781B /* SendLocationIntent.swift */,
 				6B0A854B2C6A95030097265A /* Drivers Center */,
 				6B0A854A2C6A95030097265A /* Products */,
 				6BA88A852C6AFB00007844C1 /* Frameworks */,
@@ -130,6 +156,8 @@
 				6B0A85672C6A97080097265A /* NotMainView.swift */,
 				6B0A85642C6A97080097265A /* SpeedometerView.swift */,
 				6B0A85682C6A97080097265A /* WeatherView.swift */,
+				6BF2967A2C88E00B00456ACC /* Retrospeed.swift */,
+				6BF2967C2C88F27800456ACC /* MusicView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -143,6 +171,9 @@
 				6B0A85772C6A97C00097265A /* MyVariables.swift */,
 				6B0A85752C6A97C00097265A /* PullToRefresh.swift */,
 				6B0A85732C6A97C00097265A /* TabItems.swift */,
+				6B3C21C22C83C8D200A064A4 /* ListTemplate.swift */,
+				6BE4D5A62C843B840029B971 /* GarageStatus.swift */,
+				6BF2967E2C88F60200456ACC /* PlayNext.swift */,
 			);
 			path = Struct;
 			sourceTree = "<group>";
@@ -155,6 +186,11 @@
 				6B0A85802C6A98170097265A /* TemplateManager.swift */,
 				6B0A85812C6A98170097265A /* WeatherViewModel.swift */,
 				6B0A85892C6A99C00097265A /* LocationManager.swift */,
+				6B5635212C6FBB3D0090FAC7 /* SiriIntents.swift */,
+				6B5635232C6FFD800090FAC7 /* SendMsg.swift */,
+				6B5635292C7023CD0090FAC7 /* SendLocationIntentHandler.swift */,
+				6BF296662C8885A500456ACC /* Music.swift */,
+				6BF296682C88C36400456ACC /* MusicObserver.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -162,6 +198,7 @@
 		6BA88A852C6AFB00007844C1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6B56352B2C7026CC0090FAC7 /* Intents.framework */,
 				6BA88A862C6AFB00007844C1 /* CarPlay.framework */,
 			);
 			name = Frameworks;
@@ -238,21 +275,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B0A85562C6A95050097265A /* Persistence.swift in Sources */,
+				6B5635242C6FFD800090FAC7 /* SendMsg.swift in Sources */,
 				6B0A85692C6A97080097265A /* MainView.swift in Sources */,
+				6BF296692C88C36400456ACC /* MusicObserver.swift in Sources */,
 				6B0A85832C6A98170097265A /* CarPlaySceneDelegate.swift in Sources */,
+				6BF2967F2C88F60200456ACC /* PlayNext.swift in Sources */,
 				6B0A854F2C6A95030097265A /* TestView.swift in Sources */,
 				6B0A85592C6A95050097265A /* Drivers_Center.xcdatamodeld in Sources */,
+				6BF2967B2C88E00B00456ACC /* Retrospeed.swift in Sources */,
 				6B0A85792C6A97C00097265A /* TabItems.swift in Sources */,
 				6B0A857C2C6A97C00097265A /* DateFormat.swift in Sources */,
+				6B3C21C32C83C8D200A064A4 /* ListTemplate.swift in Sources */,
 				6B0A85702C6A97090097265A /* WeatherView.swift in Sources */,
 				6B0A856B2C6A97090097265A /* CompassView.swift in Sources */,
+				6BE0984A2C702D2200F7781B /* SendLocationIntent.swift in Sources */,
 				6B0A85782C6A97C00097265A /* Model.swift in Sources */,
 				6B0A85852C6A98170097265A /* WeatherViewModel.swift in Sources */,
 				6B0A856A2C6A97090097265A /* MapsView.swift in Sources */,
 				6B0A856E2C6A97090097265A /* ElevationView.swift in Sources */,
+				6BF296672C8885A500456ACC /* Music.swift in Sources */,
 				6B0A856F2C6A97090097265A /* NotMainView.swift in Sources */,
 				6B0A858A2C6A99C00097265A /* LocationManager.swift in Sources */,
+				6BE4D5A72C843B840029B971 /* GarageStatus.swift in Sources */,
+				6B5635222C6FBB3D0090FAC7 /* SiriIntents.swift in Sources */,
 				6B0A857A2C6A97C00097265A /* Intents.swift in Sources */,
+				6BF2967D2C88F27800456ACC /* MusicView.swift in Sources */,
+				6B56352A2C7023CD0090FAC7 /* SendLocationIntentHandler.swift in Sources */,
 				6B0A85842C6A98170097265A /* TemplateManager.swift in Sources */,
 				6B0A85862C6A98170097265A /* CarplayContentView.swift in Sources */,
 				6B0A857B2C6A97C00097265A /* PullToRefresh.swift in Sources */,
@@ -390,6 +438,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Drivers Center/Drivers Center.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -399,8 +448,10 @@
 				INFOPLIST_FILE = "Drivers-Center-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Drivers Center";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "to show now playing info";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Allow for background location to get speed";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required to get speed";
+				INFOPLIST_KEY_NSSiriUsageDescription = "We need access to Siri for hands free actions";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -415,6 +466,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rightdevllc.Drivers-Center";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -427,6 +479,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Drivers Center/Drivers Center.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -436,8 +489,10 @@
 				INFOPLIST_FILE = "Drivers-Center-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Drivers Center";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "to show now playing info";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Allow for background location to get speed";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Required to get speed";
+				INFOPLIST_KEY_NSSiriUsageDescription = "We need access to Siri for hands free actions";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -452,6 +507,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rightdevllc.Drivers-Center";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
