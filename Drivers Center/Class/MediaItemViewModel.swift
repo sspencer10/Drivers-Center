@@ -42,6 +42,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     var genres: [String] = []
     var musicItemID: MusicItemID?
     var lastSongStoreID: String?
+    let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
     private let queueLock = DispatchQueue(label: "com.example.queueLock")
     
     private var currentQueue: [String] = [] // Track store IDs of the queue
@@ -53,7 +54,6 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     private var progressUpdateTimer: Timer?
 
     var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
-    let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjdYOERIV1JQQUQifQ.eyJpYXQiOjE3MzY5MTk1MTksImV4cCI6MTc1MjQ3MTUxOSwiaXNzIjoiWlVMMzI0NTNLUiJ9.gE3OTLoD4E32tV3kt8ZgeYvBSa9nUSwHT3nlxzrppi_23aujztS33Nm3g2zmtiEatX2mAZh7yew9-KhLBCKCVg"
 
 
     private init() {
@@ -1001,16 +1001,10 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
     
     func fetchSimilarTracks2(artist: String, track: String, completion: @escaping ([String]) -> Void) {
-        let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
         let cleanTitle = removeParentheses(from: track)
         let cleanArtist = removeParentheses(from: artist)
 
-        // Change limit dynamically to get more varied songs
-        let limit = Int.random(in: 10...20) // Fetch between 10 to 20 songs each time
-        let encodedArtist = cleanArtist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanArtist
-        let encodedTitle = cleanTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanTitle
-
-        let urlString = "https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=westcoast%20rap&api_key=4fb73e8d151e5fe3fc9f1575af974a59&format=json&limit=1"
+        let urlString = "https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=westcoast%20rap&api_key=\(apiKey)&format=json&limit=1"
         
         print("test422 - Fetching similar tracks from URL: \(urlString)")
 
@@ -1121,7 +1115,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
 
     func fetchSimilarTracks(artist: String, track: String, completion: @escaping ([String]) -> Void) {
-        let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
+        
         let cleanTitle = removeParentheses(from: track)
         let cleanArtist = removeParentheses(from: artist)
 

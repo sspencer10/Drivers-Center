@@ -24,6 +24,8 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var code: Int = 0
     @Published var is_day: Int = 0
     
+    var apiKey: String = "5aa6d70b54f7455fb2f141924241508"
+    
     var timer: Timer?
     
     private override init() {
@@ -33,7 +35,7 @@ class WeatherViewModel: NSObject, ObservableObject {
     
     func fetchWeather() {
         print("FetchWeather")
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&q=\(LocationManager.shared.latitude), \(LocationManager.shared.longitude)&alerts=yes&days=5"
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=\(apiKey)&q=\(LocationManager.shared.latitude), \(LocationManager.shared.longitude)&alerts=yes&days=5"
         print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else { return }
         
@@ -153,7 +155,7 @@ class WeatherViewModel: NSObject, ObservableObject {
     }
     
     func getMoreWeather() {
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&alerts=yes&q=\(getLoc())&days=5"
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=\(apiKey)&alerts=yes&q=\(getLoc())&days=5"
         guard let url = URL(string: urlString) else { return }
 
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
