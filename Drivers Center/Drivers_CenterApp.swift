@@ -1,82 +1,104 @@
-import SwiftUI
-import Intents
 import AppIntents
 import CoreLocation
+import Intents
+import MediaPlayer
 import MessageUI
-
+import MusicKit
+import StoreKit
+import SwiftUI
 
 @main
 struct YourApp: App {
-    
+
+    @Environment(\.scenePhase) var scenePhase
+    @StateObject var locationManager: LocationManager
+    @StateObject var weatherViewModel: WeatherViewModel
+    @StateObject var templateManager: TemplateManager
+    @StateObject var mediaItemViewModel: MediaItemViewModel
+    @StateObject var addressSearchViewModel: AddressSearchViewModel
     init() {
-        // Configure SiriKit
-        INPreferences.requestSiriAuthorization { status in
-            // Handle the status of Siri authorization
-        }
+        let sharedLocationManager = LocationManager.shared
+        let sharedWeatherViewModel = WeatherViewModel.shared
+        let sharedTemplateManager = TemplateManager.shared
+        let sharedMediaItemViewModel = MediaItemViewModel.shared
+        let sharedAddressSearchViewModel = AddressSearchViewModel.shared
+
+        _locationManager = StateObject(wrappedValue: sharedLocationManager)
+        _weatherViewModel = StateObject(wrappedValue: sharedWeatherViewModel)
+        _templateManager = StateObject(wrappedValue: sharedTemplateManager)
+        _mediaItemViewModel = StateObject(wrappedValue: sharedMediaItemViewModel)
+        _addressSearchViewModel = StateObject(wrappedValue: sharedAddressSearchViewModel)
     }
-    
+
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainView(
+                locationManager: locationManager,
+                tm: templateManager,
+                weatherViewModel: weatherViewModel,
+                mediaItemViewModel: mediaItemViewModel,
+                addressSearchViewModel: addressSearchViewModel
+            )
+            .onChange(of: scenePhase) {
+                switch scenePhase {
+                case .active:
+                    locationManager.lm.startUpdatingLocation()
+                    locationManager.lm.startUpdatingHeading()
+                    locationManager.configureLocationUpdates(for: "navigation")
+                    UserDefaults.standard.set(false, forKey: "isInBackground")
+                    print("App is active")
+                    if mediaItemViewModel.songArray.count == 0 {
+                        if templateManager.isCarPlay {
+                            CarPlayObserver.shared.setCarPlay(true)
+                        } else {
+                            CarPlayObserver.shared.setCarPlay(false)
+                        }
+                    }
+                    if locationManager.lm.authorizationStatus == .authorizedWhenInUse {
+                        print("ask for always")
+                        locationManager.lm.requestAlwaysAuthorization()
+                    } else {
+                        print("wont ask")
+                    }
+                    requestNotificationAuthorization()
+                case .inactive:
+                    print("App is inactive")
+                    if (!mediaItemViewModel.isCarPlay)
+                        && (mediaItemViewModel.bypassed)
+                    {
+                        mediaItemViewModel.byPass()
+                    }
+                case .background:
+                    if !locationManager.isNav {
+                        locationManager.configureLocationUpdates(for: "background")
+                        if !templateManager.isCarPlay {
+                            locationManager.lm.stopUpdatingLocation()
+                            locationManager.lm.stopUpdatingHeading()
+                        }
+                    }
+                    UserDefaults.standard.set(true, forKey: "isInBackground")
+          
+                    print("App is in background")
+                default:
+                    break
+                }
+            }
+            
         }
     }
-    
+
     enum LocationError: Error {
         case unableToGetLocation
     }
     
-    private func requestSiriAuthorization() {
-        INPreferences.requestSiriAuthorization { status in
-            handleSiriAuthorizationStatus(status)
-        }
-    }
-    
-    func handleSiriAuthorizationStatus(_ status: INSiriAuthorizationStatus) {
-        switch status {
-        case .authorized:
-            // Siri is authorized, proceed with Siri-related tasks
-            print("Siri is authorized")
-        case .denied:
-            // Siri access was denied, show an alert or direct the user to settings
-            print("Siri access was denied")
-            self.showSiriAccessDeniedAlert()
-        case .restricted:
-            // Siri access is restricted, possibly due to parental controls
-            print("Siri access is restricted")
-        case .notDetermined:
-            // Siri authorization status hasn't been determined yet
-            print("Siri authorization status is not determined")
-        @unknown default:
-            // Handle any future cases or unexpected scenarios
-            print("Unknown Siri authorization status")
-        }
-    }
-    
-    func showSiriAccessDeniedAlert() {
-        DispatchQueue.main.async {
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let rootVC = windowScene.windows.first?.rootViewController {
-                let alertController = UIAlertController(title: "Siri Access Denied",
-                                                        message: "Please enable Siri in Settings to use this feature.",
-                                                        preferredStyle: .alert)
-                let settingsAction = UIAlertAction(title: "Open Settings", style: .default) { _ in
-                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-                    }
-                }
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                alertController.addAction(settingsAction)
-                alertController.addAction(cancelAction)
-                rootVC.present(alertController, animated: true, completion: nil)
+    func requestNotificationAuthorization() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                print("Error requesting notification authorization: \(error)")
             }
+            print("Notification permission granted: \(granted)")
         }
     }
-    
-    private func handleUserActivity(_ userActivity: NSUserActivity) {
-        if userActivity.activityType == "com.yourApp.sendLocation" {
-            // Handle the activity, e.g., trigger the intent or related action
-            print("Handling send location user activity")
-        }
-    }
-}
 
+}

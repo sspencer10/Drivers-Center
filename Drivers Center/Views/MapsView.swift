@@ -47,15 +47,28 @@ struct RouteMapView: UIViewRepresentable {
         mapView.userTrackingMode = .follow
         return mapView
     }
-
+    
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        uiView.removeOverlays(uiView.overlays) // ✅ Clear previous overlays before adding new one
+        // Remove any existing overlays to avoid duplicates
+        uiView.removeOverlays(uiView.overlays)
 
-        // 🚀 **Fix: Prevent Crashes by Checking for Empty Route Data**
-        guard !routeCoordinates.isEmpty else { return }
+        // Ensure routeCoordinates is not empty before adding the route
+        guard !routeCoordinates.isEmpty else {
+            print("test420 - 🚨 No route coordinates available. Skipping polyline addition.")
+            return
+        }
 
+        // Add the route polyline to the map
         let polyline = MKPolyline(coordinates: routeCoordinates, count: routeCoordinates.count)
         uiView.addOverlay(polyline)
+        print("test420 - ✅ Added polyline with \(routeCoordinates.count) points to the map.")
+
+        // Debugging: Check if zoom and heading updates are being called
+        print("test420 - 🚀 Calling updateMapZoom with speed: \(LocationManager.shared.speed)")
+        LocationManager.shared.updateMapZoom(for: uiView)
+
+        print("test420 - 🚀 Calling updateMapHeading with course: \(LocationManager.shared.lm.location?.course ?? -1)")
+        LocationManager.shared.updateMapHeading(for: uiView)
     }
 
     func makeCoordinator() -> Coordinator {
@@ -78,5 +91,11 @@ struct RouteMapView: UIViewRepresentable {
             renderer.lineWidth = 5
             return renderer
         }
+    }
+}
+
+struct MapsView_Previews: PreviewProvider {
+    static var previews: some View {
+        MapsView(locationManager: LocationManager.shared)
     }
 }

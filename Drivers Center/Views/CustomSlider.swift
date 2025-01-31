@@ -1,51 +1,21 @@
 import SwiftUI
 
-struct CustomSlider: View {
-    @Binding var value: Double
-    var range: ClosedRange<Double>
-    
+struct SimpleSlider: View {
     var body: some View {
-        GeometryReader { geometry in
-            let width = geometry.size.width
-            
-            // Slider Track
+        ZStack(alignment: .leading) {
+            // Track (the bar)
             Rectangle()
-                .fill(Color.gray.opacity(0.5))
-                .frame(height: 4)
+                .fill(Color.gray.opacity(0.5)) // Track background color
+                .frame(height: 4) // Height of the track
                 .cornerRadius(2)
-                .overlay(
-                    Rectangle()
-                        .fill(Color.blue)
-                        .frame(width: CGFloat((value - range.lowerBound) / (range.upperBound - range.lowerBound)) * width, height: 4)
-                        .cornerRadius(2)
-                )
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let newValue = Double(gesture.location.x / width) * (range.upperBound - range.lowerBound) + range.lowerBound
-                            value = min(max(newValue, range.lowerBound), range.upperBound)
-                        }
-                )
-                .padding(.horizontal)
-        }
-        .frame(height: 30) // Adjust the height as needed
-    }
-}
 
-struct ContentView: View {
-    @State private var sliderValue: Double = 50 // Example initial value
-    
-    var body: some View {
-        VStack {
-            CustomSlider(value: $sliderValue, range: 0...100)
-            Text("Value: \(sliderValue, specifier: "%.2f")")
+            // Thumb (the circle)
+            Circle()
+                .fill(Color.gray) // Thumb color
+                .frame(width: 9, height: 9) // Thumb size
+                .offset(y: 0) // Adjust vertically to center on the track
+                .padding(.leading, -6) // Align thumb to the very start of the track
         }
-        .padding()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        .frame(height: 20) // Overall height of the slider container
     }
 }

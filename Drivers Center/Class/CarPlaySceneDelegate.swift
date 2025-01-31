@@ -42,14 +42,15 @@ Abstract:
 
 import CarPlay
 import UIKit
+import SwiftUI
 
 /// `CarPlaySceneDelegate` is the UIScenDelegate and CPCarPlaySceneDelegate.
-class CarPlaySceneDelegate: NSObject {
+class CarPlaySceneDelegate: NSObject, ObservableObject {
+    
+    
     
     /// The template manager handles the connection to CarPlay and manages the displayed templates.
-    let templateManager = TemplateManager()
-    
-    // MARK: UISceneDelegate
+    let templateManager = TemplateManager.shared
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if scene is CPTemplateApplicationScene, session.configuration.name == "TemplateSceneConfiguration" {
@@ -60,7 +61,7 @@ class CarPlaySceneDelegate: NSObject {
     func sceneDidDisconnect(_ scene: UIScene) {
         if scene.session.configuration.name == "TemplateSceneConfiguration" {
             print("Template application scene did disconnect.")
-            //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
+            
         }
     }
     
@@ -86,16 +87,19 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
         print("Template application scene did connect.")
         templateManager.connect(interfaceController, scene: templateApplicationScene)
+        LocationManager.shared.lm.startUpdatingLocation()
+        LocationManager.shared.lm.startUpdatingHeading()
         let maxItemCount = CPListTemplate.maximumItemCount
         print("Maximum items allowed: \(maxItemCount)")
         UserDefaults.standard.set(maxItemCount, forKey: "maxItemCount")
-        
+        MediaItemViewModel.shared.start()
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                   didDisconnectInterfaceController interfaceController: CPInterfaceController) {
         templateManager.disconnect()
         print("Template application scene did disconnect.")
+        MediaItemViewModel.shared.stop()
     }
 }
 

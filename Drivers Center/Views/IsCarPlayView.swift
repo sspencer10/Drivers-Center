@@ -8,65 +8,62 @@
 
 import SwiftUI
 
-struct RetroSpeedometerView2: View {
-    @StateObject var lm: LocationManager
+struct IsCarPlayView: View {
+    @State private var tabSelection = 3
+    @State var carplay: Bool = false
+    @ObservedObject var locationManager: LocationManager
+    @ObservedObject var tm: TemplateManager
+    @ObservedObject var weatherViewModel: WeatherViewModel
+    @ObservedObject var mediaItemViewModel: MediaItemViewModel
+    @State var x: Bool = false
     
     var body: some View {
-
-        ZStack {
-            VStack {
-                Spacer()
-                Text("\(lm.speed, specifier: "%.1f") mph")
-                    .font(.system(size: 30, weight: .bold))
-                    //.foregroundColor(.white)
-                    //.padding(.bottom, 30)
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
+        VStack {
+            Spacer()
+            // App Icon
+            Button(action: {
+                mediaItemViewModel.byPass()
+            }) {
+                Image("loginImg")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .padding()
             }
-            // Background Circle
-            Circle()
-                .fill(LinearGradient(gradient: Gradient(colors: [Color("darkGray2"), Color("medGray"), Color("ltGray")]), startPoint: .top, endPoint: .bottom))
-                .frame(width: 330, height: 330)
-                .shadow(radius: 10)
             
-            // Dial Markers
-            ForEach(0..<11) { i in
-                VStack {
-                    Text("\(i * 10)")  // Updated to reflect 100 max speed
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(.white)
-                        .rotationEffect(Angle.degrees(-Double(i) * 30 - 210)) // Compensates for rotation
-                    Spacer()
+            Button(action: {
+                mediaItemViewModel.byPass()
+            }) {
+                Text("CarPlay Active")
+                    .font(.system(size: 38, weight: .bold))
+                    .foregroundColor(Color("almostWhite"))
+            }
+                Button(action: {
+                    print("Tapped Prominent Button")
+                    mediaItemViewModel.byPass()
+                }) {
+                    Text("Unlock App")
+                        .font(.system(size: 22, weight: .bold))
+                        .padding(.horizontal, 35)
+                        .padding(.vertical, 5)
                 }
-                .rotationEffect(Angle.degrees(Double(i) * 30)) // Rotate each marker
-                //.offset(y: -140) // Commented out to allow markers to position naturally
-            }
-            .frame(width: 300, height: 300)
-            .rotationEffect(Angle.degrees(210)) // Rotate the entire marker set to start at 230 degrees
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
+                .frame(minWidth: 350, maxWidth: .infinity) // Make the button span the full width
+                //.padding(.horizontal, 16) // Add padding from the edges
             
-            // Needle
-            Rectangle()
-                .fill(Color.red)
-                .frame(width: 2, height: 100)
-                .offset(y: -50)
-                .rotationEffect(Angle.degrees(lm.speed * 3.0 + 210))  // Adjusted multiplier for 100 km/h max
-                .animation(.easeInOut(duration: 0.5), value: lm.speed)
             
-            // Center Circle
-            Circle()
-                .fill(Color.red)
-                .frame(width: 15, height: 15)
-            
-
+            Spacer()
         }
+        .frame(minWidth: 350, maxWidth: .infinity) // Make the button
+        //span the full width
+        
 
     }
 }
 
-struct RetroSpeedometerView_Previews: PreviewProvider {
+struct IsCarPlayView_Previews: PreviewProvider {
     static var previews: some View {
-        RetroSpeedometerView(lm: LocationManager.shared)
+        IsCarPlayView(locationManager: LocationManager.shared, tm: TemplateManager.shared, weatherViewModel: WeatherViewModel.shared, mediaItemViewModel: MediaItemViewModel.shared)
     }
 }

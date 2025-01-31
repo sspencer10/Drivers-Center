@@ -1,4 +1,5 @@
 import UIKit
+import MusicKit
 import SwiftUI
 import CarPlay
 import MapKit
@@ -17,15 +18,18 @@ protocol MyDelegate: AnyObject {
 
 class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate, CPSessionConfigurationDelegate  {
     
+    public static var shared = TemplateManager()
+
+    
     @Published var currentTime: String = ""
     
     @AppStorage("gps_location", store: UserDefaults(suiteName: "group.DBJQ6YJG82.com.rightdevllc.CarSample2")) var gps_location: String = ""
     @AppStorage("today_min", store: UserDefaults(suiteName: "group.DBJQ6YJG82.com.rightdevllc.CarSample2")) var today_min: Double = 60.0
     @AppStorage("today_max", store: UserDefaults(suiteName: "group.DBJQ6YJG82.com.rightdevllc.CarSample2")) var today_max: Double = 70.0
     @AppStorage("current_f", store: UserDefaults(suiteName: "group.DBJQ6YJG82.com.rightdevllc.CarSample2")) var current_f: Double = 0.0
-    
-    @State var wvm = WeatherViewModel.shared
-    @State var musicPlayer = MPMusicPlayerController.systemMusicPlayer
+
+    //@ObservedObject var wvm: WeatherViewModel
+    var mediaClass = MediaItemViewModel.shared
     @State var nowPlayingArtist: String?
     @State var nowPlayingTitle: String?
     @State var currentTemplate: String?
@@ -37,15 +41,16 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
     @State var myCnt: Int = 0
     
     private var cancellables = Set<AnyCancellable>()
-    private var timer: Timer?
+    //private var timer: Timer?
     private var currentOffset = 0
-    private let batchSize = 11
+    private let batchSize = 10
+    private let batchSize2 = 10
     let albumBatchSize = 10
     let playlistBatchSize = 10
     
     weak var delegate: MyDelegate?
     
-    var isCarPlay: Bool = false
+    @Published var isCarPlay: Bool = false
     var window: UIWindow?
     var enableCarPlay: Bool = true
     var carplayInterfaceController: CPInterfaceController?
@@ -56,24 +61,46 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
     var carplayScene: CPTemplateApplicationScene?
     var addressString: String = ""
     var counter: Int = 0
-    var lm = LocationManager.shared
+    
     var listTemplate: CPTemplate!
     var cc = CurlCommands()
     var artImg: UIImage?
     var playlists: [MPMediaPlaylist] = []
     var previousType: String = ""
-    var artUrl: String = "https://rightdevllc.com/images/592590040.png"
     var url: URL!
     var url2: URL!
-    var myTimer: Timer?
-    var myTimer2: Timer?
-    var myTimer3: Timer?
+    var isAlternateDetailText = false
+    var updateCounter = 0
+    var textA: String = ""
+    var textB: String = ""
+    private let speechRecognizer = SpeechRecognizer()
+    private let speechRecognizer2 = SpeechRecognizer()
+    private var musicPlayer: MPMusicPlayerController
+    //var myTimer: Timer?
+    //var myTimer2: Timer?
+    //var myTimer3: Timer?
+    var cnt: Int = .zero
+
     
     let configuration = UIImage.SymbolConfiguration.init(pointSize: 10)
 
-    override init() {
+    private override init() {
+        musicPlayer = MediaItemViewModel.shared.musicPlayer
         super.init()
+        self.setupVoiceSearch()
+        self.setupVoiceSearch2()
+        //self.musicPlayer = MPMusicPlayerController.systemMusicPlayer
+        self.musicPlayer = MPMusicPlayerController.applicationQueuePlayer
+        NotificationCenter.default.addObserver(self, selector: #selector(nowPlayingItemDidChange), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: musicPlayer)
+        LocationManager.shared.$speed
+            .sink { [weak self] newSpeed in
+                if self?.isCarPlay == false { return }
+                self?.updateTemplate(with: newSpeed)
+            }
+            .store(in: &cancellables)
     }
+    
+    var artUrl: String = "https://rightdevllc.com/images/592590040.png"
 
     //Called when CarPlay connects.
     func connect(_ interfaceController: CPInterfaceController, scene: CPTemplateApplicationScene) {
@@ -83,61 +110,276 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
         carplayInterfaceController!.delegate = self
         sessionConfiguration = CPSessionConfiguration(delegate: self)
         isCarPlay = true
-        startCarPlayTimer()
-        startCPTimer()
-        lm.carplayStart()
-        startTimer()
+        CarPlayObserver.shared.setCarPlay(true)
+        //startCarPlayTimer()
+        //startCPTimer()
+        //startTimer()
+        print("test 44 - \(LocationManager.shared.latitude)")
         
         Task {
-            wvm.fetchText()
-            await  wvm.fetchWeather()
+            WeatherViewModel.shared.fetchText()
+            WeatherViewModel.shared.fetchWeather()
         }
         
-        let viewModel = MediaItemViewModel()
-        self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: {x in
-            let carPlayTemplate = x
-            self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-        })
+        let viewModel = MediaItemViewModel.shared
+        let _ = fetchImage4(from: mediaClass.newArt?.absoluteString ?? "")
+        Task {
+            let img = await getSong()
+            self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: img, speedo: self.getSpeedo(), detailedText: LocationManager.shared.eta, completion: {x in
+                let carPlayTemplate = x
+                self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+            })
+            
+        }
     }
     
     //Called when CarPlay disconnects.
     func disconnect() {
-        stopCarPlayTimer()
+        //stopCarPlayTimer()
         carplayScene = nil
         print("updating isCarPlay to false")
         isCarPlay = false
-        UserDefaults.standard.setValue(false, forKey: "isCarPlay")
-        lm.carplayStop()
+        CarPlayObserver.shared.setCarPlay(false)
     }
     
-    // Start the timer
-    func startCarPlayTimer() {
-        myTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            self.updateTemplate()
+    func setupVoiceSearch2() {
+        print("voice search init")
+        speechRecognizer2.onRecognitionComplete = { [weak self] recognizedText in
+            print("Recognized text: \(recognizedText ?? "No text recognized")")
+            guard let self = self else { return }
+
+            if let query = recognizedText {
+                print("Recognized text: \(query)")
+                
+                // Trigger the search with the recognized text
+                Task {
+                    do {
+                        let _ = try await self.promptForSearchQuery2(with: query)
+                        // Go home
+                        let viewModel = MediaItemViewModel.shared
+                        let _ = self.fetchImage4(from: self.mediaClass.newArt?.absoluteString ?? "")
+                        Task {
+                            let img = await self.getSong()
+                            self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: img, speedo: self.getSpeedo(), detailedText: LocationManager.shared.eta, completion: {x in
+                                let carPlayTemplate = x
+                                self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                            })
+                            //self.presentSearchResults(results: results)
+                        }
+                    } catch {
+                        print("Error during search: \(error)")
+                    }
+                }
+            } else {
+                // Handle no input case
+                print("No input received. Please try again.")
+            }
+        }
+
+        speechRecognizer2.onError = { error in
+            print("Speech recognition error: \(error?.localizedDescription ?? "Unknown error")")
         }
     }
     
-    func startCPTimer() {
-        myTimer2 = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: true) { timer in
-            self.updateTemplate2()
+    func setupVoiceSearch() {
+        print("voice search init")
+        speechRecognizer.onRecognitionComplete = { [weak self] recognizedText in
+            print("Recognized text: \(recognizedText ?? "No text recognized")")
+            guard let self = self else { return }
+
+            if let query = recognizedText {
+                print("Recognized text: \(query)")
+                
+                // Trigger the search with the recognized text
+                Task {
+                    do {
+                        let results = try await self.promptForSearchQuery(with: query)
+                        self.presentSearchResults(results: results)
+                    } catch {
+                        print("Error during search: \(error)")
+                    }
+                }
+            } else {
+                // Handle no input case
+                print("No input received. Please try again.")
+            }
+        }
+
+        speechRecognizer.onError = { error in
+            print("Speech recognition error: \(error?.localizedDescription ?? "Unknown error")")
+        }
+    }
+
+    func startVoiceSearch() {
+        speechRecognizer.startRecognition()
+    }
+    
+    func startVoiceSearch2() {
+        speechRecognizer2.startRecognition()
+    }
+    
+    func promptForSearchQuery2(with recognizedText: String) async throws {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = recognizedText
+
+        let search = MKLocalSearch(request: searchRequest)
+
+        do {
+            // Perform the search asynchronously
+            let response = try await search.start()
+
+            // Extract the first map item's coordinate
+            guard let coordinate = response.mapItems.first?.placemark.coordinate else {
+                print("test - No coordinate found for \(recognizedText)")
+                return
+            }
+
+            // Perform UI updates on the main thread
+            await MainActor.run {
+                LocationManager.shared.startNavigation(to: coordinate)
+                print("test - Selected address: \(recognizedText), Coordinate: \(coordinate)")
+            }
+
+        } catch {
+            // Handle errors
+            print("test - Error fetching coordinates: \(error.localizedDescription)")
+            throw error
         }
     }
     
-    // Stop the timer
-    func stopCarPlayTimer() {
-        myTimer?.invalidate()
-        myTimer = nil
-        myTimer2?.invalidate()
-        myTimer2 = nil
+    func promptForSearchQuery(with recognizedText: String) async throws -> [SongWithArtwork] {
+        
+        let simulatedQuery = recognizedText
+
+        // Step 1: Fetch songs using MusicKit
+        let songs = try await MediaItemViewModel.shared.searchSongs(q: simulatedQuery)
+
+        // Step 2: Fetch artwork for each song asynchronously
+        var results: [SongWithArtwork] = []
+        for song in songs {
+            let artworkURL = song.artwork?.url(width: 500, height: 500)?.absoluteString
+            let artwork = artworkURL != nil ? await fetchImage(from: artworkURL!) : UIImage(systemName: "music.note")
+            results.append(SongWithArtwork(song: song, artwork: artwork))
+        }
+
+        return results
     }
     
-    func startTimer() {
-        print("start timer")
-        timer?.invalidate() // Invalidate any existing timer
-        timer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in
-            self?.updateTime()
+    func fetchImage(from urlString: String) async -> UIImage? {
+        guard let url = URL(string: urlString) else { return nil }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return UIImage(data: data)
+        } catch {
+            print("Error fetching image: \(error)")
+            return nil
         }
-        timer?.fire()
+    }
+
+    
+    func presentSearchResults(results: [SongWithArtwork]) {
+        var listItems = results.map { result in
+            let song = result.song
+            let artwork = result.artwork ?? UIImage(systemName: "music.note")
+            let item = CPListItem(text: song.title, detailText: song.artistName)
+            item.setImage(artwork)
+            item.handler = { _, completion in
+                Task {
+                    do {
+                        try await MediaItemViewModel.shared.playSelectedSong(song)
+                        let viewModel = MediaItemViewModel.shared
+                        Task {
+                            let img = await self.getSong()
+                            self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: img, speedo: "", detailedText: LocationManager.shared.eta, completion: {x in
+                                let carPlayTemplate = x
+                                self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                            })
+                            print("Playing song: \(song.title) by \(song.artistName)")
+                        }
+                    } catch {
+                        print("Error playing song: \(error)")
+                    }
+                    completion()
+                }
+                
+            }
+            return item
+        }
+
+        // Create the Back button
+        let backButtonItem = CPListItem(text: "Back", detailText: nil)
+        backButtonItem.setImage(UIImage(systemName: "arrowshape.left.circle")!)
+        backButtonItem.handler = { [weak self] _, completion in
+            guard let self = self else { return }
+            self.gridTemplate { gridTemplate in
+                self.carplayInterfaceController?.setRootTemplate(gridTemplate, animated: true, completion: nil)
+            }
+            completion()
+        }
+
+        // Prepend the Back button to the list items
+        listItems.insert(backButtonItem, at: 0)
+
+        let section = CPListSection(items: listItems)
+        let listTemplate = CPListTemplate(title: "Search Results", sections: [section])
+
+        // Push the search results template to CarPlay
+        carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
+    }
+    
+    func presentSearchResults2(for query: String) {
+        Task {
+            do {
+                // Fetch songs using your MediaItemViewModel
+                let songs = try await MediaItemViewModel.shared.searchSongs(q: query)
+
+                // Map the results to CPListItems
+                let listItems = songs.map { song in
+                    let item = CPListItem(text: song.title, detailText: song.artistName)
+                    let imgurl = song.artwork?.url(width: 500, height: 500)
+                    let img = fetchImage4(from: imgurl?.absoluteString ?? "")
+                    item.setImage(img ?? UIImage(systemName: "music.note"))
+                    item.handler = { _, completion in
+                        Task {
+                            do {
+                                try await MediaItemViewModel.shared.playSelectedSong(song)
+                                let viewModel = MediaItemViewModel.shared
+                                Task {
+                                    let img = await self.getSong()
+                                    self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: img, speedo: self.getSpeedo(), detailedText: LocationManager.shared.eta, completion: {x in
+                                        let carPlayTemplate = x
+                                        self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                                    })
+                                    print("Playing: \(song.title) by \(song.artistName)")
+                                }
+                            } catch {
+                                print("Error playing song: \(error)")
+                            }
+                            completion()
+                        }
+                    }
+                    return item
+                }
+
+                // Create a list section with the results
+                let section = CPListSection(items: listItems)
+                let listTemplate = CPListTemplate(title: "Search Results", sections: [section])
+
+                // Push the search results template to CarPlay
+                carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
+            } catch {
+                print("Error fetching search results: \(error)")
+            }
+        }
+    }
+    
+    
+    func playSong(named songName: String) {
+        print("Attempting to play: \(songName)")
+        
+        // Implement playback logic using MusicKit or your media player
+       // MediaItemViewModel.shared.playSelectedSong(<#T##song: Song##Song#>)
     }
     
     func updateTime() {
@@ -145,10 +387,10 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
         formatter.timeStyle = .medium
         currentTime = formatter.string(from: Date())
         print("Function executed at \(currentTime)")
-        wvm.fetchText()
+        WeatherViewModel.shared.fetchText()
         // get weather
         Task {
-            await wvm.fetchWeather()
+            WeatherViewModel.shared.fetchWeather()
         }
     }
     
@@ -189,104 +431,61 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
         if musicPlayer.playbackState == .paused {
             musicPlayer.play()
         } else {
-            musicPlayer.pause()
+            musicPlayer.play()
         }
     }
-    
-    func loadMoreSongs(for mediaCollection: MPMediaItemCollection, offset: Int, batchSize: Int, completion: @escaping ([MPMediaItem]) -> Void) {
-        let mediaItems = mediaCollection.items
-        let totalSongs = mediaItems.count
-        
-        print("Total Songs: \(totalSongs)")
-        print("Current Offset: \(offset)")
-        
-        // Ensure that the offset is within bounds of the mediaItems array.
-        guard offset < totalSongs else {
-            print("No more songs to load.")
-            completion([])
-            return
-        }
 
-        // Calculate the range safely, ensuring we don't exceed the total item count.
-        let nextBatch = Array(mediaItems[offset..<min(offset + batchSize, totalSongs)])
-        
-        print("Next Batch Count: \(nextBatch.count)")
-        print("min \(min(offset + batchSize, totalSongs))")
-        print("offset: \(offset)")
-        print("Total Songs: \(totalSongs)")
-
-        // Return the batch of songs.
-        completion(nextBatch)
-
-        // Update the currentOffset after loading the batch.
-        currentOffset += nextBatch.count
-    }
-    
     func loadNextPage(for mediaCollection: MPMediaItemCollection) {
-        loadMoreSongs(for: mediaCollection, offset: currentOffset, batchSize: batchSize) { [weak self] newSongs in
+        loadMoreSongs(for: mediaCollection, offset: currentOffset, batchSize: 9) { [weak self] newSongs in
             guard let self = self else { return }
 
             if let currentListTemplate = self.carplayInterfaceController?.topTemplate as? CPListTemplate,
                let currentSection = currentListTemplate.sections.first {
+                // Safely cast items to [CPListItem]
+                var allItems = currentSection.items.compactMap { $0 as? CPListItem }
 
-                var allItems = currentSection.items as? [CPListItem] ?? []
-
-                // Remove the "Load More" item if it exists
-                if let lastItem = allItems.last, lastItem.text == "Load More..." {
-                    allItems.removeLast()
+                // Add the Back button
+                let backButtonItem = CPListItem(text: "Back", detailText: nil)
+                backButtonItem.setImage(UIImage(systemName: "arrowshape.left.circle", withConfiguration: self.configuration)!)
+                backButtonItem.handler = { [weak self] _, _ in
+                    self?.currentOffset = 0
+                    self?.gridTemplate { gridTemplate in
+                        self?.carplayInterfaceController?.setRootTemplate(gridTemplate, animated: true, completion: nil)
+                    }
                 }
-                allItems.removeAll()
+                if !allItems.contains(where: { $0.text == "Back" }) {
+                    allItems.insert(backButtonItem, at: 0)
+                }
+
+                // Remove the existing "Load More..." button
+                allItems.removeAll { $0.text == "Load More..." }
+
                 // Add new songs to the list
                 for song in newSongs {
                     let listItem = CPListItem(text: song.title ?? "Unknown Title", detailText: song.artist)
                     if let artwork = song.artwork {
-                        let imageSize = CGSize(width: 100, height: 100) // Specify the size you want
-                        let artworkImage = artwork.image(at: imageSize)
-                        listItem.setImage(artworkImage)
+                        listItem.setImage(artwork.image(at: CGSize(width: 100, height: 100)))
                     }
-                    // Add the custom handler for new songs when tapped
                     listItem.handler = { [weak self] _, _ in
-                        // Play the selected song
-                        self?.playMediaCollection(mediaCollection, startingAt: song)
-
-                        // Run your custom code when the song is tapped
-                        self?.currentOffset = 0
-                        let viewModel = MediaItemViewModel()
-                        self?.ListTemplate(title: song.title ?? viewModel.title, artist: song.artist ?? viewModel.artist, art: viewModel.artworkImage, completion: { x in
-                            let carPlayTemplate = x
-                            self?.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                        })
+                        guard let self = self else { return }
+                        let mediaCollection = MPMediaItemCollection(items: [song])
+                        self.playMediaCollection(mediaCollection, startingAt: song)
                     }
-
                     allItems.append(listItem)
                 }
 
-                // Add the "Load More" item again if more songs are still available
-                if self.currentOffset < mediaCollection.items.count - 1 {
+                // Add the "Load More..." button if more songs are available
+                if self.currentOffset < mediaCollection.items.count {
                     let loadMoreItem = CPListItem(text: "Load More...", detailText: nil)
                     loadMoreItem.handler = { [weak self] _, _ in
                         self?.loadNextPage(for: mediaCollection)
                     }
                     allItems.append(loadMoreItem)
-                } else {
-                   let backItem = CPListItem(text: "Back", detailText: nil)
-                    backItem.setImage(UIImage(systemName: "arrow.left"))
-                    backItem.handler = { [weak self] _, _ in
-                        self?.currentOffset = 0
-                        let viewModel = MediaItemViewModel()
-                        self?.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: { x in
-                            let carPlayTemplate = x
-                            self?.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                        })
-                    }
-                    allItems.append(backItem)
                 }
-                
 
-                let newSection = CPListSection(items: allItems)
-                let updatedTemplate = CPListTemplate(title: currentListTemplate.title, sections: [newSection])
-
-                // Set the root template with the updated section
+                // Update the section and template
+                let updatedSection = CPListSection(items: allItems)
+                let updatedTemplate = CPListTemplate(title: currentListTemplate.title, sections: [updatedSection])
                 self.carplayInterfaceController?.setRootTemplate(updatedTemplate, animated: true, completion: nil)
             }
         }
@@ -303,7 +502,6 @@ class TemplateManager: NSObject, ObservableObject, CPInterfaceControllerDelegate
     func fetchAlbums() {
         let query = MPMediaQuery.albums()
         let albums = query.collections ?? []
-        
         DispatchQueue.main.async {
             self.loadNextAlbumPage(albums: albums)
         }
@@ -326,7 +524,7 @@ func loadNextAlbumPage(albums: [MPMediaItemCollection]) {
     listItemHead.userInfo = "1"
     listItemHead.handler = { item, completion in
         self.currentOffset = 0
-            self.lm.UpdateAllowed(x: false, completion: { x in
+        LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 var grid: CPGridTemplate!
                 self.gridTemplate(completion: { x in
                     grid = x
@@ -433,7 +631,7 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
     listItemHead.userInfo = "1"
     listItemHead.handler = { item, completion in
         self.currentOffset = 0
-            self.lm.UpdateAllowed(x: false, completion: { x in
+        LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 var grid: CPGridTemplate!
                 self.gridTemplate(completion: { x in
                     grid = x
@@ -509,6 +707,35 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         }
     }
 }
+    func loadMoreSongs(for mediaCollection: MPMediaItemCollection, offset: Int, batchSize: Int, completion: @escaping ([MPMediaItem]) -> Void) {
+        let mediaItems = mediaCollection.items
+        let totalSongs = mediaItems.count
+        
+        print("Total Songs: \(totalSongs)")
+        print("Current Offset: \(offset)")
+        
+        // Ensure that the offset is within bounds of the mediaItems array.
+        guard offset < totalSongs else {
+            print("No more songs to load.")
+            completion([])
+            return
+        }
+
+        // Calculate the range safely, ensuring we don't exceed the total item count.
+        let nextBatch = Array(mediaItems[offset..<min(offset + batchSize, totalSongs)])
+        
+        print("Next Batch Count: \(nextBatch.count)")
+        print("min \(min(offset + batchSize, totalSongs))")
+        print("offset: \(offset)")
+        print("Total Songs: \(totalSongs)")
+
+        // Return the batch of songs.
+        completion(nextBatch)
+
+        // Update the currentOffset after loading the batch.
+        currentOffset += nextBatch.count
+    }
+    
     func showPlaylistsTemplate(playlists: [MPMediaItemCollection]) {
         var playlistItems: [CPListItem] = []
         
@@ -542,69 +769,295 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
     func showSongsTemplate(for mediaCollection: MPMediaItemCollection, title: String? = nil) {
         var songItems: [CPListItem] = []
 
-        // Load songs from the media collection
+        // Back button
+        let backButtonItem = CPListItem(text: "Back", detailText: nil)
+        backButtonItem.setImage(UIImage(systemName: "arrowshape.left.circle", withConfiguration: configuration)!)
+        backButtonItem.handler = { [weak self] _, completion in
+            guard let self = self else { return }
+            self.currentOffset = 0
+            LocationManager.shared.UpdateAllowed(x: false) { _ in
+                self.gridTemplate { grid in
+                    self.carplayInterfaceController?.setRootTemplate(grid, animated: true, completion: nil)
+                }
+            }
+            completion()
+        }
+
+        // Load songs in batches based on batchSize
         loadMoreSongs(for: mediaCollection, offset: currentOffset, batchSize: batchSize) { [weak self] songs in
             guard let self = self else { return }
 
-            // Add all the songs that were loaded
+            // Add only the batch-sized songs to the template
             for song in songs {
                 let listItem = CPListItem(text: song.title ?? "Unknown Title", detailText: song.artist)
                 if let artwork = song.artwork {
-                    let imageSize = CGSize(width: 100, height: 100) // Specify the size you want
-                    let artworkImage = artwork.image(at: imageSize)
-                    listItem.setImage(artworkImage)
+                    listItem.setImage(artwork.image(at: CGSize(width: 100, height: 100)))
                 }
-                // Add custom handler to run when a song is tapped
                 listItem.handler = { [weak self] _, _ in
-                    // Play the selected song
-                    self?.playMediaCollection(mediaCollection, startingAt: song)
-
-                    // Run your custom code when the song is tapped
-                    if let artwork = song.artwork {
-                        let imageSize = CGSize(width: 100, height: 100) // Specify the size you want
-                        let artworkImage = artwork.image(at: imageSize)
-                        // Now you can use artworkImage (which will be a UIImage) in your UI
-                        self?.currentOffset = 0
-                        let viewModel = MediaItemViewModel()
-                        self?.ListTemplate(title: song.title ?? viewModel.title, artist: song.artist ?? viewModel.artist, art: artworkImage, completion: { x in
-                            let carPlayTemplate = x
-                            self?.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                        })
-                    } else {
-                        self?.currentOffset = 0
-                        let viewModel = MediaItemViewModel()
-                        self?.ListTemplate(title: song.title ?? viewModel.title, artist: song.artist ?? viewModel.artist, art: viewModel.artworkImage, completion: { x in
-                            let carPlayTemplate = x
-                            self?.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                        })
-                    }
+                    guard let self = self else { return }
+                    let mediaCollection = MPMediaItemCollection(items: [song])
+                    self.playMediaCollection(mediaCollection, startingAt: song)
                 }
-
                 songItems.append(listItem)
             }
 
-            // Add the "Load More" item if more songs are available to load
+            // Add "Load More..." button if there are more songs to load
             if self.currentOffset < mediaCollection.items.count {
                 let loadMoreItem = CPListItem(text: "Load More...", detailText: nil)
                 loadMoreItem.handler = { [weak self] _, _ in
-                    self?.loadNextPage(for: mediaCollection)
+                    guard let self = self else { return }
+                    self.loadNextPage(for: mediaCollection)
                 }
                 songItems.append(loadMoreItem)
             }
 
-            // Prepare the title for the template
-            let collectionTitle = title ?? mediaCollection.representativeItem?.albumTitle ?? "Songs"
+            // Update the template
+            let backSection = CPListSection(items: [backButtonItem])
+            let songsSection = CPListSection(items: songItems)
+            let listTemplate = CPListTemplate(title: title ?? "Songs", sections: [backSection, songsSection])
+            self.carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
+        }
+    }
 
-            // Create a new section with the updated list of songs
-            let section = CPListSection(items: songItems)
+   
+    func showSongsTemplate(for mediaQuery: MPMediaQuery, title: String? = nil) {
+        var songItems: [CPListItem] = []
 
-            // Set the root template with the new section to force CarPlay to refresh
-            let listTemplate = CPListTemplate(title: collectionTitle, sections: [section])
-            self.carplayInterfaceController!.setRootTemplate(listTemplate, animated: true, completion: nil)
+        // Create a "Back" button item
+        let backButtonItem = CPListItem(text: "Back", detailText: nil)
+        backButtonItem.setImage(
+            UIImage(systemName: "arrowshape.left.circle",
+                    withConfiguration: self.configuration)!
+        )
+        backButtonItem.handler = { [weak self] _, completion in
+            guard let self = self else { return }
+            self.currentOffset = 0
+            LocationManager.shared.UpdateAllowed(x: false, completion: { _ in
+                self.gridTemplate { grid in
+                    self.carplayInterfaceController?.setRootTemplate(grid, animated: true, completion: nil)
+                }
+            })
+            completion()
+        }
+
+        // Retrieve all songs from the query
+        guard let mediaItems = mediaQuery.items, !mediaItems.isEmpty else {
+            print("No songs available")
+            return
+        }
+
+        // Load the initial batch of songs
+        let mediaCollection = MPMediaItemCollection(items: mediaItems)
+        loadMoreSongs(for: mediaCollection, offset: currentOffset, batchSize: 9) { [weak self] songs in
+            guard let self = self else { return }
+
+            // Populate list items for each song in the batch
+            for song in songs {
+                let listItem = CPListItem(
+                    text: song.title ?? "Unknown Title",
+                    detailText: song.artist
+                )
+                if let artwork = song.artwork {
+                    let imageSize = CGSize(width: 100, height: 100)
+                    listItem.setImage(artwork.image(at: imageSize))
+                }
+                listItem.handler = { [weak self] _, _ in
+                    guard let self = self else { return }
+                    // Wrap the song in an MPMediaItemCollection
+                    let mediaCollection = MPMediaItemCollection(items: [song])
+                    self.playMediaCollection(mediaCollection, startingAt: song)
+
+                    // Reset offset for the new list
+                    self.currentOffset = 0
+                    let viewModel = MediaItemViewModel.shared
+                    Task {
+                        let img = await self.getSong()
+                        self.ListTemplate(
+                            title: song.title ?? viewModel.title,
+                            artist: song.artist ?? viewModel.artist,
+                            art: img,
+                            speedo: self.getSpeedo(),
+                            detailedText: ""
+                        ) { carPlayTemplate in
+                            self.carplayInterfaceController?.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                        }
+                    }
+                }
+                songItems.append(listItem)
+            }
+            
+            // If there's more to load, append a "Load More" item
+            if self.currentOffset < mediaItems.count {
+                let loadMoreItem = CPListItem(text: "Load More...", detailText: nil)
+                loadMoreItem.handler = { [weak self] _, _ in
+                    guard let self = self else { return }
+                    // Wrap mediaItems in MPMediaItemCollection
+                    let mediaCollection = MPMediaItemCollection(items: mediaItems)
+                    self.loadNextPage(for: mediaCollection)
+                }
+                songItems.append(loadMoreItem)
+            }
+
+            // Create sections for the back button and songs
+            let backSection = CPListSection(items: [backButtonItem])
+            let songsSection = CPListSection(items: songItems)
+
+            let collectionTitle = title ?? "Songs"
+
+            // Present the list template
+            let listTemplate = CPListTemplate(
+                title: collectionTitle,
+                sections: [backSection, songsSection]
+            )
+            self.carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
         }
     }
     
-    func ListTemplate(title: String, artist: String, art: UIImage?, completion: @escaping (CPListTemplate) -> Void) {
+
+    
+    
+    
+    func getImageFromUserDefaults(key: String) -> UIImage? {
+        if let imageData = UserDefaults.standard.data(forKey: key) {
+            return UIImage(data: imageData)
+        }
+        return nil
+    }
+    
+    func getSpeedo() -> String {
+        if LocationManager.shared.speed < 20.0 {
+            print("speed-0")
+            return "speed0"
+        } else if LocationManager.shared.speed < 42 {
+            print("speed-30")
+            return "speed30"
+        } else if LocationManager.shared.speed < 62 {
+            print("speed-50")
+            return "speed50"
+        } else if LocationManager.shared.speed < 78 {
+            print("speed-70")
+            return "speed70"
+        } else if LocationManager.shared.speed >= 87 {
+            print("speed-100")
+            return "speed100"
+        } else {
+            print("speed-0-0")
+            return "speed0"
+        }
+    }
+    
+
+    // Fetch a song by store ID
+    func fetchSongMetadata(storeID: String) async throws -> SongMetadata? {
+        // Create a MusicCatalogResourceRequest for a specific song
+        let request = MusicCatalogResourceRequest<Song>(matching: \.id, equalTo: MusicItemID(storeID))
+
+        do {
+            // Perform the request
+            let response = try await request.response()
+
+            // Get the first song (if available)
+            guard let song = response.items.first else {
+                print("No song found with store ID \(storeID).")
+                return nil
+            }
+
+            // Extract metadata from the song
+            let metadata = SongMetadata(
+                title: song.title,
+                artist: song.artistName,
+                album: song.albumTitle ?? "Unknown Album",
+                genre: song.genreNames.first ?? "Unknown Genre",
+                artworkURL: song.artwork?.url(width: 500, height: 500)
+            )
+
+            return metadata
+
+        } catch {
+            print("Error fetching song metadata: \(error.localizedDescription)")
+            throw error
+        }
+    }
+    
+    func getSong() async -> UIImage {
+        do {
+            let id = musicPlayer.nowPlayingItem?.playbackStoreID
+            if let metadata = try await fetchSongMetadata(storeID: id ?? "") {
+                print("Title: \(metadata.title)")
+                print("Artist: \(metadata.artist)")
+                print("Album: \(metadata.album)")
+                print("Genre: \(metadata.genre)")
+                if let artworkURL = metadata.artworkURL {
+                    print("Artwork URL: \(artworkURL)")
+                    guard let image = await fetchImage(from: artworkURL.absoluteString) else {
+                        return UIImage(named: "music")!
+                    }
+                    return image
+                } else {
+                    return UIImage(named: "music")!
+                }
+            } else {
+                return UIImage(named: "music")!
+            }
+        } catch {
+            print("Failed to fetch metadata: \(error)")
+            return UIImage(named: "music")!
+        }
+        
+    }
+    
+    func fetchImage2(from urlString: String) async throws -> UIImage {
+        // Ensure the string can be converted to a valid URL
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        do {
+            // Fetch the image data from the URL
+            let (data, _) = try await URLSession.shared.data(from: url)
+            
+            // Convert the data into a UIImage
+            guard let image = UIImage(data: data) else {
+                throw NSError(domain: "ImageError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid image data."])
+            }
+            
+            return image
+        } catch {
+            throw error
+        }
+    }
+    
+    func setupListTemplate() async {
+        let listTemplate = await CPListTemplate(title: "My List", sections: [createListSection()])
+        carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
+    }
+    
+    private func createListSection() async -> CPListSection {
+        var items: [CPListItem] = []
+        let img = await getSong()
+        // Create a list item for the now playing song
+        if let nowPlayingItem = MPMusicPlayerController.applicationMusicPlayer.nowPlayingItem {
+            let nowPlayingTitle = nowPlayingItem.title ?? "Unknown Title"
+            let nowPlayingArtist = nowPlayingItem.artist ?? "Unknown Artist"
+            //let artwork = nowPlayingItem.artwork?.image(at: CGSize(width: 100, height: 100))
+            
+            let nowPlayingListItem = CPListItem(text: nowPlayingTitle, detailText: nowPlayingArtist)
+           
+            // Use the UIImage directly for the item imgag
+            nowPlayingListItem.setImage(img) // Assuming image it's most likely a UIImage
+           
+            items.append(nowPlayingListItem)
+        }
+        
+        // Add additional non-music related items here
+        let otherItem = CPListItem(text: "Other Item 1", detailText: "Detail 1")
+        items.append(otherItem)
+        
+        return CPListSection(items: items)
+    }
+    
+    func ListTemplate(title: String, artist: String, art: UIImage?, speedo: String, detailedText: String, completion: @escaping (CPListTemplate) -> Void) {
+        print("test2 - speedo: \(speedo)")
         var listItems: [CPListItem] = []
         // Iterate over each MPMediaItem in the mediaItems array
         let title3 = title
@@ -612,13 +1065,14 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         var listItem3: CPListItem?
 
         listItem3 = CPListItem(text: title3, detailText: artist3)
-        if art != nil {
-            listItem3?.setImage(art)
+        
+        if let img = art {
+            listItem3?.setImage(img)
         }
         
         listItems.append(listItem3 ?? CPListItem(text: "", detailText: ""))
         
-        let img = UIImage(named: "\(dayName(forCode: wvm.is_day) ?? "day")/\(imageName(forCode: wvm.code) ?? "113")")
+        let img = UIImage(named: "\(dayName(forCode: WeatherViewModel.shared.is_day) ?? "day")/\(imageName(forCode: WeatherViewModel.shared.code) ?? "113")")
         let img_resized = resizeImage(img ?? UIImage(named: "day/113")!, targetSize: CGSize(width: 44, height: 44)) // Adjust size as needed
         let _ = UIImage(systemName: "line.3.horizontal", withConfiguration: self.configuration)!
         let _ = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular) // Adjust pointSize and weight as needed
@@ -632,30 +1086,70 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         Back(listItem: listItemHead)
         
         // List Item 1
-        let listItem = CPListItem(text: String(format: "%.1f MPH", self.lm.speed), detailText: self.lm.directionString)
-        listItem.setImage(UIImage(named: "speed"))
+        let listItem = CPListItem(text: String(format: "%.1f MPH", LocationManager.shared.speed), detailText: LocationManager.shared.directionString)
+        listItem.setImage(UIImage(named: "\(speedo)"))
         listItem.userInfo = "1"
         
         // List Item 2
-        let listItem2 = CPListItem(text: ("\(String(self.wvm.temp))"), detailText: ("\(String(format: "%.0f", self.wvm.today_min))°/\(String(format: "%.0f", self.wvm.today_max))°"))
+        let listItem2 = CPListItem(text: ("\(String(WeatherViewModel.shared.temp))"), detailText: ("\(String(format: "%.0f", WeatherViewModel.shared.today_min))°/\(String(format: "%.0f", WeatherViewModel.shared.today_max))°"))
         listItem2.setImage(img_resized)
         listItem2.userInfo = "2"
         openWeather(listItem: listItem2)
         
         // List Item 4
-        let listItem4 = CPListItem(text: self.addressString, detailText: "Location")
-        listItem4.setImage(UIImage(named: "map")!)
-        listItem4.userInfo = "4"
-        searchHandlerForItem(listItem: listItem4)
+        if !LocationManager.shared.currentStep.isEmpty {
+            let listItem4 = CPListItem(text: "In \(formatDistance(LocationManager.shared.disToCurrentStep)) \(LocationManager.shared.currentStep)", detailText: detailedText)
+           
+            listItem4.setImage(UIImage(named: "map")!)
+            listItem4.userInfo = "4"
+            searchHandlerForItem(listItem: listItem4)
+
+            // List Sections
+            sections = [CPListSection(items: [listItemHead, listItem, listItem2, listItem3 ?? CPListItem(text: "", detailText: ""), listItem4])]
+            
+            // List Template
+            let template = CPListTemplate(title: "", sections: self.sections!)
+            template.tabImage = UIImage(systemName: "speedometer")
+            // Initialize the scroller
+            let _ = "In \(formatDistance(LocationManager.shared.disToCurrentStep)) \(LocationManager.shared.currentStep)"
+
+            completion(template)
+            
+        } else {
+            let listItem4 = CPListItem(text: self.addressString, detailText: "Location")
+            listItem4.setImage(UIImage(named: "map")!)
+            listItem4.userInfo = "4"
+            searchHandlerForItem(listItem: listItem4)
+            // List Sections
+            sections = [CPListSection(items: [listItemHead, listItem, listItem2, listItem3 ?? CPListItem(text: "", detailText: ""), listItem4])]
+            
+            // List Template
+            let template = CPListTemplate(title: "", sections: self.sections!)
+            template.tabImage = UIImage(systemName: "speedometer")
+            completion(template)
+        }
         
-        // List Sections
-        sections = [CPListSection(items: [listItemHead, listItem, listItem2, listItem3 ?? CPListItem(text: "", detailText: ""), listItem4])]
-        
-        // List Template
-        let template = CPListTemplate(title: "", sections: self.sections!)
-        template.tabImage = UIImage(systemName: "speedometer")
-        completion(template)
+
     }
+    
+    func fetchAlbumFromCatalog(title: String, artist: String, completion: @escaping (Album?) -> Void) {
+        Task {
+            do {
+                let request = MusicCatalogSearchRequest(term: "\(title) \(artist)", types: [Album.self])
+                let response = try await request.response()
+                if let album = response.albums.first {
+                    completion(album)
+                } else {
+                    print("Album not found in catalog.")
+                    completion(nil)
+                }
+            } catch {
+                print("Error performing catalog search: \(error)")
+                completion(nil)
+            }
+        }
+    }
+    
     
     func dayName(forCode code: Int) -> String? {
         switch code {
@@ -674,41 +1168,135 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         }
     }
     
+    
+    func fetchImage(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: urlString) else {
+            completion(nil) // Invalid URL
+            return
+        }
+
+        // Perform the image fetch asynchronously
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Failed to fetch image: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+
+            guard let data = data, let image = UIImage(data: data) else {
+                completion(nil) // Unable to parse image data
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(image) // Return the image to the main thread
+            }
+        }.resume()
+    }
+    
     func gridTemplate(completion: @escaping (CPGridTemplate) -> Void) {
-        lm.UpdateAllowed(x: false, completion: { x in })
+        LocationManager.shared.UpdateAllowed(x: false, completion: { x in })
         // Create grid buttons
-        let gridButton1 = CPGridButton(titleVariants: ["Dashboard"], image: UIImage(systemName: "car.side")!) {_ in
-            let viewModel = MediaItemViewModel()
-            self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: {x in
-                let carPlayTemplate = x
-                self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-            })
-            print("Option 1 selected")
+        Task {
+            let img = await getSong()
+            
+            let gridButton1 = CPGridButton(titleVariants: ["Dashboard"], image: UIImage(systemName: "car.side")!) {_ in
+                self.ListTemplate(title: MediaItemViewModel.shared.title, artist: MediaItemViewModel.shared.artist, art: img, speedo: self.getSpeedo(), detailedText: LocationManager.shared.eta, completion: {x in
+                    let carPlayTemplate = x
+                    self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                })
+                
+                print("Option 1 selected")
+            }
+            
+            let gridButton2 = CPGridButton(titleVariants: ["Garage Door"], image: UIImage(systemName: "door.garage.double.bay.closed")!) {_ in
+                print("Option 2 selected")
+                self.informationTemplate(completion: {x in
+                    self.carplayInterfaceController!.setRootTemplate(x, animated: true, completion: nil)
+                })
+            }
+            
+            let gridButton3 = CPGridButton(titleVariants: ["Outside Lighting"], image: UIImage(systemName: "lightbulb.2")!) {_ in
+                self.informationTemplate2(completion: {x in
+                    self.carplayInterfaceController!.setRootTemplate(x, animated: true, completion: nil)
+                })
+            }
+            
+            let gridButton4 = CPGridButton(titleVariants: ["Playlists"], image: UIImage(systemName: "text.line.first.and.arrowtriangle.forward")!) { [weak self] _ in
+                guard let self = self else { return }
+                self.fetchPlaylists()
+                Task {
+                    //await self.setupListTemplate()
+                }
+                print("NO")
+            }
+            
+            let gridButton5 = CPGridButton(titleVariants: ["Albums"], image: UIImage(systemName: "music.house")!) { [weak self] _ in
+                guard let self = self else { return }
+                self.fetchAlbums()
+                Task {
+                    //await self.setupListTemplate()
+                }
+                
+            }
+            
+            let songsTemplate = CPGridButton(titleVariants: ["Songs"], image: UIImage(systemName: "music.note.list")!) { [weak self] _ in
+                guard let self = self else { return }
+                
+                // Fetch all songs from the media query
+                let query = MPMediaQuery.songs()
+                self.showSongsTemplate(for: query, title: "Songs")
+            }
+            
+            // Create Grid Template with the buttons
+            let gridTemplate = CPGridTemplate(title: "Main Menu", gridButtons: [songsTemplate, gridButton5, gridButton4, gridButton3, gridButton2, gridButton1])
+            
+            completion(gridTemplate)
+            //})
+        }
+    }
+    
+    func gridTemplate2(completion: @escaping (CPGridTemplate) -> Void) {
+        LocationManager.shared.UpdateAllowed(x: false, completion: { x in })
+        // Create grid buttons
+        let gridButton22 = CPGridButton(titleVariants: [""], image: UIImage(systemName: "playpause.fill")!) {_ in
+            print("play/pause")
+            let state = MediaItemViewModel.shared.musicPlayer.playbackState
+            if state == .playing {
+                MediaItemViewModel.shared.musicPlayer.pause()
+            } else {
+                MediaItemViewModel.shared.musicPlayer.play()
+            }
         }
         
-        let gridButton2 = CPGridButton(titleVariants: ["Garage Door"], image: UIImage(systemName: "door.garage.double.bay.closed")!) {_ in
-            print("Option 2 selected")
-            self.informationTemplate(completion: {x in
-                self.carplayInterfaceController!.setRootTemplate(x, animated: true, completion: nil)
-            })
-        }
-        
-        let gridButton3 = CPGridButton(titleVariants: ["Outside Lighting"], image: UIImage(systemName: "lightbulb.2")!) {_ in
-            self.informationTemplate2(completion: {x in
-                self.carplayInterfaceController!.setRootTemplate(x, animated: true, completion: nil)
-            })
+        let gridButton11 = CPGridButton(titleVariants: [""], image: UIImage(systemName: "backward.fill")!) {_ in
+            print("back")
+            MediaItemViewModel.shared.musicPlayer.skipToPreviousItem()
+            
         }
             
-        let gridButton4 = CPGridButton(titleVariants: ["Playlists"], image: UIImage(systemName: "text.line.first.and.arrowtriangle.forward")!) {_ in
-            self.fetchPlaylists()
+        let gridButton33 = CPGridButton(titleVariants: [""], image: UIImage(systemName: "forward.fill")!) {_ in
+            MediaItemViewModel.shared.musicPlayer.skipToNextItem()
+        }
+        let gridButton44 = CPGridButton(titleVariants: ["Search"], image: UIImage(systemName: "magnifyingglass")!) {_ in
+            self.presentCarPlayGrid()
+            self.startVoiceSearch()
         }
         
-        let gridButton5 = CPGridButton(titleVariants: ["Albums"], image: UIImage(systemName: "music.house")!) {_ in
-            self.fetchAlbums()
+        let gridButton3 = CPGridButton(titleVariants: ["    "], image: UIImage(named: "clear")!) {_ in
+            
+        }
+        
+        let gridButton3_3 = CPGridButton(titleVariants: ["    "], image: UIImage(named: "clear")!) {_ in
+            
+        }
+        
+        let gridButton4_4 = CPGridButton(titleVariants: ["    "], image: UIImage(named: "clear")!) {_ in
+            
         }
             
         // Create Grid Template with the buttons
-        let gridTemplate = CPGridTemplate(title: "Main Menu", gridButtons: [gridButton5, gridButton4, gridButton3, gridButton2, gridButton1])
+        let gridTemplate = CPGridTemplate(title: "Music", gridButtons: [gridButton4_4, gridButton11, gridButton3, gridButton22, gridButton3_3, gridButton33, gridButton44])
         
         completion(gridTemplate)
         //})
@@ -766,6 +1354,38 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         }
         
         return nil
+    }
+    
+
+    func createCarPlayGridTemplate(withTitle title: String, microphoneAction: @escaping () -> Void, cancelAction: @escaping () -> Void) -> CPGridTemplate {
+        // Create the microphone grid item
+        let microphoneItem = CPGridButton(titleVariants: [""], image: UIImage(named: "red_microphone")!) {_ in
+            microphoneAction()
+        }
+
+        // Create the cancel grid item
+        let _ = CPGridButton(titleVariants: ["Cancel"], image: UIImage(systemName: "xmark.circle")!) {_ in
+            cancelAction()
+        }
+
+        // Create and return the grid template
+        let gridTemplate = CPGridTemplate(title: title, gridButtons: [microphoneItem])
+        return gridTemplate
+    }
+    
+    func presentCarPlayGrid() {
+
+        let gridTemplate = createCarPlayGridTemplate(
+            withTitle: "Voice Input",
+            microphoneAction: {
+                print("Microphone tapped.")
+            },
+            cancelAction: {
+                print("Cancel tapped.")
+            }
+        )
+
+        carplayInterfaceController!.setRootTemplate(gridTemplate, animated: true, completion: nil)
     }
     
     func informationTemplate(completion: @escaping (CPTemplate) -> Void) {
@@ -869,19 +1489,65 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         })
     }
     
-
-        
-        
-    func downloadImage(from artUrlString: String, completion: @escaping (UIImage?) -> Void) {
-        if let url = URL(string: artUrlString) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data, error == nil else {
-                    completion(nil)
-                    return
-                }
-                completion(UIImage(data: data))
-            }.resume()
+        func fetchImage3(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+            print("test2 - fetch image")
+            let artwork = musicPlayer.nowPlayingItem?.artwork?.image(at: CGSize(width: 3000, height: 3000))
+            completion(artwork)
         }
+    
+    func fetchImage4(from urlString: String) -> UIImage? {
+        print("test2 - fetch image4")
+        let artwork = MediaItemViewModel.shared.musicPlayer.nowPlayingItem?.artwork?.image(at: CGSize(width: 4000, height: 4000))
+        return artwork
+    }
+    
+    
+    func fetchImage() async throws -> (String) {
+        do {
+            let x = try await mediaClass.getID(songTitle: mediaClass.title, artistName: mediaClass.artist)
+            return x
+        } catch {
+            print("error")
+            return ""
+        }
+    }
+
+    func fetchImage2(from urlString: String, completion: @escaping (UIImage?) -> Void) {
+        let cacheKey = NSString(string: urlString)
+        
+        // Check if the image is already cached
+        if let cachedImage = ImageCache.shared.object(forKey: cacheKey) {
+            print("Using cached image")
+            completion(cachedImage)
+            return
+        }
+        
+        // If not cached, download the image
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            completion(nil)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error fetching image: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                print("Failed to decode image data")
+                completion(nil)
+                return
+            }
+            
+            // Cache the downloaded image
+            ImageCache.shared.setObject(image, forKey: cacheKey)
+            print("Image cached")
+            
+            completion(image)
+        }.resume()
     }
     
     // CPInterfaceControllerDelegate method
@@ -890,30 +1556,30 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
         var type: String = ""
         if aTemplate is CPGridTemplate {
             type = "grid"
-            lm.UpdateAllowed(x: false, completion: { x in
+            LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 if type != self.previousType {
                     print("type: \(type)")
                     self.previousType = type
-                    print("allow updates: \(self.lm.UpdateAllowed())")
+                    print("allow updates: \(LocationManager.shared.UpdateAllowed())")
                 }
             })
         } else if aTemplate is CPListTemplate {
             type = "list"
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.lm.UpdateAllowed(x: true, completion: { x in
+                LocationManager.shared.UpdateAllowed(x: true, completion: { x in
                     if type != self.previousType {
                         print("type: \(type)")
                         self.previousType = type
-                        print("allow updates: \(self.lm.UpdateAllowed())")
+                        print("allow updates: \(LocationManager.shared.UpdateAllowed())")
                     }
                 })            }
         } else if aTemplate is CPInformationTemplate {
             type = "info"
-            lm.UpdateAllowed(x: false, completion: { x in
+            LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 if type != self.previousType {
                     print("type: \(type)")
                     self.previousType = type
-                    print("allow updates: \(self.lm.UpdateAllowed())")
+                    print("allow updates: \(LocationManager.shared.UpdateAllowed())")
                 }
             })
             if doorStatus == "open" {
@@ -994,7 +1660,7 @@ func loadNextPlaylistPage(playlists: [MPMediaItemCollection]) {
     
     func Back(listItem: CPListItem) {
         listItem.handler = { item, completion in
-            self.lm.UpdateAllowed(x: false, completion: { x in
+            LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 var grid: CPGridTemplate!
                 self.gridTemplate(completion: { x in
                     grid = x
@@ -1025,18 +1691,17 @@ extension TemplateManager {
 
     func musicHandler(listItem: CPListItem) {
         listItem.handler = { item, completion in
-            if self.musicPlayer.playbackState == .playing {
-                self.musicPlayer.pause()
-            } else {
-                self.musicPlayer.play()
-            }
+            self.gridTemplate2(completion: { x in
+                self.carplayInterfaceController!.pushTemplate(x, animated: true, completion: nil)
+            })
+            completion()
         }
     }
     
     func buttonTemp(listItem: CPListItem) {
         listItem.handler = { item, completion in
             print("grid")
-            self.lm.UpdateAllowed(x: false, completion: { x in
+            LocationManager.shared.UpdateAllowed(x: false, completion: { x in
                 var grid: CPGridTemplate!
                 self.gridTemplate(completion: { x in
                     grid = x
@@ -1049,47 +1714,57 @@ extension TemplateManager {
     
     func searchHandlerForItem(listItem: CPListItem) {
         listItem.handler = { item, completion in
-
-            let ok = CPAlertAction(title: "OK", style: .default) { _ in
-                let viewModel = MediaItemViewModel()
-                self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: {x in
-                    let carPlayTemplate = x
-                    self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                })
-            }
-            
-            let alert2 = CPActionSheetTemplate(
-                title: "Complete Action In",
-                message: "The Drivers Center Phone App",
-                actions: [ok]
-            )
-
-            let sendLocation = CPAlertAction(title: "Send Location", style: .default) { _ in
-                //self.sendLocation()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self.carplayInterfaceController!.presentTemplate(alert2, animated: true, completion: nil)
-                }
-            }
-
-            let showMaps = CPAlertAction(title: "Open Google Maps", style: .default) { _ in
-                self.carplayScene?.open(self.url, options: nil, completionHandler: nil)
-            }
-            let cancel = CPAlertAction(title: "Cancel", style: .default) { _ in
-                let viewModel = MediaItemViewModel()
-                self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: {x in
-                    let carPlayTemplate = x
-                    self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-                })
-            }
-            let alert = CPActionSheetTemplate(
-                title: "Choose an Option",
-                message: "Or Cancel Request",
-                actions: [sendLocation, showMaps, cancel]
-            )
-            self.carplayInterfaceController!.presentTemplate(alert, animated: true, completion: nil)
-            completion()
+            self.presentCarPlayGrid()
+            self.startVoiceSearch2()
         }
     }
+        //listItem.handler = { item, completion in
+        //listItem.handler = { item, completion in
+        // Your closure code here
+        
+        /*
+         let ok = CPAlertAction(title: "OK", style: .default) { _ in
+         let art = fetchImage4(from: mediaClass.newArt?.absoluteString?)
+         self.ListTemplate(title: mediaClass.title, artist: mediaClass.artist, art: art, completion: {x in
+         let carPlayTemplate = x
+         self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+         })
+         }
+         */
+        /*
+         let alert2 = CPActionSheetTemplate(
+         title: "Complete Action In",
+         message: "The Drivers Center Phone App",
+         actions: [ok]
+         )
+         
+         let sendLocation = CPAlertAction(title: "Send Location", style: .default) { _ in
+         //self.sendLocation()
+         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+         self.carplayInterfaceController!.presentTemplate(alert2, animated: true, completion: nil)
+         }
+         }
+         
+         let showMaps = CPAlertAction(title: "Open Google Maps", style: .default) { _ in
+         self.carplayScene?.open(self.url, options: nil, completionHandler: nil)
+         }
+         let cancel = CPAlertAction(title: "Cancel", style: .default) { _ in
+         let viewModel = MediaItemViewModel.shared
+         self.ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.newArt?.absoluteString ?? "", completion: {x in
+         let carPlayTemplate = x
+         self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+         })
+         }
+         let alert = CPActionSheetTemplate(
+         title: "Choose an Option",
+         message: "Or Cancel Request",
+         actions: [sendLocation, showMaps, cancel]
+         )
+         self.carplayInterfaceController!.presentTemplate(alert, animated: true, completion: nil)
+         completion()
+         
+         
+         */
     
     func openWeather(listItem: CPListItem) {
         listItem.handler = { item, completion in
@@ -1099,8 +1774,6 @@ extension TemplateManager {
         }
     }
     
-
-        
     func updateTemplate2() {
 
         let currentTemplate: CPTemplate = self.carplayInterfaceController!.topTemplate ?? CPTemplate()
@@ -1131,43 +1804,68 @@ extension TemplateManager {
 
         }
     }
-    
-    
-func updateTemplate() {
-    let currentTemplate: CPTemplate = self.carplayInterfaceController!.topTemplate ?? CPTemplate()
-    let templateType = type(of: currentTemplate)
-    let templateTitle = getCurrentTemplateTitle(template: currentTemplate)
-    //print("templateType: \(templateType)")
-    
-    var tempCounter: Int = 0
-    // get address
-    if (counter == 0) {
-        tempCounter += 1
-        counter += 1
-        getAddressFromLatLon()
-        
-    } else {
-        tempCounter = 0
-        counter = 0
+    func startObservingNowPlaying() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(nowPlayingItemDidChange),
+            name: .MPMusicPlayerControllerNowPlayingItemDidChange,
+            object: musicPlayer
+        )
+        musicPlayer.beginGeneratingPlaybackNotifications()
     }
     
-    // update location url
-    let urlString = "comgooglemaps://?center=\(lm.latitude),\(lm.longitude)&zoom=14&views=traffic"
-    url = URL(string: urlString)
+    @objc private func nowPlayingItemDidChange() {
+        cnt = 0
+    }
     
-    // update radar url
-    let radarString = "myradar://"
-    url2 = URL(string: radarString)
-    
-    if templateTitle == "" && templateType == CPListTemplate.self {
-        let viewModel = MediaItemViewModel()
-        ListTemplate(title: viewModel.title, artist: viewModel.artist, art: viewModel.artworkImage, completion: {x in
-            let carPlayTemplate = x
-            self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
-        })
+    func updateTemplate(with speed: Double) {
+
+            print("updating Template")
+            let currentTemplate: CPTemplate = self.carplayInterfaceController!.topTemplate ?? CPTemplate()
+            let templateType = type(of: currentTemplate)
+            let templateTitle = getCurrentTemplateTitle(template: currentTemplate)
+            //print("templateType: \(templateType)")
+            
+            var tempCounter: Int = 0
+            // get address
+            if (counter == 0) {
+                tempCounter += 1
+                counter += 1
+                getAddressFromLatLon()
+                
+            } else {
+                tempCounter = 0
+                counter = 0
+            }
+            
+            // update location url
+            let urlString = "comgooglemaps://?center=\(LocationManager.shared.latitude),\(LocationManager.shared.longitude)&zoom=14&views=traffic"
+            url = URL(string: urlString)
+            
+            // update radar url
+            let radarString = "myradar://"
+            url2 = URL(string: radarString)
+            
+            if templateTitle == "" && templateType == CPListTemplate.self {
+                _ = MediaItemViewModel.shared
+                _ = self.fetchImage4(from: self.mediaClass.newArt?.absoluteString ?? "")
+                Task {
+                    let img = await getSong()
+                    self.ListTemplate(title: musicPlayer.nowPlayingItem?.title ?? "", artist: musicPlayer.nowPlayingItem?.artist ?? "" , art: img, speedo: self.getSpeedo(), detailedText: LocationManager.shared.eta, completion: {x in
+                        let carPlayTemplate = x
+                        self.carplayInterfaceController!.setRootTemplate(carPlayTemplate, animated: true, completion: nil)
+                    })
+                    
+                    
+                    
+                    
+                }
+            }
+        
+
     }
 
-}
+    
     func imageName(forCode code: Int) -> String? {
         switch code {
                 case 1000: return "113"
@@ -1247,9 +1945,9 @@ func updateTemplate() {
         func getAddressFromLatLon() {
             
             var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
-            let lat: Double = lm.latitude
+            let lat: Double = LocationManager.shared.latitude
             //21.228124
-            let lon: Double = lm.longitude
+            let lon: Double = LocationManager.shared.longitude
             //72.833770
             let ceo: CLGeocoder = CLGeocoder()
             center.latitude = lat
@@ -1292,9 +1990,9 @@ func updateTemplate() {
         func getAddress() -> String {
             
             var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
-            let lat: Double = lm.latitude
+            let lat: Double = LocationManager.shared.latitude
             //21.228124
-            let lon: Double = lm.longitude
+            let lon: Double = LocationManager.shared.longitude
             //72.833770
             let ceo: CLGeocoder = CLGeocoder()
             center.latitude = lat
@@ -1338,7 +2036,7 @@ func updateTemplate() {
         func initPos() {
             if #available(iOS 17.0, *) {
                 MyVariables.initialPosition = {
-                    let center = CLLocationCoordinate2D(latitude: lm.latitude, longitude: lm.longitude)
+                    let center = CLLocationCoordinate2D(latitude: LocationManager.shared.latitude, longitude: LocationManager.shared.longitude)
                     let span = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
                     let region = MKCoordinateRegion(center: center, span: span)
                     return .region(region)
@@ -1364,3 +2062,56 @@ class SpinnerViewController: UIViewController {
         view.addSubview(spinner)
     }
 }
+
+extension TemplateManager: CPSearchTemplateDelegate {
+    func searchTemplate(
+        _ searchTemplate: CPSearchTemplate,
+        updatedSearchText searchText: String,
+        completionHandler: @escaping ([CPListItem]) -> Void
+    ) {
+        Task {
+            do {
+                // Use your view model to fetch songs based on the search text
+                let songs = try await MediaItemViewModel.shared.searchSongs(q: searchText)
+
+                // Map songs to CPListItems
+                let listItems = songs.map { song in
+                    let item = CPListItem(
+                        text: song.title,
+                        detailText: song.artistName
+                    )
+                    item.handler = { _, completion in
+                        // Create a Task to handle async function calls
+                        Task {
+                            do {
+                                try await MediaItemViewModel.shared.playSelectedSong(song)
+                                print("Playing song: \(song.title) by \(song.artistName)")
+                            } catch {
+                                print("Error playing selected song: \(error)")
+                            }
+                            completion()
+                        }
+                    }
+                    return item
+                }
+
+                // Pass the list items back to the search template
+                completionHandler(listItems)
+            } catch {
+                print("Error fetching search results: \(error)")
+                completionHandler([]) // Return an empty array in case of failure
+            }
+        }
+    }
+
+    func searchTemplate(
+        _ searchTemplate: CPSearchTemplate,
+        selectedResult item: CPListItem,
+        completionHandler: @escaping () -> Void
+    ) {
+        // Handle selection of a search result if needed
+        completionHandler()
+    }
+}
+
+

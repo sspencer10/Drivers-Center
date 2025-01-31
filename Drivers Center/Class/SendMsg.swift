@@ -21,7 +21,7 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
         }
         let str = "driverscenter://"
         let url: URL = URL(string: str)!
-        TemplateManager().carplayScene?.open(url, options: nil, completionHandler: nil)
+        TemplateManager.shared.carplayScene?.open(url, options: nil, completionHandler: nil)
         let messageVC = MFMessageComposeViewController()
         messageVC.body = message.body
         messageVC.recipients = [message.recipient]

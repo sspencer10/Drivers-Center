@@ -1,4 +1,12 @@
 //
+//  IsFirst.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/17/25.
+//
+
+
+//
 //  RetroSpeedometerView2.swift
 //  Drivers Center
 //
@@ -22,7 +30,7 @@ struct IsFirst: View {
             Spacer()
             // App Icon
             Button(action: {
-                mediaItemViewModel.byPass()
+                //mediaItemViewModel.byPass()
             }) {
                 Image("loginImg")
                     .resizable()
@@ -32,7 +40,7 @@ struct IsFirst: View {
             }
             
             Button(action: {
-                mediaItemViewModel.byPass()
+                //mediaItemViewModel.byPass()
             }) {
                 Text("CarPlay Active")
                     .font(.system(size: 38, weight: .bold))
@@ -40,9 +48,10 @@ struct IsFirst: View {
             }
                 Button(action: {
                     print("Tapped Prominent Button")
-                    mediaItemViewModel.byPass()
+                    //mediaItemViewModel.byPass()
+                    UserDefaults.standard.set(true, forKey: "firstLaunch")
                 }) {
-                    Text("Unlock App")
+                    Text("Permissions")
                         .font(.system(size: 22, weight: .bold))
                         .padding(.horizontal, 35)
                         .padding(.vertical, 5)

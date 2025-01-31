@@ -1,7 +1,15 @@
+//
+//  SpeechRecognizer 2.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/28/25.
+//
+
+
 import Speech
 import AVFoundation
 
-class SpeechRecognizer: NSObject {
+class SpeechRecognizer2: NSObject {
     private let speechRecognizer = SFSpeechRecognizer()
     private let audioEngine = AVAudioEngine()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?

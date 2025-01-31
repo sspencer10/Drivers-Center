@@ -2,84 +2,90 @@ import SwiftUI
 
 struct LibraryMenuSheet: View {
     @Environment(\.dismiss) var dismiss
-
+    @ObservedObject var viewModel: MediaItemViewModel
+    @Binding var showSheet: Bool
+    
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Library")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, 20)
-
-            Spacer()
-
-            VStack(spacing: 16) {
-                Button(action: {
-                    // Action for Playlists
-                }) {
-                    HStack {
-                        Text("Playlists")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
+        NavigationStack { // ✅ Enables nested navigation
+            VStack(spacing: 0) {
+                Text("Library")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.top, 25) // Increased top padding
+                    .padding(.bottom, 25)
+                
+                // Library Options
+                VStack(spacing: 0) {
+                    NavigationLink(destination: PlaylistView(viewModel: viewModel, showSheet: $viewModel.showPlaylist)) {
+                        LibraryMenuItem(icon: "playlist", text: "Playlists")
                     }
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                    Divider().background(Color.gray)
+
+                    NavigationLink(destination: AlbumsView(viewModel: viewModel, showSheet: $viewModel.showAlbums)) {
+                        LibraryMenuItem(icon: "albums", text: "Albums")
+                    }
+                    Divider().background(Color.gray)
+
+                    NavigationLink(destination: SongsView(viewModel: viewModel, showSheet: $viewModel.showSongs)) {
+                        LibraryMenuItem(icon: "songs", text: "Songs")
+                    }
+                    Divider().background(Color.gray)
+
+                    NavigationLink(destination: MusicSearch(viewModel: viewModel, isPresented: $viewModel.showSearchSheet, onSelectSong: { song in
+                        viewModel.selectedSong = song
+                        Task {
+                            try await viewModel.playSelectedSong(song) // Start playback of selected song
+                        }
+                    })) {
+                        LibraryMenuItem(icon: "search", text: "Search")
+                    }
+                }
+                .padding(.horizontal)
+                .onAppear {
+                    viewModel.fetchSongs()
+                    viewModel.fetchAlbums()
                 }
 
-                Button(action: {
-                    // Action for Albums
-                }) {
-                    HStack {
-                        Text("Albums")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                }
+                Spacer()
 
-                Button(action: {
-                    // Action for Songs
-                }) {
-                    HStack {
-                        Text("Songs")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                Button("Dismiss") {
+                    dismiss()
                 }
+                .font(.headline)
+                .foregroundColor(.blue)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal)
-
-            Spacer()
-
-            Button("Dismiss") {
-                dismiss()
-            }
-            .font(.headline)
-            .foregroundColor(.blue)
-            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.edgesIgnoringSafeArea(.all))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black.edgesIgnoringSafeArea(.all))
     }
 }
 
-struct LibraryMenuSheet_Previews: PreviewProvider {
-    static var previews: some View {
-        LibraryMenuSheet()
+// 🔹 Updated LibraryMenuItem with direct NavigationLink
+struct LibraryMenuItem: View {
+    var icon: String // Image name from Assets.xcassets
+    var text: String
+
+    var body: some View {
+        HStack {
+            Image(icon)
+                .resizable()
+                .frame(width: 70, height: 70)
+                .scaledToFit()
+                .cornerRadius(10)
+            
+            Text(text)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding(.leading, 12)
+            
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.2))
     }
 }

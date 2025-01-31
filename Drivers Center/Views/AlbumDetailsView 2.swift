@@ -1,9 +1,17 @@
+//
+//  AlbumDetailsView 2.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/29/25.
+//
+
+
 import SwiftUI
 import MusicKit
 import MediaPlayer
 
 
-struct AlbumDetailsView: View {
+struct AlbumDetailsView2: View {
     @Environment(\.dismiss) private var dismiss
     @State private var artworkImage: UIImage?
     @State private var tracks: [MusicKit.Song] = []
@@ -12,10 +20,12 @@ struct AlbumDetailsView: View {
     @State var artworkURL: URL?
     @State var albumTitle: String?
     @State var albumArtist: String?
-    @ObservedObject var viewModel: MediaItemViewModel
+    @ObservedObject var viewModel = MediaItemViewModel.shared
     @State var releaseDate: Date?
     @State private var albumTracks: [MPMediaItem] = []
     @State private var albumSongs: [Song] = []
+    @State var albumID: MPMediaEntityPersistentID
+    @State var album: MPMediaItemCollection?
 
     var body: some View {
         NavigationView {
@@ -24,177 +34,137 @@ struct AlbumDetailsView: View {
                     if isLoading {
                         ProgressView()
                             .onAppear {
-                                viewModel.startObservingNowPlaying()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                    isLoading = false
-                                }
+                                 album = getAlbumByPersistentID(persistentID: albumID)
                             }
                     } else {
-                        // Album Artwork
-                        if let artworkImage = viewModel.newArt2 {
-                            Image(uiImage: artworkImage)
-                                .resizable()
-                                .scaledToFit()
-                                .cornerRadius(8)
-                                .frame(width: 300, height: 300) // Set fixed size
-                                .padding(.horizontal, 20)
-                        } else if let artworkURL = viewModel.newArt {
-                            AsyncImage(url: artworkURL) { phase in
-                                switch phase {
-                                case .empty:
-                                    ProgressView()
-                                case .success(let image):
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .cornerRadius(8)
-                                        .frame(width: 300, height: 300) // Set fixed size
-                                        .padding(.horizontal, 20)
-                                case .failure:
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .foregroundColor(.gray)
-                                        .frame(width: 300, height: 300) // Set fixed size
-                                        .padding(.horizontal, 20)
-                                @unknown default:
-                                    EmptyView()
-                                }
-                            }
-                        }
-
-                        // Album Details
-                        VStack(spacing: 8) {
-                            Text(viewModel.musicPlayer.nowPlayingItem?.albumTitle ?? "Unknown Title")
-                                .font(.headline)
-                                .lineLimit(2)
-                                .multilineTextAlignment(.center)
-
-                            Text("by \(viewModel.musicPlayer.nowPlayingItem?.albumArtist ?? "Unknown Artist")")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            HStack {
-                                if let releaseDate = getAlbumReleaseDate(from: viewModel.musicPlayer) {
-                                    Text("Released: \(formatReleaseDate(releaseDate))")
-                                        .font(.footnote)
-                                        .foregroundColor(.secondary)
-                                }
-                                // Add Album to Library Button
-                              Button(action: {
-                                  Task {
-                                      do {
-                                          try await viewModel.addAlbumToLibrary()
-                                          print("Album successfully added to library.")
-                                      } catch {
-                                          print("Error adding album to library: \(error.localizedDescription)")
-                                      }
-                                  }
-                              }) {
-                                  HStack {
-                                      Image(systemName: "plus.circle")
-                                          .resizable()
-                                          .frame(width: 20, height: 20)
-                                      Text("Add Album")
-                                          .font(.subheadline)
-                                  }
-                                  .padding()
-                              }
-                              .buttonStyle(BorderlessButtonStyle())
-                          }
-                    }
-                        .padding(.horizontal)
-                        .padding(.top, 16)
-
-                        // Tracks List
-                        VStack {
-                            if isTracksLoading {
-                                ProgressView("Loading Album Tracks...")
-                                    .onAppear {
-                                        Task {
-                                            albumSongs = try await fetchAlbumTracksFromSong(
-                                                songTitle: viewModel.title,
-                                                artistName: viewModel.artist
-                                                //songTitle: "Gettin' It (feat. Parliament-Funkadelic)",
-                                                //artistName: "Too $hort"
-                                            )
-                                        }
-                                    }
-                            } else if albumTracks.isEmpty && albumSongs.isEmpty {
-                                Text("No tracks found for the current album.")
-                                    .foregroundColor(.secondary)
-                                    .padding()
-                                    .onAppear {
-                                        isTracksLoading = false
-                                    }
+                        if let album = getAlbumByPersistentID(persistentID: albumID),
+                           let artwork = album.representativeItem?.artwork {
+                            if let image = artwork.image(at: CGSize(width: 300, height: 300)) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .cornerRadius(8)
+                                    .frame(width: 300, height: 300) // Set fixed size
+                                    .padding(.horizontal, 20)
                             } else {
-                                if (!albumTracks.isEmpty) {
-                                    ForEach(albumTracks.indices, id: \.self) { index in
-                                        let track = albumTracks[index]
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(track.title ?? "Unknown Title")
-                                                    .font(.headline)
-                                                Text(track.artist ?? "Unknown Artist")
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            Spacer()
-                                            Button(action: {
-                                                Task {
-                                                    try await viewModel.playSelectedSong(mapMPMediaItemToSong(track)!)
-                                                }
-                                                dismiss()
-                                            }) {
-                                                Image(systemName: "play.circle")
-                                                    .resizable()
-                                                    .frame(width: 30, height: 30)
-                                                    .foregroundColor(.blue)
-                                            }
-                                        }
-                                        .padding(.vertical, 4)
-                                    }
-                                } else {
-                                    
-                                    ForEach(albumSongs, id: \.id) { track in
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text(track.title)
-                                                    .font(.headline)
-                                                Text(track.artistName) // Use artistName for Song
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.secondary)
-                                            }
-                                            Spacer()
-                                            Button(action: {
-                                                Task {
-                                                    do {
-                                                        try await viewModel.playSelectedSong(track) // Directly play the Song
-                                                    } catch {
-                                                        print("Error playing track: \(error.localizedDescription)")
-                                                    }
-                                                }
-                                                dismiss()
-                                            }) {
-                                                Image(systemName: "play.circle")
-                                                    .resizable()
-                                                    .frame(width: 30, height: 30)
-                                                    .foregroundColor(.blue)
-                                            }
-                                        }
-                                        .padding(.vertical, 4)
-                                    }
-                                     
-                                }
+                                Image(uiImage: UIImage(named: "music")!)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .cornerRadius(8)
+                                    .frame(width: 300, height: 300) // Set fixed size
+                                    .padding(.horizontal, 20)
                             }
+                            // Album Details
+                            VStack(spacing: 8) {
+                                Text(album.representativeItem?.albumTitle ?? "Unknown Title")
+                                    .font(.headline)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("by \(album.representativeItem?.artist ?? "Unknown Artist")")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    
+                                    Text("Released: \(formatReleaseDate(album.representativeItem?.releaseDate ?? .now))")
+                                            .font(.footnote)
+                                            .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal)
+                                .padding(.top, 4)
+                                
+                                VStack {
+                                    if isTracksLoading {
+                                        ProgressView("Loading Album Tracks...")
+                                            .onAppear {
+                                                Task {
+                                                    albumTracks = album.items
+                                                    isTracksLoading = false
+                                                }
+                                            }
+                                    } else if albumTracks.isEmpty {
+                                        Text("No tracks found for the current album.")
+                                            .foregroundColor(.secondary)
+                                            .padding()
+                                    } else {
+                                        ForEach(albumTracks.indices, id: \.self) { index in
+                                            let track = albumTracks[index]
+                                            HStack {
+                                                VStack(alignment: .leading) {
+                                                    Text(track.title ?? "Unknown Title")
+                                                        .font(.headline)
+                                                    Text(track.artist ?? "Unknown Artist")
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.secondary)
+                                                }
+                                                Spacer()
+                                                Button(action: {
+                                                    Task {
+                                                        try await viewModel.playSelectedSong(mapMPMediaItemToSong(track)!)
+                                                    }
+                                                    DispatchQueue.main.async {
+                                                        dismiss()
+                                                        viewModel.showAlbums = false
+                                                        viewModel.showMenu = false
+                                                    }
+                                                    DispatchQueue.main.async {
+                                                        dismiss() // Dismiss the first sheet
+                                                        dismiss() // Try dismissing again (if another sheet is open)
+                                                        viewModel.showAlbums = false
+                                                        viewModel.showMenu = false
+                                                    }
+                                                }) {
+                                                    Image(systemName: "play.circle")
+                                                        .resizable()
+                                                        .frame(width: 30, height: 30)
+                                                        .foregroundColor(.blue)
+                                                }
+                                            }
+                                            .padding(.vertical, 4)
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
+                            }
+
+
+                            
+                            .padding()
                         }
-                        .padding(.horizontal)
+                        
                     }
                 }
-                .padding()
             }
             .navigationTitle("Album Details")
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+    
+    func getAlbumByPersistentID(persistentID: UInt64) -> MPMediaItemCollection? {
+        print("id: \(persistentID)")
+        let query = MPMediaQuery.albums()
+        
+        let predicate = MPMediaPropertyPredicate(
+            value: NSNumber(value: persistentID),
+            forProperty: MPMediaItemPropertyAlbumPersistentID,
+            comparisonType: .equalTo
+        )
+        
+        query.addFilterPredicate(predicate)
+        
+        guard let albums = query.collections, !albums.isEmpty else {
+            print("Album not found")
+            return nil
+        }
+        
+        // Find the album with the most tracks
+        let albumWithMostTracks = albums.max(by: { $0.items.count < $1.items.count })
+        
+        DispatchQueue.main.async {
+            isLoading = false
+        }
+        
+        return albumWithMostTracks
     }
     
     func playLocalTrack(_ track: MPMediaItem) {

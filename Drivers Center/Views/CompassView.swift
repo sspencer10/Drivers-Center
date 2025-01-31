@@ -63,7 +63,7 @@ struct CompassMarkerView: View {
     }
 
     private func capsuleColor() -> Color {
-        return self.marker.degrees == 0 ? .red : .gray
+        return self.marker.degrees == 0 ? .blue : .gray
     }
 
     private func textAngle() -> Angle {
@@ -73,7 +73,8 @@ struct CompassMarkerView: View {
 
 struct CompassView : View {
     @StateObject var carPlay = LocationManager.shared
-    @StateObject var tm = TemplateManager()
+    //@StateObject var tm = TemplateManager()
+    var tm = TemplateManager.shared
     @State var carPlay2: Bool = false
 
     var body: some View {
@@ -116,8 +117,3 @@ struct CompassView : View {
     }
 }
 
-struct CompassView_Previews: PreviewProvider {
-    static var previews: some View {
-        CompassView(carPlay: LocationManager.shared)
-    }
-}

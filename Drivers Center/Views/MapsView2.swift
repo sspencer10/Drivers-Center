@@ -97,8 +97,4 @@ struct CustomMapView: UIViewRepresentable {
     }
 }
 
-struct MapsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapsView(locationManager: LocationManager.shared)
-    }
-}
+

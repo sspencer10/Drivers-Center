@@ -1,9 +1,44 @@
+//
+//  Utilities.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/26/25.
+//
+
 import Foundation
 
 func formatDistance(_ distanceInMeters: Double) -> String {
+    // Create a Measurement object with meters
     let distance = Measurement(value: distanceInMeters, unit: UnitLength.meters)
+
     let formatter = MeasurementFormatter()
     formatter.unitOptions = .providedUnit
     formatter.unitStyle = .medium
-    return formatter.string(from: distance)
+    
+    formatter.locale = Locale(identifier: "en_US")
+
+    // Create NumberFormatter for miles
+    let milesNumberFormatter = NumberFormatter()
+    milesNumberFormatter.maximumFractionDigits = 1
+    milesNumberFormatter.minimumFractionDigits = 1
+
+    // Create NumberFormatter for feet
+    let feetNumberFormatter = NumberFormatter()
+    feetNumberFormatter.maximumFractionDigits = 0
+    feetNumberFormatter.minimumFractionDigits = 0
+
+    // Convert to imperial units: miles or feet
+    if distance.value >= 1609.34 { // Greater than or equal to 1 mile
+        let miles = distance.converted(to: .miles) // Convert to miles
+        formatter.numberFormatter = milesNumberFormatter
+        return formatter.string(from: miles)
+    } else if distance.value < 152.4 { // Less than 500 feet
+        let feet = distance.converted(to: .feet) // Convert to feet
+        formatter.numberFormatter = feetNumberFormatter
+        return formatter.string(from: feet)
+    } else { // Default to miles for anything 500 feet or greater
+        let miles = distance.converted(to: .miles) // Convert to miles
+        formatter.numberFormatter = milesNumberFormatter
+        return formatter.string(from: miles)
+    }
 }

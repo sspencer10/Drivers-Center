@@ -2,9 +2,9 @@ import SwiftUI
 
 struct WeatherView: View {
     
-    @StateObject private var viewModel = WeatherViewModel()
-    @StateObject private var templateManager = LocationManager.shared
-    @StateObject var tm = TemplateManager()
+    @ObservedObject var viewModel: WeatherViewModel
+    @ObservedObject var lm: LocationManager
+    @ObservedObject var tm: TemplateManager
     @State private var city: String = ""
     @State private var q: String = ""
     @State private var x: String = ""
@@ -28,7 +28,7 @@ struct WeatherView: View {
                     Text("Getting location...")
                         .onAppear {
                             Task {
-                                await viewModel.fetchWeather()
+                                viewModel.fetchWeather()
                             }
                         }
                 } else {
@@ -39,7 +39,7 @@ struct WeatherView: View {
                             viewModel.showSecondView = false
                             let location = viewModel.getLoc()
                             Task {
-                                await viewModel.fetchWeather()
+                                viewModel.fetchWeather()
                                 if (location != "42.1673839, -92.0156213") {
                                     viewModel.showFirstView = false
                                     viewModel.showSecondView = true
@@ -202,11 +202,16 @@ struct WeatherView: View {
                 //templateManager.setup()
             }
             .onChange(of: tm.isCarPlay) {
-                if tm.isCarPlay {
-                    carPlay = true
-                } else {
-                    carPlay = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    
+                    if tm.isCarPlay {
+                        carPlay = true
+                    } else {
+                        carPlay = false
+                    }
+                    
                 }
+            
             }
             
             //viewModel.onMySubmit()
@@ -230,9 +235,3 @@ struct WeatherView: View {
     }
 }
 
-
-struct WeatherView_Previews: PreviewProvider {
-    static var previews: some View {
-        WeatherView()
-    }
-}

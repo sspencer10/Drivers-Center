@@ -10,6 +10,41 @@ import Foundation
 func formatDistance(_ distanceInMeters: Double) -> String {
     // Create a Measurement object with meters
     let distance = Measurement(value: distanceInMeters, unit: UnitLength.meters)
+//
+//  Utilities.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/26/25.
+//
+
+
+import Foundation
+
+func formatDistance(_ distanceInMeters: Double) -> String {
+    // Create a Measurement object with meters
+    let distance = Measurement(value: distanceInMeters, unit: UnitLength.meters)
+
+    let formatter = MeasurementFormatter()
+    formatter.unitOptions = .providedUnit
+    formatter.unitStyle = .medium
+    
+    formatter.locale = Locale(identifier: "en_US")
+
+    // Configure NumberFormatter for one decimal place
+    let numberFormatter = NumberFormatter()
+    numberFormatter.maximumFractionDigits = 1
+    numberFormatter.minimumFractionDigits = 1
+    formatter.numberFormatter = numberFormatter
+
+    // Convert to imperial units: miles or feet
+    if distance.value >= 1609.34 { // Greater than or equal to 1 mile
+        let miles = distance.converted(to: .miles) // Convert to miles
+        return formatter.string(from: miles)
+    } else { // Less than 1 mile, use feet
+        let feet = distance.converted(to: .feet) // Convert to feet
+        return formatter.string(from: feet)
+    }
+}
 
     let formatter = MeasurementFormatter()
     formatter.unitOptions = .providedUnit

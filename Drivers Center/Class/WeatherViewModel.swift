@@ -1,11 +1,12 @@
 import Foundation
 import SwiftUI
 
-class WeatherViewModel: ObservableObject {
+class WeatherViewModel: NSObject, ObservableObject {
     
-    public static var shared = WeatherViewModel()
+    public static var shared = Drivers_Center.WeatherViewModel()
+
     
-    var lm = LocationManager.shared
+    //var lm = LocationManager.shared
     @Published var weather: WeatherResponse?
     @Published var loc: String?
     @Published var min: Double?
@@ -23,18 +24,16 @@ class WeatherViewModel: ObservableObject {
     @Published var code: Int = 0
     @Published var is_day: Int = 0
     
+    var timer: Timer?
     
-    var timer: Timer
-    init() {
-        timer = Timer()
-        Task {
-            await fetchWeather()
-        }
+    private override init() {
+        super.init()
+        fetchWeather()
     }
     
-    func fetchWeather() async {
+    func fetchWeather() {
         print("FetchWeather")
-        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&q=\(lm.latitude), \(lm.longitude)&alerts=yes&days=5"
+        let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&q=\(LocationManager.shared.latitude), \(LocationManager.shared.longitude)&alerts=yes&days=5"
         print("urlString: \(urlString)")
         guard let url = URL(string: urlString) else { return }
         
@@ -68,13 +67,19 @@ class WeatherViewModel: ObservableObject {
     
     func getLoc() -> String {
         print("getLoc")
-        self.loc = "\(lm.latitude), \(lm.longitude)"
-        if (loc != "42.1673839, -92.0156213") {
-            UserDefaults.standard.setValue(loc, forKeyPath: "loc")
+        
+        // Ensure all @Published property updates happen on the main thread
+        let newLoc = "\(LocationManager.shared.latitude), \(LocationManager.shared.longitude)"
+        DispatchQueue.main.async {
+            self.loc = newLoc
+            if self.loc != "42.1673839, -92.0156213" {
+                UserDefaults.standard.setValue(self.loc, forKeyPath: "loc")
+            }
         }
-        if (UserDefaults.standard.string(forKey: "loc") != nil) {
-            print(UserDefaults.standard.string(forKey: "loc") ?? "42.167383, -92.015621")
-            return UserDefaults.standard.string(forKey: "loc")!
+        
+        if let storedLoc = UserDefaults.standard.string(forKey: "loc") {
+            print(storedLoc)
+            return storedLoc
         } else {
             print("42.1673839, -92.0156213")
             return "42.1673839, -92.0156213"
@@ -82,25 +87,25 @@ class WeatherViewModel: ObservableObject {
     }
     
     func getLat() -> Double {
-        self.lat = lm.latitude
+        self.lat = LocationManager.shared.latitude
         return lat ?? 42.1673839
     }
     
     func getLong() -> Double {
-        self.long = lm.longitude
+        self.long = LocationManager.shared.longitude
         return long ?? -92.0156213
     }
     
     func onMySubmit() {
         showSecondView = true
         showFirstView = false
-        timer.invalidate()
+        timer?.invalidate()
         print("fetch weather")
         if (getLoc() != "42.1673839, -92.0156213") {
             timer = Timer.scheduledTimer(withTimeInterval: 60.0, repeats: true) {
                 [self] timer in
                 Task {
-                    await fetchWeather()
+                    fetchWeather()
 
                 }
             }
@@ -108,7 +113,7 @@ class WeatherViewModel: ObservableObject {
             timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) {
                 [self] timer in
                 Task {
-                    await fetchWeather()
+                    fetchWeather()
 
                 }
             }
@@ -147,17 +152,16 @@ class WeatherViewModel: ObservableObject {
         task.resume()
     }
     
-    func getMoreWeather() async {
-        //print("fetchWeather")
+    func getMoreWeather() {
         let urlString = "https://api.weatherapi.com/v1/forecast.json?key=5aa6d70b54f7455fb2f141924241508&alerts=yes&q=\(getLoc())&days=5"
-        guard let url = URL(string: urlString) else { return  }
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        guard let url = URL(string: urlString) else { return }
+
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            guard let self = self else { return } // Capture self weakly
             if let data = data {
                 do {
                     let decodedData = try JSONDecoder().decode(WeatherResponse.self, from: data)
                     DispatchQueue.main.async {
-                        self.weather = decodedData
-                        //self.current_f = decodedData.current.temp_f
                         self.today_min = decodedData.forecast.forecastday[0].day.mintemp_f
                         self.today_max = decodedData.forecast.forecastday[0].day.maxtemp_f
                     }
@@ -167,6 +171,5 @@ class WeatherViewModel: ObservableObject {
             }
         }.resume()
     }
-      
 }
 

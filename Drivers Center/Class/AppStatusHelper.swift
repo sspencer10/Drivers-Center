@@ -5,6 +5,7 @@
 //  Created by Steven Spencer on 1/31/25.
 //
 
+import UIKit
 
 class AppStatusHelper {
     func isAppInBackground() -> Bool {

@@ -1,18 +1,14 @@
 import CarPlay
 import MediaPlayer
 
-class CarPlayManager: NSObject, CPTemplateApplicationSceneDelegate {
-    var interfaceController: CPTemplateApplicationScene?
-    
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, 
-                                   didUpdateInterfaceStyle interfaceStyle: CPInterfaceStyle) {
-        self.interfaceController = templateApplicationScene
-        setupListTemplate()
-    }
+class CarPlayManager: NSObject, CPSessionConfigurationDelegate {
+    var carplayInterfaceController: CPInterfaceController?
+
+
     
     func setupListTemplate() {
         let listTemplate = CPListTemplate(title: "My List", sections: [createListSection()])
-        interfaceController?.setRootTemplate(listTemplate, animated: true)
+        carplayInterfaceController?.setRootTemplate(listTemplate, animated: true, completion: nil)
     }
     
     private func createListSection() -> CPListSection {
@@ -22,20 +18,20 @@ class CarPlayManager: NSObject, CPTemplateApplicationSceneDelegate {
         if let nowPlayingItem = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem {
             let nowPlayingTitle = nowPlayingItem.title ?? "Unknown Title"
             let nowPlayingArtist = nowPlayingItem.artist ?? "Unknown Artist"
-            let artwork = nowPlayingItem.artwork?.image(with: CGSize(width: 100, height: 100))
+            let artwork = nowPlayingItem.artwork?.image(at: CGSize(width: 100, height: 100))
             
             let nowPlayingListItem = CPListItem(text: nowPlayingTitle, detailText: nowPlayingArtist)
             if let image = artwork {
-                // Create a custom image for the item for now playing song
-                nowPlayingListItem.image = CPImage(image: image)
+                // Use the UIImage directly for the item image
+                nowPlayingListItem.setImage(image) // Assuming image it's most likely a UIImage
             } else {
                 // Use a placeholder image if there is no artwork
-                nowPlayingListItem.image = CPImage(image: UIImage(systemName: "music.note")!)
+                nowPlayingListItem.setImage(UIImage(systemName: "music.note")) // Or any other placeholder
             }
             items.append(nowPlayingListItem)
         }
         
-        // Add other non-music related items here as needed
+        // Add additional non-music related items here
         let otherItem = CPListItem(text: "Other Item 1", detailText: "Detail 1")
         items.append(otherItem)
         

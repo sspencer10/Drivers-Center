@@ -1,3 +1,11 @@
+//
+//  CustomSheetMenu.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 1/20/25.
+//
+
+
 import SwiftUI
 
 struct CustomSheetMenu: View {
@@ -53,11 +61,14 @@ struct MenuSheet: View {
                 onViewPlaylists()
                 dismiss()
             }) {
-                Text("View Playlists")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
+                HStack {
+                    Image(systemName: "music.note.list")
+                    Text("View Playlists")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
             }
 
             Button(action: {

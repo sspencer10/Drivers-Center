@@ -1,6 +1,7 @@
+/*
+
 import SwiftUI
 import MusicKit
-import MediaPlayer
 
 @main
 struct MusicKitPlaylistApp: App {
@@ -11,100 +12,267 @@ struct MusicKitPlaylistApp: App {
     }
 }
 
+@MainActor
 struct ContentView: View {
-    @State private var isAuthorized = false
-    @State private var playlistStatus = ""
-
+    @State private var search_q: String = ""
+    @State private var isLoading = false
+    @State private var message: String? = nil
+    @State var songArray: [String] = []
+    @State var plSongs: [Song] = []
+    
     var body: some View {
         VStack(spacing: 20) {
-            Text("MusicKit Playlist Creator")
-                .font(.largeTitle)
+            
+            TextField("Add or Remove song (title artist)", text: $search_q)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
-            Button("Request Permissions") {
-                Task {
-                    await requestPermissions()
+            Button(action: {
+                if !search_q.isEmpty {
+                    Task {
+                        try await searchSong(q: search_q)
+                    }
                 }
+            }) {
+                Text("Add Song")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            
+            Button(action: {
+                if !search_q.isEmpty {
+                    Task {
+                        try await searchSongDelete(q: search_q)
+                    }
+                }
+            }) {
+                Text("Remove Song")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            .disabled(isLoading)
+            
+            if isLoading {
+                ProgressView("Processing...")
             }
 
-            Button("Create Playlist") {
-                Task {
-                    await createMyPlaylist()
-                }
-            }
-            .disabled(!isAuthorized)
-
-            Text(playlistStatus)
-                .multilineTextAlignment(.center)
-                .padding()
         }
         .padding()
-    }
-
-    // Step 1: Request Permissions
-    func requestPermissions() async {
-        let mediaStatus = MPMediaLibrary.authorizationStatus()
-        if mediaStatus != .authorized {
-            MPMediaLibrary.requestAuthorization { status in
-                if status == .authorized {
-                    print("Media library access granted.")
-                } else {
-                    print("Media library access denied.")
-                }
+        .onAppear {
+            Task {
+               await getPlaylistSongs()
             }
         }
-
+    }
+    
+    
+    
+    func addSongToPlaylist() async {
+        message = nil
+        isLoading = true
         do {
-            let musicStatus = await MusicAuthorization.request()
-            switch musicStatus {
-            case .authorized:
-                isAuthorized = true
-                playlistStatus = "Music authorization granted. You can now create a playlist."
-            case .denied, .restricted:
-                isAuthorized = false
-                playlistStatus = "Music authorization denied. Unable to create a playlist."
-            default:
-                isAuthorized = false
-                playlistStatus = "Music authorization not determined."
+            try await requestAuthorization()
+            let playlists = try await fetchUserPlaylists()
+            if let _ = playlists.first(where: { $0.name == "My Awesome Playlist" }) {
+            } else {
+                let _ = try await createMyPlaylist()
             }
         } catch {
-            playlistStatus = "Error requesting permissions: \(error.localizedDescription)"
+            if let musicError = error as? MusicError {
+                message = musicError.localizedDescription
+            } else {
+                message = error.localizedDescription
+            }
+            print("Error: \(error.localizedDescription)")
+        }
+        isLoading = false
+    }
+    
+func requestAuthorization() async throws {
+        let status = await MusicAuthorization.request()
+        guard status == .authorized else {
+            throw MusicError.notAuthorized
         }
     }
+    
+    func fetchUserPlaylists() async throws -> [Playlist] {
+        let playlistsRequest = MusicLibraryRequest<Playlist>()
+        let playlistsResponse = try await playlistsRequest.response()
+        return Array(playlistsResponse.items)
+    }
 
-    // Step 2: Create Playlist
-    func createMyPlaylist() async {
-        let query = "Your favorite artist" // Replace with your search term
+    func searchSong(q: String) async throws -> MusicKit.Song {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: "\(q)",
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 1
+
+        let searchResponse = try await searchRequest.response()
+
+        guard let song = searchResponse.songs.first else {
+            throw MusicError.songNotFound
+        }
+        let songDetails = "\(song.title) \(song.artistName)"
+        songArray.append(songDetails)
+        plSongs.append(song)
+        search_q = ""
+
+        Task {
+            try await updatePlaylist()
+        }
+        return song
+    }*/
+    
+    /*func searchSongDelete(q: String) async throws -> MusicKit.Song {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: "\(q)",
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 1
+
+        let searchResponse = try await searchRequest.response()
+
+        guard let song = searchResponse.songs.first else {
+            throw MusicError.songNotFound
+        }
+        //let songDetails = "\(song.title) \(song.artistName)"
+        songArray = songArray.filter { !$0.contains(song.title) }
+        print("songArray: \(songArray)")
+        
+        plSongs = plSongs.filter {
+            let title = $0.title
+            return !title.contains(song.title)
+        }
+        search_q = ""
+
+        Task {
+            try await updatePlaylist()
+        }
+        return song
+    }*/
+    
+   /* func isSongInLibraryPlaylist(title: String) -> Bool {
+        if let found = songArray.first(where: { $0.contains(title) }) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func createMyPlaylist() async throws -> Playlist {
         let playlistName = "My Awesome Playlist"
         let playlistDescription = "A playlist of my favorite tracks."
-
-        // Search for songs
-        let tracks = await searchForTracks(query: query)
-        let trackIDs = tracks.map { $0.id }
-
-        // Create the playlist
-        if !trackIDs.isEmpty {
-            do {
-                let playlist = MusicLibraryPlaylistCreationRequest(name: playlistName, description: playlistDescription, items: trackIDs)
-                try await MusicLibrary.shared.createPlaylist(playlist)
-                playlistStatus = "Playlist '\(playlistName)' created successfully!"
-            } catch {
-                playlistStatus = "Failed to create playlist: \(error.localizedDescription)"
-            }
-        } else {
-            playlistStatus = "No tracks found to add to the playlist."
+        let authorDisplayName = "Steve Spencer"
+        
+        do {
+            let playlist = try await MusicLibrary.shared.createPlaylist(
+                name: playlistName,
+                description: playlistDescription,
+                authorDisplayName: authorDisplayName
+            )
+            message = "Playlist '\(playlist.name)' created successfully!"
+            return playlist
+        } catch {
+            throw MusicError.playlistCreationFailed(error.localizedDescription)
         }
     }
+    
 
-    // Step 3: Search for Tracks
-    func searchForTracks(query: String) async -> [Song] {
+    
+    func updatePlaylist() async throws {
+        guard !songArray.isEmpty else {
+            Task {
+                try await createMyPlaylist()
+            }
+            return
+        }
+        
+        var request = MusicLibraryRequest<Playlist>()
+        request.filter(matching: \.name, equalTo: "My Awesome Playlist")
+        let response = try await request.response()
+
+        guard let playlist = response.items.first else {
+            print("Playlist with name 'My Awesome Playlist' not found.")
+            return
+        }
+        
+        try await MusicLibrary.shared.edit(
+            playlist,
+            name: nil,
+            description: nil,
+            authorDisplayName: nil,
+            items: plSongs
+        )
+        message = "Successfully added \(plSongs.count) songs to '\(playlist.name)'."
+        print("Successfully added \(plSongs.count) songs to '\(playlist.id)'.")
+    }
+    
+    @MainActor
+    func getPlaylistSongs() async {
         do {
-            let searchRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
-            let response = try await searchRequest.response()
-            return response.songs
+            var request = MusicLibraryRequest<Playlist>()
+            request.filter(matching: \.name, equalTo: "My Awesome Playlist")
+            let response = try await request.response()
+
+            guard let playlist = response.items.first else {
+                print("Playlist with name 'My Awesome Playlist' not found.")
+                return
+            }
+
+            print("Curator Name: \(playlist.curatorName ?? "Unknown Curator")")
+            print("Playlist Details: \(playlist)")
+
+            let detailedPlaylist = try await playlist.with([.tracks])
+            let tracks = detailedPlaylist.tracks ?? []
+
+            print("Processing songs in playlist '\(playlist.name)'...")
+
+            for track in tracks {
+                switch track {
+                case .song(let song):
+                    let songDetails = "\(song.title) \(song.artistName)"
+                    songArray.append(songDetails)
+                    plSongs.append(song)
+                default:
+                    print("Unsupported track type in playlist.")
+                }
+            }
+
+            print("Songs added to array: \(songArray)")
         } catch {
-            playlistStatus = "Error searching for songs: \(error.localizedDescription)"
-            return []
+            print("An error occurred while refreshing the playlist: \(error)")
+        }
+    }
+    
+}
+
+/// Custom errors for better error handling
+enum MusicError: LocalizedError {
+    case notAuthorized
+    case playlistNotFound
+    case songNotFound
+    case playlistCreationFailed(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .notAuthorized:
+            return "Not authorized to access Apple Music. Please grant permission in Settings."
+        case .playlistNotFound:
+            return "Playlist 'My Awesome Playlist' not found in your library."
+        case .songNotFound:
+            return "Song not found in the Apple Music catalog."
+        case .playlistCreationFailed(let reason):
+            return "Failed to create playlist: \(reason)"
         }
     }
 }
+
+    */
+

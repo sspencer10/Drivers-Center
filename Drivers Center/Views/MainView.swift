@@ -3,187 +3,120 @@ import SwiftUI
 struct MainView: View {
     @State private var tabSelection = 1
     @State var carplay: Bool = false
-    @StateObject var locationManager = LocationManager.shared
-    @StateObject var tm = TemplateManager()
+    @ObservedObject var locationManager: LocationManager
+    @ObservedObject var tm: TemplateManager
+    @ObservedObject var weatherViewModel: WeatherViewModel
+    @ObservedObject var mediaItemViewModel: MediaItemViewModel
+    @ObservedObject var addressSearchViewModel: AddressSearchViewModel
+    @State var x: Bool = false
+    @State var z: Bool = false
+    
+    init(locationManager: LocationManager, tm: TemplateManager, weatherViewModel: WeatherViewModel, mediaItemViewModel: MediaItemViewModel, addressSearchViewModel: AddressSearchViewModel) {
+        self.locationManager = locationManager
+        self.tm = tm
+        self.weatherViewModel = weatherViewModel
+        self.mediaItemViewModel = mediaItemViewModel
+        self.addressSearchViewModel = addressSearchViewModel
+        //UITabBar.appearance().tintColor = UIColor(
+            //red: 0.0,
+            //green: 0.0,
+           // blue: 1.0,
+           // alpha: 1.0
+       // )
+        UITabBar.appearance().unselectedItemTintColor = UIColor.gray
+        UITabBar.appearance().backgroundColor = UIColor.black
+    }
+
     var body: some View {
-        
         ZStack(alignment: .bottom) {
-            if !carplay {
-                TabView(selection: $tabSelection) {
-                    WeatherView()
-                        .tabItem {
-                            Label("Weather", systemImage: "sun.max.fill")
-                        }
-                        .tag(1)
-                    RetroSpeedometerView(lm: LocationManager.shared)
-                        .tabItem {
-                            Label("Speed", systemImage: "gauge.with.dots.needle.33percent")
-                        }
-                        .tag(2)
-                    MapsView(carPlay: TemplateManager())
-                        .tabItem {
-                            Label("Map", systemImage: "map.circle")
-                        }
-                        .tag(3)
-                    
-                    CompassView(carPlay: LocationManager.shared)
-                        .tabItem {
-                            Label("Compass", systemImage: "binoculars.circle")
-                        }
-                        .tag(4)
-                    MusicView(viewModel: MediaItemViewModel())
-                        .tabItem {
-                            Label("Music", systemImage: "play.circle")
-                        }
-                        .tag(5)
+            //if !z {
+              //  IsFirst(locationManager: locationManager, tm: tm, weatherViewModel: weatherViewModel, mediaItemViewModel: mediaItemViewModel)
+             //       .preferredColorScheme(.dark)
+           // } else {
+                if !x {
+                    TabView(selection: $tabSelection) {
+                        MusicView(viewModel: mediaItemViewModel, carPlay: $x)
+                            .tabItem {
+                                Label("Music", systemImage: "play.circle")
+                            }
+                            .tag(1)
+                            .preferredColorScheme(.dark)
+                        
+                        SpeedometerView(lm: LocationManager.shared, coveredRadius: 230, maxValue: 100, steperSplit: 10)
+                            .tabItem {
+                                Label("Speed", systemImage: "gauge.with.dots.needle.33percent")
+                            }
+                            .tag(2)
+                            .preferredColorScheme(.dark)
+                        
+                        //MapsView(loc: locationManager, carPlay: mediaItemViewModel)
+                        MapsView(locationManager: locationManager)
+                            .tabItem {
+                                Label {
+                                    Text("Map")
+                                } icon: {
+                                    Image(systemName: "map.circle")
+                                        .resizable()
+                                        .renderingMode(.template)
+                                    //.backgroundColor(UIColor.red)
+                                }
+                            }
+                            .tag(3)
+                            .preferredColorScheme(.dark)
+                        
+                        NavView(viewModel: locationManager, addressSearchViewModel: addressSearchViewModel)
+                            .tabItem {
+                                Label("Navigation", systemImage: "binoculars.circle")
+                            }
+                            .tag(4)
+                            .preferredColorScheme(.dark)
+                        
+                        WeatherView(viewModel: weatherViewModel, lm: locationManager, tm: tm)
+                            .tabItem {
+                                Label("Weather", systemImage: "sun.max.fill")
+                            }
+                            .tag(5)
+                            .preferredColorScheme(.dark)
+                    }
+                } else {
+                    IsCarPlayView(locationManager: locationManager, tm: tm, weatherViewModel: weatherViewModel, mediaItemViewModel: mediaItemViewModel)
+                        .preferredColorScheme(.dark)
+ 
+                        
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-                
-                TabButtons(selectedTab: $tabSelection, carPlay: LocationManager.shared)
-            } else {
-                Text("CarPlay Active")
-            }
-
-        }.onAppear {
-            //UserDefaults.standard.setValue(false, forKey: "isCarPlay")
+            //}
         }
-        .onChange(of: tm.isCarPlay) {
-            if tm.isCarPlay {
-                carplay = true
-            } else {
-                carplay = false
-            }
+        .onAppear {
+            setupTabBarAppearance()
+            x = mediaItemViewModel.isCarPlay
+            z = UserDefaults.standard.bool(forKey: "firstLaunch")
+        }
+        .onChange(of: mediaItemViewModel.isCarPlay) {
+            x = mediaItemViewModel.isCarPlay
         }
     }
-    
-}
 
+    private func setupTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.black // Background color of the tab bar
+        appearance.shadowColor = UIColor.clear // Remove the horizontal line
+        //appearance.stackedLayoutAppearance.selected.iconColor = UIColor(
+         //   red: 0.0,
+         //   green: 0.0,
+        //    blue: 1.0,
+        //    alpha: 1.0
+        //) // Selected icon color
+        //appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(
+          //  red: 0.0,
+          //  green: 0.0,
+           // blue: 1.0,
+            //alpha: 1.0
+        //)] // Selected text color
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.gray // Unselected icon color
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.gray] // Unselected text color
 
-struct TabButtons: View {
-    @Binding var selectedTab: Int
-    @StateObject var carPlay: LocationManager
-    @StateObject var tm = TemplateManager()
-
-    @State var showingPopover = false
-    
-    var body: some View {
-        HStack {
-            Spacer()
-            VStack() {
-                Image(systemName: "sun.max.circle")
-                    .foregroundColor(selectedTab == 1 ? .red : .gray)
-                    .scaleEffect(1.5)
-                    .onTapGesture {
-                        selectedTab = 1
-                    }
-                Text("\nWeather")
-                    .font(.caption)
-                    .foregroundColor(selectedTab == 1 ? .red : .gray)
-                    .onTapGesture {
-                        selectedTab = 1
-                    }
-            }
-            
-            Spacer()
-            VStack() {
-                Image(systemName: "gauge.with.dots.needle.33percent")
-                    .foregroundColor(selectedTab == 2 ? .red : .gray)
-                    .scaleEffect(1.5)
-                    .onTapGesture {
-                        selectedTab = 2
-                    }
-                Text("\n Speed ")
-                    .font(.caption)
-                    .foregroundColor(selectedTab == 2 ? .red : .gray)
-                    .onTapGesture {
-                        selectedTab = 2
-                    }
-            }
-            
-            Spacer()
-            VStack() {
-                Image(systemName: "map.circle")
-                    .foregroundColor(selectedTab == 3 ? .red : .gray)
-                    .scaleEffect(1.5)
-                    .onTapGesture {
-                        selectedTab = 3
-                    }
-                Text("\nLocation")
-                    .font(.caption)
-                    .foregroundColor(selectedTab == 3 ? .red : .gray)
-                    .onTapGesture {
-                        selectedTab = 3
-                    }
-                
-                    
-            }
-
-            
-            Spacer()
-            VStack() {
-                Image(systemName: "binoculars.circle")
-                    .foregroundColor(selectedTab == 4 ? .red : .gray)
-                    .scaleEffect(1.5)
-                    .onTapGesture {
-                        selectedTab = 4
-                    }
-                Text("\nCompass")
-                    .font(.caption)
-                    .foregroundColor(selectedTab == 4 ? .red : .gray)
-                    .onTapGesture {
-                        selectedTab = 4
-                    }
-            }
-            
-            Spacer()
-            VStack() {
-                Image(systemName: "play.circle")
-                    .foregroundColor(selectedTab == 5 ? .red : .gray)
-                    .scaleEffect(1.5)
-                    .onTapGesture {
-                        selectedTab = 5
-                    }
-                Text("\nMusic")
-                    .font(.caption)
-                    .foregroundColor(selectedTab == 5 ? .red : .gray)
-                    .onTapGesture {
-                        selectedTab = 5
-                    }
-            }
-            
-            Spacer()
-        }
-        .padding(.top)
-        .padding(.bottom)
-        
-        .sheet(isPresented: $showingPopover) {
-            Text("Map Options").frame(width: 400, alignment: .leading).multilineTextAlignment(.leading)
-                .bold()
-                .font(.title)
-                .padding(.leading, 40)
-                .padding(.bottom, 20)
-            
-            
-            HStack {
-                Button("Send Location") {
-                    let msgBody = "https://maps.google.com/?%26daddr=\(carPlay.latitude),\(carPlay.longitude)%26directionsmode=driving"
-                    
-                    UIApplication.shared.open(URL(string: "imessage://?&body=\(msgBody)")!)
-                }
-                .buttonStyle(.borderedProminent)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 15)
-                .tint(.red)
-                Button("Google Maps") {
-                    UIApplication.shared.open(URL(string: "comgooglemaps://")!)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                .frame(maxWidth: 400 )
-                .padding(.bottom, 15)
-                .presentationDetents([.medium, .large])
-            }
-        }
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance // For iOS 15 and later
     }
 }
-

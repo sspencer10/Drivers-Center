@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RetroSpeedometerView: View {
+struct RetroSpeedometerView2: View {
     @StateObject var lm: LocationManager
     
     var body: some View {
@@ -59,6 +59,6 @@ struct RetroSpeedometerView: View {
 
 struct RetroSpeedometerView_Previews: PreviewProvider {
     static var previews: some View {
-        RetroSpeedometerView(lm: LocationManager.shared)
+        RetroSpeedometerView2(lm: LocationManager.shared)
     }
 }

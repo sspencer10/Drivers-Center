@@ -1,96 +1,635 @@
-
 import SwiftUI
 import MediaPlayer
 import MusicKit
+import StoreKit
 
-// MARK: - MediaItemViewModel
-
-class MediaItemViewModel: ObservableObject {
-    
+class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     public static var shared = MediaItemViewModel()
-
-    
     @Published var artworkImage: UIImage?
     @Published var title: String = "Unknown Title"
     @Published var artist: String = "Unknown Artist"
+    @Published var artwork: UIImage?
     @Published var mediaItems: [MPMediaItem] = []
     @Published var playlists: [MPMediaPlaylist] = []
     @Published var nowPlayingAlbumID: MPMediaEntityPersistentID?
     @Published var newArt: URL?
-
-
-
-    private var musicPlayer: MPMusicPlayerController?
-
+    @Published var newArt2: UIImage?
+    @Published var isCarPlay: Bool = false
+    @Published var bypassed: Bool = false
+    @Published var favorites: Set<UInt64> = []
+    @Published var systemVolume: Float = 0.0
+    @Published var currentPlaybackTime: TimeInterval = 0
+    @Published var totalPlaybackTime: TimeInterval = 0
+    @Published var currentTimeString: String = "0:00"
+    @Published var remainingTimeString: String = "-0:00"
+    @Published var songArray: [String] = []
+    @Published var plSongs: [Song] = []
+    @Published var albumID: MusicItemID?
+    @Published var album: Album?
+    @Published var albums: [MPMediaItemCollection] = []
+    @Published var songs: [MPMediaItem] = []
+    
+    var selectedSong: MusicKit.Song?
+    var showSheet: Bool = false
+    var showSearchSheet: Bool = false
+    var showMenu: Bool = false
+    var showAlbums: Bool = false
+    var showSongs: Bool = false
+    var showPlaylist: Bool = false
+    var savedSong: String = ""
+    var savedArtist: String = ""
+    var searchFlag: Bool = false
+    var genres: [String] = []
+    var musicItemID: MusicItemID?
+    var lastSongStoreID: String?
+    private let queueLock = DispatchQueue(label: "com.example.queueLock")
+    
+    private var currentQueue: [String] = [] // Track store IDs of the queue
+    private var recentlyPlayedIDs: [String] = [] // Tracks recently played store IDs
+    private let maxRecentlyPlayed = 40 // Adjust as needed
     private var currentMediaItemId: UInt64?
     private var cachedArtworkImage: UIImage?
     private var debounceTimer: Timer?
+    private var progressUpdateTimer: Timer?
+
+    var musicPlayer = MPMusicPlayerController.applicationMusicPlayer
+    let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjdYOERIV1JQQUQifQ.eyJpYXQiOjE3MzY5MTk1MTksImV4cCI6MTc1MjQ3MTUxOSwiaXNzIjoiWlVMMzI0NTNLUiJ9.gE3OTLoD4E32tV3kt8ZgeYvBSa9nUSwHT3nlxzrppi_23aujztS33Nm3g2zmtiEatX2mAZh7yew9-KhLBCKCVg"
+
 
     private init() {
-        self.musicPlayer = MPMusicPlayerController.systemMusicPlayer
+        requestAppleMusicPermissions()
+        self.musicPlayer = MPMusicPlayerController.applicationQueuePlayer
         NotificationCenter.default.addObserver(self, selector: #selector(nowPlayingItemDidChange), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: musicPlayer)
         NotificationCenter.default.addObserver(self, selector: #selector(playerStateDidChange), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer)
         
-        musicPlayer?.beginGeneratingPlaybackNotifications()
+        musicPlayer.beginGeneratingPlaybackNotifications()
         updateCurrentMediaItem()
         fetchPlaylists()
         fetchMediaItems { items in
             self.mediaItems = items
         }
-        
-        
+        startProgressUpdateTimer()
+        Task {
+            await musicInit()
+        }
+        startObservingNowPlaying()
+        lastSongStoreID = UserDefaults.standard.string(forKey: "lastSongStoreID") ?? ""
+        Task {
+            let song = try await fetchSong(byStoreID: lastSongStoreID ?? "")
+            guard let song = song else { return }
+            try await playSelectedSong(song)
+            musicPlayer.pause()
+        }
     }
-
-    var playbackState: MPMusicPlaybackState {
-        return musicPlayer?.playbackState ?? .stopped
+        
+    func fetchSong(byStoreID storeID: String) async throws -> Song? {
+        do {
+            // Create a catalog request for a specific song using the store ID
+            let request = MusicCatalogResourceRequest<Song>(matching: \.id, equalTo: MusicItemID(storeID))
+            
+            // Perform the request
+            let response = try await request.response()
+            
+            // Return the first song found (if any)
+            return response.items.first
+        } catch {
+            print("Error fetching song: \(error)")
+            return nil
+        }
     }
     
-    
-    func getAuthorized(completion: @escaping (Bool) -> Void) {
-        MPMediaLibrary.requestAuthorization { status in
-            if status == .authorized {
-                print("authorized")
-                UserDefaults.standard.set(true, forKey: "authorized")
-                UserDefaults.standard.set(true, forKey: "checked")
-                //self.getArt(completion: {_ in})
-                completion(true)
+    func musicInit() async {
+        do {
+            try await requestAuthorization()
+            let playlists = try await fetchUserPlaylists()
+            if let _ = playlists.first(where: { $0.name == "AAA" }) {
+                print("test - playlist exists")
+                await getPlaylistSongs()
             } else {
-                print("not authorized")
-                UserDefaults.standard.set(false, forKey: "authorized")
-                completion(false)
+                print("test - playlist does not exist")
+                let _ = try await createMyPlaylist()
             }
             
+        } catch {
+            if let _ = error as? MusicError {
+            }
+            print("Error: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchNowPlayingItemDetails() async throws -> MusicItem? {
+        // Get the now-playing item from the system music player
+        let player = MPMusicPlayerController.systemMusicPlayer
+        guard let nowPlayingItem = player.nowPlayingItem else {
+            throw NSError(domain: "NowPlayingError", code: 1, userInfo: [NSLocalizedDescriptionKey: "No now-playing item found."])
+        }
+        
+        // Retrieve the Apple Music catalog ID
+        guard let catalogID = nowPlayingItem.value(forProperty: "playbackStoreID") as? String else {
+            throw NSError(domain: "CatalogIDError", code: 2, userInfo: [NSLocalizedDescriptionKey: "The now-playing item does not have a valid catalog ID."])
+        }
+        
+        let musicItemID = MusicItemID(catalogID)
+        
+        // Fetch the resource details (Assuming it's a song, as MPMediaItem does not directly indicate albums or playlists)
+        return try await fetchSongDetails(catalogID: musicItemID)
+    }
+    
+    private func fetchSongDetails(catalogID: MusicItemID) async throws -> Song {
+        let request = MusicCatalogResourceRequest<Song>(matching: \.id, equalTo: catalogID)
+        let response = try await request.response()
+        guard let song = response.items.first else {
+            throw NSError(domain: "SongDetailsError", code: 4, userInfo: [NSLocalizedDescriptionKey: "No song found with the given catalog ID."])
+        }
+        return song
+    }
+    
+    func doThis() {
+        Task {
+            do {
+                if let detailedItem = try await fetchNowPlayingItemDetails() {
+                    if let song = detailedItem as? Song {
+                        musicItemID = song.id
+                        print("song details - Song Title: \(song.title)")
+                        print("song details - Artist Name: \(song.artistName)")
+                        print("song details - Album Name: \(song.albumTitle ?? "N/A")")
+                        print("song details - Artist URL: \(song.artistURL?.absoluteString ?? "")")
+                        print("song details - genreNames: \(song.genreNames)")
+                        genres = song.genreNames
+                        print("song details - albums: \(song.albums?.count ?? .zero)")
+                        print("song details - musicVideos: \(song.musicVideos?.first?.url?.absoluteString ?? "")")
+                        print("song details - previewAssets: \(song.previewAssets ?? [])")
+                        print("song details - station url: \(song.station?.url?.absoluteString ?? "" )")
+                    }
+                } else {
+                    print("No details found for the now-playing item.")
+                }
+            } catch {
+                print("Error fetching details: \(error)")
+            }
+        }
+        
+    }
+    
+    func fetchAlbums() {
+        let query = MPMediaQuery.albums()
+        if let collections = query.collections {
+            DispatchQueue.main.async {
+                self.albums = collections
+            }
+        }
+    }
+    
+    func fetchSongs() {
+        let query = MPMediaQuery.songs()
+        if let items = query.items {
+            DispatchQueue.main.async {
+                self.songs = items
+            }
+        }
+    }
+    
+    // Playback State
+    var playbackState: MPMusicPlaybackState {
+        return musicPlayer.playbackState
+    }
+   
+    // Update playback progress
+    private func startProgressUpdateTimer() {
+        progressUpdateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            Task {
+                self?.updatePlaybackProgress()
+            }
+        }
+    }
+    
+    func requestAppleMusicPermissions() {
+        let status = MPMediaLibrary.authorizationStatus()
+        if status == .notDetermined {
+            MPMediaLibrary.requestAuthorization { newStatus in
+                if newStatus != .authorized {
+                    print("Apple Music access denied.")
+                }
+            }
+        } else if status != .authorized {
+            print("Apple Music access not granted.")
+        }
+    }
+    
+    func isSongInLibraryPlaylist(title: String) -> Bool {
+        print("test - \(title)")
+        let found = songArray.contains(where: { $0.contains(title) })
+        return found
+    }
+    
+    func searchSongDelete(q: String) async throws -> Bool {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: "\(q)",
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 1
+
+        let searchResponse = try await searchRequest.response()
+
+        guard let song = searchResponse.songs.first else {
+            throw MusicError.songNotFound
+        }
+        
+        //let songDetails = "\(song.title) \(song.artistName)"
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                
+                self.songArray = self.songArray.filter { !$0.contains(song.title) }
+                print("songArray: \(self.songArray)")
+                
+                
+                self.plSongs = self.plSongs.filter {
+                    let title = $0.title
+                    return !title.contains(song.title)
+                }
+            }
+            try await updatePlaylist()
+        }
+
+        return false
+    }
+    
+
+    func searchSong(q: String) async throws -> Bool {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: "\(q)",
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 1
+
+        let searchResponse = try await searchRequest.response()
+
+        guard let song = searchResponse.songs.first else {
+            throw MusicError.songNotFound
+        }
+        let songDetails = "\(song.title) \(song.artistName)"
+        print("add \(songDetails) to playlist")
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                songArray.append(songDetails)
+                plSongs.append(song)
+                print("songArray \(songArray)")
+                print("plSongs \(plSongs)")
+            }
+            try await updatePlaylist()
+        }
+        return true
+    }
+    
+/*
+    /// Finds an MPMediaItem in the user's library that matches the given MusicKit.Song
+    func findMPMediaItem(for song: MusicKit.Song) -> MPMediaItem? {
+        // Create a query for songs in the media library
+        let query = MPMediaQuery.songs()
+        
+        // Filter the query by title and artist
+        let titlePredicate = MPMediaPropertyPredicate(value: song.title, forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
+        let artistPredicate = MPMediaPropertyPredicate(value: song.artistName, forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
+        
+        query.addFilterPredicate(titlePredicate)
+        query.addFilterPredicate(artistPredicate)
+        
+        // Retrieve the matching items
+        guard let items = query.items, !items.isEmpty else {
+            print("No matching MPMediaItem found for \(song.title) by \(song.artistName)")
+            return nil
+        }
+        
+        // Return the first matching item
+        return items.first
+    }
+    */
+    func fetchPlaylist(by name: String) async -> MPMediaPlaylist? {
+        // Create a query for playlists in the media library
+        let query = MPMediaQuery.playlists()
+        
+        // Create a predicate to filter playlists by name
+        let predicate = MPMediaPropertyPredicate(
+            value: name,
+            forProperty: MPMediaPlaylistPropertyName,
+            comparisonType: .contains
+        )
+        
+        query.addFilterPredicate(predicate)
+        
+        // Get the matching playlists
+        guard let playlists = query.collections as? [MPMediaPlaylist] else {
+            print("No playlists found.")
+            return nil
+        }
+        
+        // Return the first matching playlist
+        return playlists.first
+    }
+    /*
+    func playSong(_ song: MusicKit.Song) async throws -> Bool {
+        
+        let theSong = try await searchSong2(q: "\(song.title) \(song.artistName)")
+        
+        let playlist = await fetchPlaylist(by: "AAA")!
+            
+        //playPlaylist(playlist, startingAt: findMPMediaItem(for: theSong))
+        musicPlayer.setQueue(with: playlist)
+        let finalSong = findMPMediaItem(for: theSong)
+        musicPlayer.nowPlayingItem = finalSong
+        
+        musicPlayer.play()
+        updateCurrentMediaItem()
+        
+        
+        return false
+    }
+     */
+    func searchSongs(q: String) async throws -> [MusicKit.Song] {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: q,
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 25 // Adjust the limit as needed
+
+        let searchResponse = try await searchRequest.response()
+        print("Search Response: \(searchResponse.songs)")
+
+        // Convert MusicItemCollection<Song> to [Song]
+        let songs = Array(searchResponse.songs)
+
+        return songs
+    }
+    
+    func searchSong2(q: String) async throws -> Song {
+        var searchRequest = MusicCatalogSearchRequest(
+            term: "\(q)",
+            types: [MusicKit.Song.self]
+        )
+        searchRequest.limit = 1
+
+        let searchResponse = try await searchRequest.response()
+
+        guard let song = searchResponse.songs.first else {
+            throw MusicError.songNotFound
+        }
+       // let songDetails = "\(song.title) \(song.artistName)"
+        /*
+        Task {
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                songArray.append(songDetails)
+                plSongs.append(song)
+            }
+            if let theSong = findMPMediaItem(for: song) {
+                try await updatePlaylist2(song: theSong)
+            }
+        }
+         */
+        return song
+    }
+    
+    func requestAuthorization() async throws {
+        let status = await MusicAuthorization.request()
+        guard status == .authorized else {
+            throw MusicError.notAuthorized
+        }
+    }
+    
+    func fetchUserPlaylists() async throws -> [Playlist] {
+        let playlistsRequest = MusicLibraryRequest<Playlist>()
+        let playlistsResponse = try await playlistsRequest.response()
+        return Array(playlistsResponse.items)
+    }
+    
+    func playSelectedSong(_ song: MusicKit.Song) async throws {
+        // Search for the song in the Apple Music catalog
+        let songToPlay = try await searchSong2(q: "\(song.title) \(song.artistName)")
+        let storeID = songToPlay.id.rawValue
+        
+        // Use AutoplayManager to set the initial queue
+        currentQueue = [storeID]
+        musicPlayer.setQueue(with: currentQueue)
+        
+        // Start playback
+        musicPlayer.play()
+        disableRepeat()
+
+        print("Playing selected song: \(song.title) by \(song.artistName)")
+        // Update the now playing item
+        updateCurrentMediaItem()
+        extendPlaybackQueue()
+        setInitialQueue(with: [storeID])
+    }
+    
+    func playPlaylist(_ playlist: MPMediaPlaylist, startingAt song: MPMediaItem? = nil) {
+        musicPlayer.setQueue(with: playlist)
+        if let song = song {
+            musicPlayer.nowPlayingItem = song
+            print("set now playing song \(song)")
+        } else {
+            print("unable to set now playing song")
+        }
+        musicPlayer.play()
+        updateCurrentMediaItem()
+    }
+    
+
+    
+    func createMyPlaylist() async throws -> Playlist {
+        let status = await MusicAuthorization.request()
+        guard status == .authorized else {
+            throw MusicError.notAuthorized
+        }
+        print("test2 - Authorization granted.")
+        let playlistName = "AAA"
+        let playlistDescription = "A playlist of my favorite tracks."
+        let authorDisplayName = "Steve Spencer"
+        print("test2 - Attempting to create playlist with name: \(playlistName)")
+
+
+        // Fetch existing playlists
+        let existingPlaylists = try await fetchUserPlaylists()
+        print("test2 - Retrieved \(existingPlaylists.count) playlists.")
+
+        if let existingPlaylist = existingPlaylists.first(where: { $0.name == playlistName }) {
+            print("test2 - Playlist already exists: \(existingPlaylist.id)")
+            return existingPlaylist
+        }
+        print("playlist named \(playlistName) does not exist")
+
+        // Attempt to create the playlist
+        do {
+            print("attempting to create playlist...")
+            let playlist = try await MusicLibrary.shared.createPlaylist(
+                name: playlistName,
+                description: playlistDescription,
+                authorDisplayName: authorDisplayName
+            )
+            print("test2 - Successfully created playlist: \(playlist.id)")
+            return playlist
+        } catch let error as MusicError {
+            print("test2 - MusicError: \(error.localizedDescription)")
+            throw MusicError.playlistCreationFailed(error.localizedDescription)
+        } catch {
+            print("test2 - Unexpected error: \(error.localizedDescription)")
+            throw error
+        }
+    }
+    
+    func updatePlaylist() async throws {
+        
+        var request = MusicLibraryRequest<Playlist>()
+        request.filter(matching: \.name, equalTo: "AAA")
+        let response = try await request.response()
+
+        guard let playlist = response.items.first else {
+            print("Playlist with name: 'AAA' not found.")
+            return
+        }
+        
+        try await MusicLibrary.shared.edit(
+            playlist,
+            name: nil,
+            description: nil,
+            authorDisplayName: nil,
+            items: plSongs
+        )
+        print("Successfully added \(plSongs.count) songs to '\(playlist.id)'.")
+        
+         
+
+         
+    }
+    
+    func updatePlaylist2(song: MPMediaItem) async throws {
+        
+        var request = MusicLibraryRequest<Playlist>()
+        request.filter(matching: \.name, equalTo: "AAA")
+        let response = try await request.response()
+
+        guard let playlist = response.items.first else {
+            print("Playlist with name: 'AAA' not found.")
+            return
+        }
+        
+        try await MusicLibrary.shared.edit(
+            playlist,
+            name: nil,
+            description: nil,
+            authorDisplayName: nil,
+            items: plSongs
+        )
+        print("Successfully added \(plSongs.count) songs to '\(playlist.id)'.")
+        
+        //musicPlayer.setQueue(with: playlist)
+        //let finalSong = findMPMediaItem(for: theSong)
+        musicPlayer.nowPlayingItem = song
+        
+        musicPlayer.play()
+        updateCurrentMediaItem()
+    }
+    
+    func getPlaylistSongs() async {
+        do {
+            var request = MusicLibraryRequest<Playlist>()
+            request.filter(matching: \.name, equalTo: "AAA")
+            let response = try await request.response()
+
+            let playlist = response.items.first
+            if playlist?.name != "AAA" {
+                print("Playlist with name 'AAA' not found.")
+                let _ = try await createMyPlaylist()
+            }
+            guard let playlist = playlist else { return }
+
+            print("Curator Name: \(playlist.curatorName ?? "Unknown Curator")")
+            print("Playlist Details: \(playlist)")
+
+            let detailedPlaylist = try await playlist.with([.tracks])
+            let tracks = detailedPlaylist.tracks ?? []
+
+            print("Processing songs in playlist '\(playlist.name)'...")
+
+            for track in tracks {
+                switch track {
+                case .song(let song):
+                    let songDetails = "\(song.title) \(song.artistName)"
+                    if !isSongInLibraryPlaylist(title: songDetails) {
+                        Task {
+                            await MainActor.run {
+                                songArray.append(songDetails)
+                                plSongs.append(song)
+                            }
+                        }
+                    }
+                default:
+                    print("Unsupported track type in playlist.")
+                }
+            }
+
+            print("Songs added to array: \(songArray)")
+        } catch {
+            print("An error occurred while refreshing the playlist: \(error)")
         }
     }
 
-    func getNowPlayingTitle(completion: @escaping (String) -> Void) {
-        if let nowPlayingItem = musicPlayer?.nowPlayingItem {
-            let nowPlayingTitle = nowPlayingItem.title ?? "Unknown Title"
-            print("Title: \(nowPlayingTitle)")
-            completion(nowPlayingTitle)
-        } else {
-            let nowPlayingTitle = "Not Playing"
-            completion(nowPlayingTitle)
+    private func updatePlaybackProgress() {
+        let musicPlayer = self.musicPlayer
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem else {
+            DispatchQueue.main.async {
+                self.currentPlaybackTime = 0
+                self.totalPlaybackTime = 0
+                self.currentTimeString = "0:00"
+                self.remainingTimeString = "-0:00"
+            }
+            return
+        }
+        DispatchQueue.main.async {
+            self.currentPlaybackTime = musicPlayer.currentPlaybackTime
+            self.totalPlaybackTime = nowPlayingItem.playbackDuration
+            self.currentTimeString = self.formatTime(self.currentPlaybackTime)
+            self.remainingTimeString = "-\(self.formatTime(self.totalPlaybackTime - self.currentPlaybackTime))"
         }
     }
     
-    func getNowPlayingArtist(completion: @escaping (String) -> Void) {
-        if let nowPlayingItem = musicPlayer?.nowPlayingItem {
-            let nowPlayingArtist = nowPlayingItem.artist ?? "Unknown Artist"
-            print("Artist: \(nowPlayingArtist)")
-            completion(nowPlayingArtist)
-        } else {
-            let nowPlayingArtist = "Not Playing"
-            completion(nowPlayingArtist)
-        }
+    func fetchSystemVolume() {
+        systemVolume = AVAudioSession.sharedInstance().outputVolume
     }
     
+    func seek(to time: Float) {
+        let musicPlayer = self.musicPlayer
+        let newTime = TimeInterval(time) // Convert Float to TimeInterval (Double)
+        
+        // Ensure the new time is within the bounds of the total playback duration
+        if newTime >= 0 && newTime <= totalPlaybackTime {
+            musicPlayer.currentPlaybackTime = newTime
+        } else {
+            print("Seek time out of bounds: \(newTime)")
+        }
+    }
+
+    private func formatTime(_ time: TimeInterval) -> String {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    // Stop the progress update timer
+    deinit {
+        progressUpdateTimer?.invalidate()
+        musicPlayer.endGeneratingPlaybackNotifications()
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // Fetch album from catalog
     func fetchAlbumFromCatalog(title: String, artist: String, completion: @escaping (Album?) -> Void) {
         Task {
             do {
                 let request = MusicCatalogSearchRequest(term: "\(title) \(artist)", types: [Album.self])
                 let response = try await request.response()
-
                 if let album = response.albums.first {
                     completion(album)
                 } else {
@@ -103,14 +642,19 @@ class MediaItemViewModel: ObservableObject {
             }
         }
     }
-    
-    func getID() async {
+
+    // Fetch album artwork and ID
+    func getID2() {
         fetchAlbumFromCatalog(title: title, artist: artist) { album in
             if let album = album {
                 print("Album found: \(album.title) by \(album.artistName)")
+                let art = self.musicPlayer.nowPlayingItem?.artwork?.image(at: CGSize(width: 500, height: 500))
                 if let artworkUrl = album.artwork?.url(width: 500, height: 500) {
                     print("Artwork URL: \(artworkUrl)")
-                    self.newArt = artworkUrl
+                    DispatchQueue.main.async {
+                        self.newArt = artworkUrl
+                        self.newArt2 = art
+                    }
                 } else {
                     print("No artwork URL available.")
                 }
@@ -119,109 +663,117 @@ class MediaItemViewModel: ObservableObject {
             }
         }
     }
-
-     func startObservingNowPlaying() {
-        // Add observer for now playing item changes
-        NotificationCenter.default.addObserver(forName: .MPMusicPlayerControllerNowPlayingItemDidChange,
-                                               object: MPMusicPlayerController.systemMusicPlayer,
-                                               queue: .main) { _ in
-            Task {
-                await self.getID()
+    
+    func getID(
+        songTitle: String,
+        artistName: String/*, completion: @escaping ((URL?)) -> (Void)*/) async throws -> (String){
+            let title = musicPlayer.nowPlayingItem?.title ?? "Unknown Song"
+            let artist = musicPlayer.nowPlayingItem?.artist ?? "Unknown Artist"
+            // --- STEP 1: Search for the Song by (songTitle, artistName) ---
+            var songRequest = MusicCatalogSearchRequest(
+                term: "\(title) \(artist)",
+                types: [Song.self]
+            )
+            songRequest.limit = 25
+            let songResponse = try await songRequest.response()
+            
+            // Naive match for the first Song that includes both strings
+            guard let matchedSong = songResponse.songs.first(where: {
+                $0.title.localizedCaseInsensitiveContains(title)
+                && $0.artistName.localizedCaseInsensitiveContains(artist)
+            }) else {
+                print("No matching song found in Apple Music catalog.")
+                return ""
+            }
+            
+            // iOS 16's `Song` provides `albumTitle` and `artistName` as optional Strings.
+            // Replace nil with "" to avoid optional-binding errors.
+            let albumTitle = matchedSong.albumTitle ?? ""
+            let albumArtist = matchedSong.artistName  // also a String? but we used it above, safe to keep going
+            
+            // If albumTitle or albumArtist is empty, we can’t search meaningfully
+            guard !albumTitle.isEmpty, !albumArtist.isEmpty else {
+                print("Song has no valid albumTitle or albumArtist.")
+                return ""
+            }
+            
+            // --- STEP 2: Search for the Album by (albumTitle, albumArtist) ---
+            var albumRequest = MusicCatalogSearchRequest(
+                term: "\(albumTitle) \(albumArtist)",
+                types: [Album.self]
+            )
+            albumRequest.limit = 25
+            print("albumRequest \(albumRequest)")
+            let albumResponse = try await albumRequest.response()
+            
+            // Naive match for the album
+            guard let matchedAlbum = albumResponse.albums.first(where: {
+                $0.title.localizedCaseInsensitiveContains(albumTitle)
+                && $0.artistName.localizedCaseInsensitiveContains(albumArtist)
+            }) else {
+                print("No matching album found in Apple Music catalog.")
+                return ""
+            }
+            
+            
+            if let artworkUrl = matchedAlbum.artwork?.url(width: 500, height: 500) {
+                DispatchQueue.main.async {
+                    self.albumID = matchedAlbum.id
+                    self.album = matchedAlbum
+                    self.newArt = artworkUrl
+                }
+                return artworkUrl.absoluteString
+            } else {
+                return ""
             }
         }
+            
 
-        // Start monitoring
-        MPMusicPlayerController.systemMusicPlayer.beginGeneratingPlaybackNotifications()
+
+    /// Adds an album to the user's Apple Music library using its `MusicItemID`.
+    func addAlbumToLibrary() async throws {
+        // 1) Fetch the Album object using the ID
+        let album = try await fetchAlbumByID(albumID: albumID ?? "")
+        
+        // 2) Add the Album to the library
+        try await MusicLibrary.shared.add(album)
     }
 
-     func stopObservingNowPlaying() {
-        // Remove observer when no longer needed
-        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.systemMusicPlayer)
+    /// Fetches an `Album` object from the Apple Music catalog by its `MusicItemID`.
+    func fetchAlbumByID(albumID: MusicItemID) async throws -> Album {
+        // Use `MusicCatalogResourceRequest` to fetch the album by its ID
+        let request = MusicCatalogResourceRequest<Album>(matching: \.id, equalTo: albumID)
+        let response = try await request.response()
+        
+        // Ensure the response contains the album
+        guard let album = response.items.first else {
+            throw NSError(
+                domain: "com.example.musicapp",
+                code: 404,
+                userInfo: [NSLocalizedDescriptionKey: "Album not found in Apple Music catalog."]
+            )
+        }
+        
+        return album
+    }
 
-        // Stop monitoring
+    
+    func startObservingNowPlaying() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(nowPlayingItemDidChange),
+            name: .MPMusicPlayerControllerNowPlayingItemDidChange,
+            object: musicPlayer
+        )
+        musicPlayer.beginGeneratingPlaybackNotifications()
+    }
+
+    func stopObservingNowPlaying() {
+        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.systemMusicPlayer)
         MPMusicPlayerController.systemMusicPlayer.endGeneratingPlaybackNotifications()
     }
-    
-    func getNowPlayingAlbumID(completion: @escaping (MPMediaEntityPersistentID?) -> Void) {
-        let nowPlayingItem = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
-        if let albumID = nowPlayingItem?.albumPersistentID {
-            completion(albumID)
-        } else {
-            print("No now-playing item or no album ID available.")
-            completion(nil)
-        }
-    }
 
-    func play() {
-        musicPlayer?.play()
-    }
-
-    func pause() {
-        musicPlayer?.pause()
-    }
-
-    func skipToNextItem() {
-        musicPlayer?.skipToNextItem()
-    }
-
-    func skipToPreviousItem() {
-        musicPlayer?.skipToPreviousItem()
-    }
-
-    func playPlaylist(_ playlist: MPMediaPlaylist, startingAt song: MPMediaItem? = nil) {
-        musicPlayer?.setQueue(with: playlist)
-        if let song = song {
-            musicPlayer?.nowPlayingItem = song
-        }
-        musicPlayer?.play()
-        updateCurrentMediaItem()
-    }
-
-    @objc private func nowPlayingItemDidChange() {
-        debounceUpdate()
-    }
-
-    @objc private func playerStateDidChange() {
-        debounceUpdate()
-    }
-
-    private func debounceUpdate() {
-        debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
-            self?.updateCurrentMediaItem()
-        }
-    }
-
-    private func updateCurrentMediaItem() {
-        guard let nowPlayingItem = musicPlayer?.nowPlayingItem else { return }
-        if nowPlayingItem.persistentID != currentMediaItemId {
-            currentMediaItemId = nowPlayingItem.persistentID
-            title = nowPlayingItem.title ?? "Unknown Title"
-            artist = nowPlayingItem.artist ?? "Unknown Artist"
-            updateArtworkImage(for: nowPlayingItem)
-        }
-    }
-
-    private func updateArtworkImage(for mediaItem: MPMediaItem) {
-        if let cachedImage = cachedArtworkImage, currentMediaItemId == mediaItem.persistentID {
-            artworkImage = cachedImage
-        } else {
-            
-            artworkImage = mediaItem.artwork?.image(at: CGSize(width: 3000, height: 3000))
-            cachedArtworkImage = artworkImage
-        }
-    }
-
-    private func resetMediaItem() {
-        DispatchQueue.main.async {
-            self.title = "Unknown Title"
-            self.artist = "Unknown Artist"
-            self.artworkImage = nil
-            self.cachedArtworkImage = nil
-            self.currentMediaItemId = nil
-        }
-    }
-
+    // Fetch playlists
     func fetchPlaylists() {
         let playlistsQuery = MPMediaQuery.playlists()
         if let playlists = playlistsQuery.collections as? [MPMediaPlaylist] {
@@ -233,6 +785,7 @@ class MediaItemViewModel: ObservableObject {
         }
     }
 
+    // Fetch media items
     func fetchMediaItems(completion: @escaping ([MPMediaItem]) -> Void) {
         let query = MPMediaQuery.songs()
         if let items = query.items {
@@ -246,117 +799,84 @@ class MediaItemViewModel: ObservableObject {
         }
     }
 
-    deinit {
-        musicPlayer?.endGeneratingPlaybackNotifications()
-        NotificationCenter.default.removeObserver(self)
+    // Playback controls
+    func play() {
+        musicPlayer.play()
     }
-}
 
+    func pause() {
+        musicPlayer.pause()
+    }
 
+    func skipToNextItem() {
+        musicPlayer.skipToNextItem()
+    }
 
-// MARK: - ControlButton
+    func skipToPreviousItem() {
+        musicPlayer.skipToPreviousItem()
+    }
 
-struct ControlButton: View {
-    let iconName: String
-    let action: () -> Void
-
-    var body: some View {
-        if let uiImage = UIImage(systemName: iconName)?.withRenderingMode(.alwaysTemplate) {
-            Button(action: action) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 50, height: 50)
-                    .foregroundColor(Color("night"))
-            }
+    func byPass() {
+        if isCarPlay {
+            isCarPlay = false
+            bypassed = true
         } else {
-            Text("No Image Available")
+            isCarPlay = true
+            bypassed = false
         }
     }
-}
 
-// MARK: - PlaylistView
+    // CarPlay start and stop
+    func start() {
+        print("isCarPlay=: true")
+        isCarPlay = true
+        //startObservingNowPlaying()
+    }
 
-struct PlaylistView: View {
-    @ObservedObject var viewModel: MediaItemViewModel
-    
-    var body: some View {
-        NavigationView {
-            List(viewModel.playlists, id: \.persistentID) { playlist in
-                NavigationLink(destination: SongListView(playlist: playlist, viewModel: viewModel)) {
-                    Text(playlist.name ?? "Unknown Playlist")
-                        .padding()
-                }
+    func stop() {
+        print("isCarPlay: false")
+        isCarPlay = false
+        //stopObservingNowPlaying()
+    }
+
+
+    @objc private func playerStateDidChange() {
+        debounceUpdate()
+    }
+
+    private func debounceUpdate() {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+            Task {
+                try await self?.getID(songTitle: self?.musicPlayer.nowPlayingItem?.title ?? "", artistName: self?.musicPlayer.nowPlayingItem?.artist ?? "")
             }
-            .navigationTitle("Playlists")
-        }
-    }
-}
-
-// MARK: - SongListView
-
-struct SongListView: View {
-    var playlist: MPMediaPlaylist
-    @ObservedObject var viewModel: MediaItemViewModel
-    
-    var body: some View {
-        List(playlist.items, id: \.persistentID) { song in
-            Button(action: {
-                viewModel.playPlaylist(playlist, startingAt: song)
-            }) {
-                VStack(alignment: .leading) {
-                    Text(song.title ?? "Unknown Title")
-                        .font(.headline)
-                    Text(song.artist ?? "Unknown Artist")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .padding()
+            Task {
+                self?.updateCurrentMediaItem()
             }
         }
-        .navigationTitle(playlist.name ?? "Songs")
     }
-}
 
+    func updateCurrentMediaItem() {
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem else { return }
+        if nowPlayingItem.persistentID != currentMediaItemId {
+            currentMediaItemId = nowPlayingItem.persistentID
 
-import MusicKit
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.title = nowPlayingItem.title ?? "Unknown Title"
+                self.artist = nowPlayingItem.artist ?? "Unknown Artist"
+                self.totalPlaybackTime = nowPlayingItem.playbackDuration
+                self.updateArtworkImage(for: nowPlayingItem)
+            }
+        }
+    }
 
-extension MediaItemViewModel {
-    
-    
-    func fetchAppleMusicArtwork(for albumID: String, completion: @escaping (UIImage?) -> Void) {
-        // Perform a catalog search for the album using its ID
+    private func updateArtworkImage(for mediaItem: MPMediaItem) {
         Task {
-            do {
-                // Replace `albumID` with the Apple Music catalog ID format
-                let request = MusicCatalogResourceRequest<Album>(matching: \.id, equalTo: MusicItemID(albumID))
-                let response = try await request.response()
-                
-                guard let album = response.items.first else {
-                    print("Album not found")
-                    completion(nil)
-                    return
-                }
-                
-                if let artworkURL = album.artwork?.url(width: 500, height: 500) {
-                    // Download the artwork image
-                    let imageData = try Data(contentsOf: artworkURL)
-                    let image = UIImage(data: imageData)
-                    completion(image)
-                } else {
-                    print("Artwork URL not available")
-                    completion(nil)
-                }
-            } catch {
-                print("Error fetching album artwork: \(error.localizedDescription)")
-                completion(nil)
-            }
+            let x = try await getID(songTitle: mediaItem.title ?? "", artistName: mediaItem.artist ?? "")
+            print("img url: \(x)")
         }
     }
-}
-
-class Media: ObservableObject {
-    @Published var nowPlayingAlbumID: MPMediaEntityPersistentID?
 
     func getNowPlayingAlbumID(completion: @escaping (MPMediaEntityPersistentID?) -> Void) {
         let nowPlayingItem = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
@@ -367,4 +887,280 @@ class Media: ObservableObject {
             completion(nil)
         }
     }
+
+    func getNowPlayingTitle(completion: @escaping (String) -> Void) {
+        if let nowPlayingItem = musicPlayer.nowPlayingItem {
+            let nowPlayingTitle = nowPlayingItem.title ?? "Unknown Title"
+            completion(nowPlayingTitle)
+        } else {
+            completion("Not Playing")
+        }
+    }
+
+    func getNowPlayingArtist(completion: @escaping (String) -> Void) {
+        if let nowPlayingItem = musicPlayer.nowPlayingItem {
+            let nowPlayingArtist = nowPlayingItem.artist ?? "Unknown Artist"
+            completion(nowPlayingArtist)
+        } else {
+            completion("Not Playing")
+        }
+    }
+    
+    func disableRepeat() {
+        musicPlayer.repeatMode = .none
+        print("test - Repeat mode turned off.")
+    }
+    
+    @objc private func nowPlayingItemDidChange() {
+        disableRepeat()
+        
+        print("nowPlayingItemDidChange")
+        debounceUpdate()
+        
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem else {
+            print("test - No now playing item detected.")
+            return
+        }
+        
+        // Get the storeID of the now-playing item
+        let id = nowPlayingItem.playbackStoreID
+        lastSongStoreID = id
+        UserDefaults.standard.set(id, forKey: "lastSongStoreID")
+        print("Now Playing ID: \(id)")
+        print("test - Now playing item changed: \(nowPlayingItem.title ?? "(unknown)") by \(nowPlayingItem.artist ?? "(unknown)")")
+        artwork = nowPlayingItem.artwork?.image(at: CGSize(width: 100, height: 100))
+        
+        // Add the now-playing item to the recently played list
+        recentlyPlayedIDs.append(id)
+        if recentlyPlayedIDs.count > maxRecentlyPlayed {
+            recentlyPlayedIDs.removeFirst() // Maintain a fixed size
+        }
+        
+        // Check if the queue is empty
+        if currentQueue.isEmpty {
+            print("Queue is empty. Extending...")
+            extendPlaybackQueue()
+            return
+        }
+        
+        // Remove the currently playing item from the queue
+        guard let index = currentQueue.firstIndex(of: id) else {
+            print("Item with store ID: \(id) not found in the queue.")
+            print("currentQueue: \(currentQueue)")
+            return
+        }
+        
+        currentQueue.remove(at: index)
+        print("Removed item with store ID \(id) from the queue.")
+        
+        // Update the music player's queue to reflect the removal
+        let updatedQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: currentQueue)
+        musicPlayer.setQueue(with: updatedQueueDescriptor)
+        print("Updated music player queue after removing item.")
+        
+        // Extend the queue if it's running low
+        if currentQueue.count <= 1 {
+            extendPlaybackQueue()
+        }
+    }
+    // Check if the now playing item is the last in the tracked queue
+    private func isLastItemInQueue(_ nowPlayingItem: MPMediaItem) -> Bool {
+        guard let lastItemID = currentQueue.last else {
+            print("test - Queue is empty, treating as last item.")
+            return true
+        }
+        print("test - Checking if now playing ID: \(nowPlayingItem.playbackStoreID) matches last ID: \(lastItemID)")
+        return nowPlayingItem.playbackStoreID == lastItemID
+    }
+
+    // Extend the playback queue by appending more songs
+    private func extendPlaybackQueue() {
+        Task {
+            do {
+                fetchSimilarTracks(artist: musicPlayer.nowPlayingItem?.artist ?? "Unknown Artist", track: musicPlayer.nowPlayingItem?.title ?? "Unknown Song") { storeIDs in
+                    print("StoreIDs: \(storeIDs)")
+
+                    // Ensure the new songs are unique and not recently played
+                    let uniqueNewIDs = storeIDs.filter {
+                        !self.currentQueue.contains($0) && !self.recentlyPlayedIDs.contains($0)
+                    }
+                    print("test - Unique new IDs after filtering: \(uniqueNewIDs.count)")
+
+                    if uniqueNewIDs.isEmpty {
+                        print("Warning: No unique tracks found to extend the queue.")
+                        return
+                    }
+
+                    self.currentQueue.append(contentsOf: uniqueNewIDs)
+                    self.appendToRecentlyPlayedIDs(uniqueNewIDs)
+
+                    // Maintain the size of recentlyPlayedIDs
+                    if self.recentlyPlayedIDs.count > self.maxRecentlyPlayed {
+                        self.recentlyPlayedIDs.removeFirst(self.recentlyPlayedIDs.count - self.maxRecentlyPlayed)
+                    }
+
+                    let newQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: uniqueNewIDs)
+                    self.musicPlayer.append(newQueueDescriptor)
+                    print("test - Extended playback queue successfully.")
+
+                    self.observeQueueProgress() // Continue monitoring the queue
+                }
+            }
+        }
+    }
+    
+    func appendToRecentlyPlayedIDs(_ newIDs: [String]) {
+        queueLock.sync {
+            self.recentlyPlayedIDs.append(contentsOf: newIDs)
+            if self.recentlyPlayedIDs.count > self.maxRecentlyPlayed {
+                self.recentlyPlayedIDs.removeFirst(self.recentlyPlayedIDs.count - self.maxRecentlyPlayed)
+            }
+        }
+    }
+    
+    private func observeQueueProgress() {
+        guard !currentQueue.isEmpty else {
+            print("Queue is empty, fetching new songs.")
+            extendPlaybackQueue()
+            return
+        }
+        
+        // Monitor the playback position
+        Task {
+            while musicPlayer.playbackState == .playing || musicPlayer.playbackState == .paused {
+                guard let nowPlayingItemID = musicPlayer.nowPlayingItem?.playbackStoreID else {
+                    print("No now-playing item found.")
+                    return
+                }
+                
+                // If the now-playing item is the last in the queue, fetch new songs
+                if nowPlayingItemID == currentQueue.last {
+                    print("Now playing the last item in the queue, extending the queue.")
+                    extendPlaybackQueue()
+                    return
+                }
+                
+                // Add a small delay to reduce CPU usage
+                try await Task.sleep(nanoseconds: 1_000_000_000) // 1-second delay
+            }
+        }
+    }
+    
+    func removeParentheses(from input: String) -> String {
+        // Use a regular expression to match parentheses and everything inside them
+        let pattern = "\\s*\\([^)]*\\)"
+        if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+            let range = NSRange(input.startIndex..<input.endIndex, in: input)
+            return regex.stringByReplacingMatches(in: input, options: [], range: range, withTemplate: "")
+        }
+        return input
+    }
+
+    func fetchSimilarTracks(artist: String, track: String, completion: @escaping ([String]) -> Void) {
+        let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
+        let cleanTitle = removeParentheses(from: track)
+        let cleanArtist = removeParentheses(from: artist)
+        let urlString = "https://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=\(cleanArtist)&track=\(cleanTitle)&api_key=\(apiKey)&format=json&limit=15"
+        print("url: \(urlString)")
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            completion([])
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [self] data, response, error in
+            if let error = error {
+                print("Error fetching similar tracks: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received")
+                completion([])
+                return
+            }
+            
+            do {
+                // Decode the Last.fm response
+                let decoder = JSONDecoder()
+                let similarTracksResponse = try decoder.decode(SimilarTracksResponse.self, from: data)
+                
+                // Map the response to a simple array of artist and track pairs
+                let tracks = similarTracksResponse.similartracks.track.map { track in
+                    [track.artist.name: track.name]
+                }
+                
+                // Fetch storeIDs for the tracks
+                Task {
+                    let storeIDs = await fetchStoreIDs(for: tracks)
+                    completion(storeIDs)
+                }
+                
+            } catch {
+                print("Error decoding JSON: \(error.localizedDescription)")
+                completion([])
+            }
+        }
+        
+        task.resume()
+    }
+
+    // Helper function to fetch storeIDs for a list of tracks
+    func fetchStoreIDs(for tracks: [[String: String]]) async -> [String] {
+        var storeIDs: [String] = []
+        
+        for track in tracks {
+            if let artist = track.keys.first, let song = track[artist] {
+                let searchRequest = MusicCatalogSearchRequest(term: "\(artist) \(song)", types: [Song.self])
+                do {
+                    let response = try await searchRequest.response()
+                    let songs = response.songs
+                    
+                    // Prefer explicit tracks but fall back to the first available song
+                    if let explicitSong = songs.first(where: { $0.contentRating == .explicit }) {
+                        storeIDs.append(explicitSong.id.rawValue)
+                    } else if let cleanSong = songs.first {
+                        storeIDs.append(cleanSong.id.rawValue)
+                    } else {
+                        // If no song is found, add a placeholder or skip
+                        print("No storeID found for \(song) by \(artist)")
+                    }
+                } catch {
+                    print("Error fetching storeID for \(song) by \(artist): \(error.localizedDescription)")
+                }
+            }
+        }
+        
+        return storeIDs
+    }
+
+    func setInitialQueue(with storeIDs: [String]) {
+        currentQueue = storeIDs
+        let queueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: storeIDs)
+        musicPlayer.setQueue(with: queueDescriptor)
+        print("test - Initial queue set with: \(storeIDs)")
+        observeQueueProgress() // Start monitoring the queue
+    }
+
+    
+}
+
+// Define a structure to hold track information
+struct Track: Decodable {
+    let name: String
+    let artist: Artist
+}
+
+struct Artist: Decodable {
+    let name: String
+}
+
+struct SimilarTracksResponse: Decodable {
+    let similartracks: Tracks
+}
+
+struct Tracks: Decodable {
+    let track: [Track]
 }
