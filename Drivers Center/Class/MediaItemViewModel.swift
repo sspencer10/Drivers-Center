@@ -46,7 +46,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     
     private var currentQueue: [String] = [] // Track store IDs of the queue
     private var recentlyPlayedIDs: [String] = [] // Tracks recently played store IDs
-    private let maxRecentlyPlayed = 40 // Adjust as needed
+    private let maxRecentlyPlayed = 15 // Adjust as needed
     private var currentMediaItemId: UInt64?
     private var cachedArtworkImage: UIImage?
     private var debounceTimer: Timer?
@@ -405,23 +405,21 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
     
     func playSelectedSong(_ song: MusicKit.Song) async throws {
-        // Search for the song in the Apple Music catalog
         let songToPlay = try await searchSong2(q: "\(song.title) \(song.artistName)")
         let storeID = songToPlay.id.rawValue
         
-        // Use AutoplayManager to set the initial queue
+        print("test421 - Playing selected song: \(song.title) by \(song.artistName), storeID: \(storeID)")
+
         currentQueue = [storeID]
+        appendToRecentlyPlayedIDs([storeID])
         musicPlayer.setQueue(with: currentQueue)
         
-        // Start playback
+        print("test421 - Initial queue set: \(currentQueue)")
+
         musicPlayer.play()
         disableRepeat()
-
-        print("Playing selected song: \(song.title) by \(song.artistName)")
-        // Update the now playing item
         updateCurrentMediaItem()
         extendPlaybackQueue()
-        setInitialQueue(with: [storeID])
     }
     
     func playPlaylist(_ playlist: MPMediaPlaylist, startingAt song: MPMediaItem? = nil) {
@@ -921,45 +919,34 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
             print("test - No now playing item detected.")
             return
         }
-        
-        // Get the storeID of the now-playing item
+
         let id = nowPlayingItem.playbackStoreID
         lastSongStoreID = id
         UserDefaults.standard.set(id, forKey: "lastSongStoreID")
+        
         print("Now Playing ID: \(id)")
         print("test - Now playing item changed: \(nowPlayingItem.title ?? "(unknown)") by \(nowPlayingItem.artist ?? "(unknown)")")
+
         artwork = nowPlayingItem.artwork?.image(at: CGSize(width: 100, height: 100))
-        
-        // Add the now-playing item to the recently played list
+
         recentlyPlayedIDs.append(id)
         if recentlyPlayedIDs.count > maxRecentlyPlayed {
-            recentlyPlayedIDs.removeFirst() // Maintain a fixed size
+            recentlyPlayedIDs.removeFirst()
         }
-        
-        // Check if the queue is empty
-        if currentQueue.isEmpty {
-            print("Queue is empty. Extending...")
-            extendPlaybackQueue()
-            return
-        }
-        
-        // Remove the currently playing item from the queue
-        guard let index = currentQueue.firstIndex(of: id) else {
+
+        if let index = currentQueue.firstIndex(of: id) {
+            currentQueue.remove(at: index)
+            print("Removed item with store ID \(id) from the queue.")
+            
+            let updatedQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: currentQueue)
+            musicPlayer.setQueue(with: updatedQueueDescriptor)
+            print("Updated music player queue after removing item.")
+        } else {
             print("Item with store ID: \(id) not found in the queue.")
-            print("currentQueue: \(currentQueue)")
-            return
         }
-        
-        currentQueue.remove(at: index)
-        print("Removed item with store ID \(id) from the queue.")
-        
-        // Update the music player's queue to reflect the removal
-        let updatedQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: currentQueue)
-        musicPlayer.setQueue(with: updatedQueueDescriptor)
-        print("Updated music player queue after removing item.")
-        
-        // Extend the queue if it's running low
+
         if currentQueue.count <= 1 {
+            print("Queue is empty or running low. Extending...")
             extendPlaybackQueue()
         }
     }
@@ -976,37 +963,115 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     // Extend the playback queue by appending more songs
     private func extendPlaybackQueue() {
         Task {
-            do {
-                fetchSimilarTracks(artist: musicPlayer.nowPlayingItem?.artist ?? "Unknown Artist", track: musicPlayer.nowPlayingItem?.title ?? "Unknown Song") { storeIDs in
-                    print("StoreIDs: \(storeIDs)")
+            fetchSimilarTracks(artist: musicPlayer.nowPlayingItem?.artist ?? "Unknown Artist",
+                               track: musicPlayer.nowPlayingItem?.title ?? "Unknown Song") { storeIDs in
+                print("test422 - StoreIDs fetched: \(storeIDs)")
+                print("test422 - Initial queue: \(self.currentQueue)")
+                print("test422 - Recently played IDs: \(self.recentlyPlayedIDs)")
 
-                    // Ensure the new songs are unique and not recently played
-                    let uniqueNewIDs = storeIDs.filter {
-                        !self.currentQueue.contains($0) && !self.recentlyPlayedIDs.contains($0)
+                // Check which songs are filtered out
+                let uniqueNewIDs = storeIDs.filter { storeID in
+                    let isInQueue = self.currentQueue.contains(storeID)
+                    let isInRecentlyPlayed = self.recentlyPlayedIDs.contains(storeID)
+
+                    if isInQueue {
+                        print("test422 - Skipping \(storeID) (already in queue)")
                     }
-                    print("test - Unique new IDs after filtering: \(uniqueNewIDs.count)")
-
-                    if uniqueNewIDs.isEmpty {
-                        print("Warning: No unique tracks found to extend the queue.")
-                        return
-                    }
-
-                    self.currentQueue.append(contentsOf: uniqueNewIDs)
-                    self.appendToRecentlyPlayedIDs(uniqueNewIDs)
-
-                    // Maintain the size of recentlyPlayedIDs
-                    if self.recentlyPlayedIDs.count > self.maxRecentlyPlayed {
-                        self.recentlyPlayedIDs.removeFirst(self.recentlyPlayedIDs.count - self.maxRecentlyPlayed)
+                    if isInRecentlyPlayed {
+                        print("test422 - Skipping \(storeID) (already in recently played)")
                     }
 
-                    let newQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: uniqueNewIDs)
-                    self.musicPlayer.append(newQueueDescriptor)
-                    print("test - Extended playback queue successfully.")
+                    return !isInQueue && !isInRecentlyPlayed
+                }
 
-                    self.observeQueueProgress() // Continue monitoring the queue
+                print("test422 - Unique new IDs after filtering: \(uniqueNewIDs.count)")
+                print("test422 - Unique new IDs: \(uniqueNewIDs)")
+
+                if uniqueNewIDs.isEmpty {
+                    print("test422 - No unique tracks found, retrying with fetchSimilarTracks2...")
+                    self.fetchSimilarTracks2(artist: self.musicPlayer.nowPlayingItem?.artist ?? "Unknown Artist",
+                                             track: self.musicPlayer.nowPlayingItem?.title ?? "Unknown Song") { fallbackStoreIDs in
+                        self.processFetchedTracks(fallbackStoreIDs)
+                    }
+                } else {
+                    self.processFetchedTracks(uniqueNewIDs)
                 }
             }
         }
+    }
+    
+    func fetchSimilarTracks2(artist: String, track: String, completion: @escaping ([String]) -> Void) {
+        let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
+        let cleanTitle = removeParentheses(from: track)
+        let cleanArtist = removeParentheses(from: artist)
+
+        // Change limit dynamically to get more varied songs
+        let limit = Int.random(in: 10...20) // Fetch between 10 to 20 songs each time
+        let encodedArtist = cleanArtist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanArtist
+        let encodedTitle = cleanTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanTitle
+
+        let urlString = "https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=westcoast%20rap&api_key=4fb73e8d151e5fe3fc9f1575af974a59&format=json&limit=1"
+        
+        print("test422 - Fetching similar tracks from URL: \(urlString)")
+
+        guard let url = URL(string: urlString) else {
+            print("test422 - Invalid URL")
+            completion([])
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("test422 - Error fetching similar tracks: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+
+            guard let data = data else {
+                print("test422 - No data received")
+                completion([])
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let topTracksResponse = try decoder.decode(TopTracksResponse.self, from: data)
+                let tracks = topTracksResponse.tracks.track.map { [$0.artist.name: $0.name] }
+
+                // Fetch StoreIDs for the new tracks
+                Task {
+                    let storeIDs = await self.fetchStoreIDs(for: tracks)
+                    completion(storeIDs)
+                }
+            } catch {
+                print("test422 - Error decoding JSON: \(error.localizedDescription)")
+                completion([])
+            }
+        }
+
+        task.resume()
+    }
+    
+    private func processFetchedTracks(_ storeIDs: [String]) {
+        if storeIDs.isEmpty {
+            print("test422 - Warning: No unique tracks found after retrying.")
+            return
+        }
+
+        print("test422 - Successfully fetched new tracks: \(storeIDs)")
+
+        self.currentQueue.append(contentsOf: storeIDs)
+
+        if self.recentlyPlayedIDs.count > self.maxRecentlyPlayed {
+            self.recentlyPlayedIDs.removeFirst(self.recentlyPlayedIDs.count - self.maxRecentlyPlayed)
+        }
+
+        let newQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: storeIDs)
+        self.musicPlayer.append(newQueueDescriptor)
+
+        print("test422 - Extended playback queue successfully.")
+
+        self.observeQueueProgress()
     }
     
     func appendToRecentlyPlayedIDs(_ newIDs: [String]) {
@@ -1020,28 +1085,27 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     
     private func observeQueueProgress() {
         guard !currentQueue.isEmpty else {
-            print("Queue is empty, fetching new songs.")
+            print("test421 - Queue is empty, fetching new songs.")
             extendPlaybackQueue()
             return
         }
-        
-        // Monitor the playback position
+
         Task {
             while musicPlayer.playbackState == .playing || musicPlayer.playbackState == .paused {
                 guard let nowPlayingItemID = musicPlayer.nowPlayingItem?.playbackStoreID else {
-                    print("No now-playing item found.")
+                    print("test421 - No now-playing item found.")
                     return
                 }
-                
-                // If the now-playing item is the last in the queue, fetch new songs
+
+                //print("test421 - Currently playing: \(nowPlayingItemID)")
+
                 if nowPlayingItemID == currentQueue.last {
-                    print("Now playing the last item in the queue, extending the queue.")
+                    print("test421 - Playing last item in queue, extending queue...")
                     extendPlaybackQueue()
                     return
                 }
-                
-                // Add a small delay to reduce CPU usage
-                try await Task.sleep(nanoseconds: 1_000_000_000) // 1-second delay
+
+                try await Task.sleep(nanoseconds: 1_000_000_000)
             }
         }
     }
@@ -1060,50 +1124,51 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
         let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
         let cleanTitle = removeParentheses(from: track)
         let cleanArtist = removeParentheses(from: artist)
-        let urlString = "https://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=\(cleanArtist)&track=\(cleanTitle)&api_key=\(apiKey)&format=json&limit=15"
-        print("url: \(urlString)")
+
+        // Change limit dynamically to get more varied songs
+        let limit = Int.random(in: 10...20) // Fetch between 10 to 20 songs each time
+        let encodedArtist = cleanArtist.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanArtist
+        let encodedTitle = cleanTitle.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? cleanTitle
+
+        let urlString = "https://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=\(encodedArtist)&track=\(encodedTitle)&api_key=\(apiKey)&format=json&limit=\(limit)"
         
+        print("test422 - Fetching similar tracks from URL: \(urlString)")
+
         guard let url = URL(string: urlString) else {
-            print("Invalid URL")
+            print("test422 - Invalid URL")
             completion([])
             return
         }
-        
-        let task = URLSession.shared.dataTask(with: url) { [self] data, response, error in
+
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("Error fetching similar tracks: \(error.localizedDescription)")
+                print("test422 - Error fetching similar tracks: \(error.localizedDescription)")
                 completion([])
                 return
             }
-            
+
             guard let data = data else {
-                print("No data received")
+                print("test422 - No data received")
                 completion([])
                 return
             }
-            
+
             do {
-                // Decode the Last.fm response
                 let decoder = JSONDecoder()
                 let similarTracksResponse = try decoder.decode(SimilarTracksResponse.self, from: data)
-                
-                // Map the response to a simple array of artist and track pairs
-                let tracks = similarTracksResponse.similartracks.track.map { track in
-                    [track.artist.name: track.name]
-                }
-                
-                // Fetch storeIDs for the tracks
+                let tracks = similarTracksResponse.similartracks.track.map { [$0.artist.name: $0.name] }
+
+                // Fetch StoreIDs for the new tracks
                 Task {
-                    let storeIDs = await fetchStoreIDs(for: tracks)
+                    let storeIDs = await self.fetchStoreIDs(for: tracks)
                     completion(storeIDs)
                 }
-                
             } catch {
-                print("Error decoding JSON: \(error.localizedDescription)")
+                print("test422 - Error decoding JSON: \(error.localizedDescription)")
                 completion([])
             }
         }
-        
+
         task.resume()
     }
 
@@ -1162,5 +1227,13 @@ struct SimilarTracksResponse: Decodable {
 }
 
 struct Tracks: Decodable {
+    let track: [Track]
+}
+
+struct TopTracksResponse: Decodable {
+    let tracks: TrackContainer
+}
+
+struct TrackContainer: Decodable {
     let track: [Track]
 }
