@@ -195,11 +195,14 @@ struct MapsView: View {
                             .scaledToFill()
                             .frame(width: 25, height: 25)
                     }
-                    .frame(width: 40, height: 40)
-                    .background(Color.white)
+                    .frame(width: 45, height: 45)
+                    .background(Color.black.opacity(0.8))
                     .clipShape(Circle())
                     .shadow(radius: 3)
-                    .padding()
+                    //.padding()
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 15)
+                    
                     if !addressSearchViewModel.showNavView3 {
                         Button(action: {
                             mapType = (mapType == .standard) ? .hybrid : .standard
@@ -209,11 +212,13 @@ struct MapsView: View {
                                 .scaledToFill()
                                 .frame(width: 25, height: 25)
                         }
-                        .frame(width: 40, height: 40)
-                        .background(Color.white)
+                        .frame(width: 45, height: 45)
+                        .background(Color.black.opacity(0.8))
                         .clipShape(Circle())
                         .shadow(radius: 3)
-                        .padding()
+                        //.padding()
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 15)
                         
                         Button(action: {
                             showSpeedometer.toggle()
@@ -223,18 +228,34 @@ struct MapsView: View {
                                 .scaledToFill()
                                 .frame(width: 25, height: 25)
                         }
-                        .frame(width: 40, height: 40)
-                        .background(Color.white)
+                        .frame(width: 45, height: 45)
+                        .background(Color.black.opacity(0.8))
                         .clipShape(Circle())
                         .shadow(radius: 3)
-                        .padding()
+                        //.padding()
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 15)
                     }
                     Spacer()
                 }
+                .padding(.top, 60)
             }
             
             VStack {
                 Spacer()
+                HStack {
+                    if showSpeedometer {
+                        SpeedometerView(
+                            lm: LocationManager.shared,
+                            coveredRadius: 230,
+                            maxValue: 120,
+                            steperSplit: 10,
+                            size: 135
+                        )
+                        .padding()
+                    }
+                    Spacer()
+                }
                 
                 if addressSearchViewModel.showNavView2 {
                     NavigationSearchViewHelper(
@@ -995,8 +1016,16 @@ extension RouteMapView {
         }
         // Google Places search function with pagination.
         func performGooglePlacesSearch(near coordinate: CLLocationCoordinate2D, radius: Double = 1000, completion: @escaping ([CustomPointAnnotation]) -> Void) {
-            let excludedTypes: [String] = [] // Specify the types you want to include
-            let apiKey = "AIzaSyBufibeNqdMHiyWCxsdj-R5oeQHgIRTy8Y"
+            //let excludedTypes: [String] = [] // Specify the types you want to include
+            var apiKey: String {
+                guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+                      let secrets = NSDictionary(contentsOfFile: filePath),
+                      let token = secrets["GooglePlacesAPIKey"] as? String,
+                      !token.isEmpty else {
+                    fatalError("GooglePlacesAPIKey not set in Secrets.plist")
+                }
+                return token
+            }
             var allAnnotations: [CustomPointAnnotation] = []
             
             func fetchPage(urlString: String) {
@@ -1020,12 +1049,7 @@ extension RouteMapView {
                         print("google places search raw data: \(placesResponse)")
 
                         for place in placesResponse.results {
-/*
-                            for excludedType in excludedTypes {
-                                if place.types.contains(excludedType) {
-                                    print("skipping")
-                                } else {
-                                    */
+
                                     let annotation = CustomPointAnnotation()
                                     
                                     annotation.coordinate = CLLocationCoordinate2D(latitude: place.geometry.location.lat, longitude: place.geometry.location.lng)

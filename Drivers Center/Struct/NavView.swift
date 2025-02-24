@@ -311,7 +311,7 @@ struct PlaceDetailsView: View {
             
             HStack(spacing: 16) {
                 if let coordinate = addressSearchViewModel.selectedCoordinate {
-                    CustomButton(iconName: "car.fill", label: eta, color: .blue) {
+                    CustomButton(iconName: "car.fill", label: eta, color: .blue, labelColor: .white) {
                         print("nav button")
                         
                         LocationManager.shared.startNavigation(to: coordinate)
@@ -325,13 +325,13 @@ struct PlaceDetailsView: View {
                         }
                     }
                 } else {
-                    CustomButton(iconName: "car.fill", label: eta, color: .blue) {
+                    CustomButton(iconName: "car.fill", label: eta, color: .blue, labelColor: .white.opacity(0.3)) {
                         print("Error - no coordinate")
                     }
                 }
                 
                 if let phone = place.phone {
-                    CustomButton(iconName: "phone.fill", label: "Call", color: .gray) {
+                    CustomButton(iconName: "iphone.gen2", label: "Call", color: .gray, labelColor: .white) {
                         print("phone \(phone)")
                         if let phoneURL = URL(string: "tel://\(phone)") {
                             UIApplication.shared.open(phoneURL)
@@ -340,23 +340,23 @@ struct PlaceDetailsView: View {
                         }
                     }
                 } else {
-                    CustomButton(iconName: "phone.fill", label: "No Phone Number", color: .gray) {
+                    CustomButton(iconName: "iphone.gen2.slash", label: "Call", color: .gray.opacity(0.3), labelColor: .white.opacity(0.3)) {
                         print("Error - no phone")
                     }
                 }
                 
                 if let website = place.website {
-                    CustomButton(iconName: "safari", label: "Website", color: .gray) {
+                    CustomButton(iconName: "network", label: "Website", color: .gray, labelColor: .white) {
                         print("website \(website)")
                         UIApplication.shared.open(website)
                     }
                 } else {
-                    CustomButton(iconName: "safari", label: "No Website", color: .gray) {
+                    CustomButton(iconName: "network.slash", label: "Website", color: .gray.opacity(0.3), labelColor: .white.opacity(0.3)) {
                         print("Error - no website")
                     }
                 }
                 
-                CustomButton(iconName: "x.circle", label: "Close", color: .red) {
+                CustomButton(iconName: "x.circle", label: "Close", color: .red, labelColor: .white) {
                     print("close")
                     AddressSearchViewModel.shared.showPlace = false
                     searchText = ""
@@ -425,6 +425,7 @@ struct CustomButton: View {
     let iconName: String
     let label: String
     let color: Color
+    let labelColor: Color
     let action: () -> Void
 
     var body: some View {
@@ -437,10 +438,10 @@ struct CustomButton: View {
             VStack(spacing: 4) {
                 Image(systemName: iconName)
                     .font(.system(size: 20))
-                    .foregroundColor(color == .blue ? .white : .primary)
+                    .foregroundColor(labelColor)
                 Text(label)
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(color == .blue ? .white : .primary)
+                    .foregroundColor(labelColor)
             }
             .frame(width: 70, height: 70)
             .background(color)
@@ -453,7 +454,15 @@ struct CustomButton: View {
 // MARK: - Google Places Service (Place Details)
 class GooglePlacesService {
     static let shared = GooglePlacesService()
-    private let apiKey = "AIzaSyBufibeNqdMHiyWCxsdj-R5oeQHgIRTy8Y"
+    private var apiKey: String {
+        guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let secrets = NSDictionary(contentsOfFile: filePath),
+              let token = secrets["GooglePlacesAPIKey"] as? String,
+              !token.isEmpty else {
+            fatalError("GooglePlacesAPIKey not set in Secrets.plist")
+        }
+        return token
+    }
     
     // Fetch Place Details solely from Google using the Place Details API.
     func fetchPlaceDetails(for placeID: String, completion: @escaping (PlaceDetails?) -> Void) {

@@ -23,8 +23,16 @@ class WeatherViewModel: NSObject, ObservableObject {
     @Published var today_max: Double = 0.0
     @Published var code: Int = 0
     @Published var is_day: Int = 0
-    
-    var apiKey: String = "5aa6d70b54f7455fb2f141924241508"
+        
+    private var apiKey: String {
+        guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let secrets = NSDictionary(contentsOfFile: filePath),
+              let token = secrets["WeatherAPIKey"] as? String,
+              !token.isEmpty else {
+            fatalError("WeatherAPIKey not set in Secrets.plist")
+        }
+        return token
+    }
     
     var timer: Timer?
     

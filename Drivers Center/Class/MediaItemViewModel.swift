@@ -42,9 +42,18 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     var genres: [String] = []
     var musicItemID: MusicItemID?
     var lastSongStoreID: String?
-    let apiKey = "4fb73e8d151e5fe3fc9f1575af974a59"
-    private let queueLock = DispatchQueue(label: "com.example.queueLock")
     
+    private var apiKey: String {
+        guard let filePath = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let secrets = NSDictionary(contentsOfFile: filePath),
+              let token = secrets["AudioscrobblerAPIKey"] as? String,
+              !token.isEmpty else {
+            fatalError("AudioscrobblerAPIKey not set in Secrets.plist")
+        }
+        return token
+    }
+    
+    private let queueLock = DispatchQueue(label: "com.example.queueLock")
     private var currentQueue: [String] = [] // Track store IDs of the queue
     private var recentlyPlayedIDs: [String] = [] // Tracks recently played store IDs
     private let maxRecentlyPlayed = 15 // Adjust as needed
