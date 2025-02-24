@@ -1,4 +1,0 @@
-module MusadoraKit {
-header "MusadoraKit-Swift.h"
-export *
-}
