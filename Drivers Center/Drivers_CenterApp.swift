@@ -16,7 +16,9 @@ struct YourApp: App {
     @StateObject var templateManager: TemplateManager
     @StateObject var mediaItemViewModel: MediaItemViewModel
     @StateObject var addressSearchViewModel: AddressSearchViewModel
+    
     init() {
+        
         let sharedLocationManager = LocationManager.shared
         let sharedWeatherViewModel = WeatherViewModel.shared
         let sharedTemplateManager = TemplateManager.shared

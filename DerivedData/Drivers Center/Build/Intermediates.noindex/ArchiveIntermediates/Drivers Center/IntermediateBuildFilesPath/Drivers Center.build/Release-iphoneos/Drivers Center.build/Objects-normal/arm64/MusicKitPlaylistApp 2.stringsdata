@@ -1,0 +1,48 @@
+{
+  "source": "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp 2.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Search",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search for music...",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "Searching...",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "Search",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 44
+        }
+      },
+      {
+        "comment": "",
+        "key": "Songs",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 159
+        }
+      }
+    ]
+  },
+  "version": 1
+}

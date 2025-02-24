@@ -21,16 +21,16 @@
 	<array>
 		<string>SendLocationIntentIntent</string>
 	</array>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>used for voice search</string>
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>used for voice search</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to provide navigation features.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>We need your location to continue providing navigation in the background.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need your location to provide navigation even when the app is closed or in the background.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>used for voice search</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>used for voice search</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to provide navigation features.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to continue providing navigation in the background.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to provide navigation even when the app is closed or in the background.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UISceneConfigurations</key>

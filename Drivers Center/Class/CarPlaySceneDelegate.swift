@@ -43,11 +43,15 @@ Abstract:
 import CarPlay
 import UIKit
 import SwiftUI
+import AVKit
 
 /// `CarPlaySceneDelegate` is the UIScenDelegate and CPCarPlaySceneDelegate.
 class CarPlaySceneDelegate: NSObject, ObservableObject {
     
-    
+    var window: UIWindow?
+    var interfaceController: CPInterfaceController?
+    var carWindow: CPWindow?
+
     
     /// The template manager handles the connection to CarPlay and manages the displayed templates.
     let templateManager = TemplateManager.shared
@@ -84,7 +88,11 @@ class CarPlaySceneDelegate: NSObject, ObservableObject {
 
 extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     
-    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
+    func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController/*, to window: CPWindow*/) {
+        
+        self.interfaceController = interfaceController
+        //self.carWindow = window
+        
         print("Template application scene did connect.")
         templateManager.connect(interfaceController, scene: templateApplicationScene)
         LocationManager.shared.lm.startUpdatingLocation()
@@ -93,6 +101,19 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         print("Maximum items allowed: \(maxItemCount)")
         UserDefaults.standard.set(maxItemCount, forKey: "maxItemCount")
         MediaItemViewModel.shared.start()
+        guard let path = Bundle.main.path(forResource: "video", ofType: "mp4") else
+        {
+            return
+        }
+        let videoURL = NSURL(fileURLWithPath: path)
+        let player = AVPlayer(url: videoURL as URL)
+        let playerController = AVPlayerViewController()
+        playerController.player = player
+        player.play()
+        
+       // window.rootViewController = playerController
+        
+        
     }
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,

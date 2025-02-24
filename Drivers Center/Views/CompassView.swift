@@ -63,7 +63,7 @@ struct CompassMarkerView: View {
     }
 
     private func capsuleColor() -> Color {
-        return self.marker.degrees == 0 ? .blue : .gray
+        return self.marker.degrees == 0 ? .teal : .gray
     }
 
     private func textAngle() -> Angle {
@@ -79,11 +79,20 @@ struct CompassView : View {
 
     var body: some View {
             if !(carPlay2) {
+
+                
                 VStack {
                     
-                    Capsule()
-                        .frame(width: 5,
-                               height: 50)
+                    SpeedometerView(
+                        lm: LocationManager.shared,
+                        coveredRadius: 230,
+                        maxValue: 120,
+                        steperSplit: 10,
+                        size: 320 // Set the desired size here
+                    )
+                        .padding()
+                    
+                    
                     
                     ZStack {
                         ForEach(Marker.markers(), id: \.self) { marker in
@@ -91,10 +100,11 @@ struct CompassView : View {
                                               compassDegress: self.carPlay.degrees)
                         }
                     }
-                    .frame(width: 300,
-                           height: 300)
+                    .frame(width: 230,
+                           height: 230)
                     .rotationEffect(Angle(degrees: self.carPlay.degrees))
                     .statusBar(hidden: true)
+                    .padding()
                 }
                 .onChange(of: tm.isCarPlay) {
                     if tm.isCarPlay {
@@ -114,6 +124,8 @@ struct CompassView : View {
                 }
                 .foregroundColor(.white)
             }
+        
+        
     }
 }
 

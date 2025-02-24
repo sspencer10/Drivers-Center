@@ -1,0 +1,40 @@
+{
+  "source": "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CardView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Light Mode Card",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "This card stands out in light mode.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Dark Mode Card",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "This card is now visible in dark mode!",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 39
+        }
+      }
+    ]
+  },
+  "version": 1
+}

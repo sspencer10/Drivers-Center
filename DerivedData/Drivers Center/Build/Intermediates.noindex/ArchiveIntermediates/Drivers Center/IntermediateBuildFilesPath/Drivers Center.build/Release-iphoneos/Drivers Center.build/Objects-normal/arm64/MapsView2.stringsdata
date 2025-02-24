@@ -1,0 +1,32 @@
+{
+  "source": "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView2.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "None",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 25
+        }
+      },
+      {
+        "comment": "",
+        "key": "Follow",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "Follow with Heading",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 31
+        }
+      }
+    ]
+  },
+  "version": 1
+}

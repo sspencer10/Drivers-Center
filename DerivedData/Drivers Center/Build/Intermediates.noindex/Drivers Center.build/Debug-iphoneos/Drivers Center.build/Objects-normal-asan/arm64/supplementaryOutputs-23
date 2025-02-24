@@ -1,0 +1,48 @@
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CustomAnnotationView.swift":
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomAnnotationView.swiftdeps"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomAnnotationView.d"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomAnnotationView.o"
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomAnnotationView.swiftconstvalues"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomAnnotationView.dia"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CustomSlider.swift":
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomSlider.o"
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomSlider.swiftconstvalues"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomSlider.swiftdeps"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomSlider.dia"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CustomSlider.d"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView.swift":
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MapsView.o"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MapsView.swiftdeps"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MapsView.dia"
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MapsView.swiftconstvalues"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MapsView.d"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarPlayObserver.swift":
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CarPlayObserver.swiftconstvalues"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CarPlayObserver.d"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CarPlayObserver.swiftdeps"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CarPlayObserver.dia"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/CarPlayObserver.o"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/ContentView 3.swift":
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/ContentView 3.swiftconstvalues"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/ContentView 3.d"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/ContentView 3.o"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/ContentView 3.swiftdeps"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/ContentView 3.dia"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumDetailsView.swift":
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/AlbumDetailsView.d"
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/AlbumDetailsView.swiftconstvalues"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/AlbumDetailsView.swiftdeps"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/AlbumDetailsView.o"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/AlbumDetailsView.dia"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/WeatherViewModel.swift":
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/WeatherViewModel.swiftconstvalues"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/WeatherViewModel.dia"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/WeatherViewModel.d"
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/WeatherViewModel.swiftdeps"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/WeatherViewModel.o"
+"/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp.swift":
+  swift-dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MusicKitPlaylistApp.swiftdeps"
+  diagnostics: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MusicKitPlaylistApp.dia"
+  const-values: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MusicKitPlaylistApp.swiftconstvalues"
+  object: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MusicKitPlaylistApp.o"
+  dependencies: "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal-asan/arm64/MusicKitPlaylistApp.d"

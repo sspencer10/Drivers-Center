@@ -1,0 +1,11 @@
+Target dependency graph (6 targets)
+Target 'Drivers Center' in project 'Drivers Center'
+➜ Explicit dependency on target 'MusadoraKit' in project 'MusadoraKit'
+Target 'MusadoraKit' in project 'MusadoraKit'
+➜ Explicit dependency on target 'MusadoraKit' in project 'MusadoraKit'
+Target 'MusadoraKit' in project 'MusadoraKit' (no dependencies)
+Target 'Drivers Center' in project 'Drivers Center'
+➜ Explicit dependency on target 'MusadoraKit' in project 'MusadoraKit'
+Target 'MusadoraKit' in project 'MusadoraKit'
+➜ Explicit dependency on target 'MusadoraKit' in project 'MusadoraKit'
+Target 'MusadoraKit' in project 'MusadoraKit' (no dependencies)

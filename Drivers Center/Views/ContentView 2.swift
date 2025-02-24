@@ -1,7 +1,15 @@
+//
+//  ContentView 2.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 2/6/25.
+//
+
+
 import SwiftUI
 
-struct ContentView: View {
-    @State private var isSheetPresented = false
+struct ContentView2: View {
+    @State private var isSheetPresented = true
 
     var body: some View {
         Button("Show Sheet") {
@@ -14,7 +22,7 @@ struct ContentView: View {
                     isSheetPresented = false
                 }
             }
-            .presentationDetents([.height(200), .medium]) // Adjusts height to show 25% initially
+            .presentationDetents([.height(200), .large]) // Adjusts height to show 25% initially
             .presentationDragIndicator(.visible)
         }
     }
@@ -22,6 +30,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView2()
     }
 }

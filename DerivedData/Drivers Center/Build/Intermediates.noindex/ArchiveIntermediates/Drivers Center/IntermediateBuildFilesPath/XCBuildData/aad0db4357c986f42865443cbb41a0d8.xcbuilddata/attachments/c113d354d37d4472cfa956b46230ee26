@@ -1,0 +1,315 @@
+{
+  "" : {
+    "const-values" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.swiftconstvalues",
+    "dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.d",
+    "diagnostics" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.dia",
+    "emit-module-dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master-emit-module.d",
+    "emit-module-diagnostics" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master-emit-module.dia",
+    "swift-dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.swiftdeps"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Drivers_Center+CoreDataModel.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_Center+CoreDataModel.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_Center+CoreDataModel.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_Center+CoreDataModel.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Item+CoreDataClass.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataClass.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataClass.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataClass.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Item+CoreDataProperties.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataProperties.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataProperties.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Item+CoreDataProperties.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/AppStatusHelper.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AppStatusHelper.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AppStatusHelper.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AppStatusHelper.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/AutoplayManager.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AutoplayManager.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AutoplayManager.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AutoplayManager.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/ButtonRowView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ButtonRowView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ButtonRowView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ButtonRowView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarPlayObserver.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayObserver.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayObserver.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayObserver.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarPlaySceneDelegate.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlaySceneDelegate.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlaySceneDelegate.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlaySceneDelegate.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarplayContentView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarplayContentView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarplayContentView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarplayContentView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CustomAnnotationView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomAnnotationView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomAnnotationView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomAnnotationView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/ImageCache.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ImageCache.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ImageCache.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ImageCache.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/LocalSearchViewModel.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocalSearchViewModel.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocalSearchViewModel.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocalSearchViewModel.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/LocationManager.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocationManager.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocationManager.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LocationManager.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/MarqueeTextController.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MarqueeTextController.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MarqueeTextController.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MarqueeTextController.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/MediaItemViewModel.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MediaItemViewModel.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MediaItemViewModel.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MediaItemViewModel.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SendMsg.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendMsg.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendMsg.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendMsg.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SpeechRecognizer 2.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer 2.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer 2.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer 2.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SpeechRecognizer.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeechRecognizer.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/TemplateManager.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TemplateManager.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TemplateManager.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TemplateManager.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/WeatherViewModel.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherViewModel.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherViewModel.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherViewModel.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Drivers_CenterApp.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_CenterApp.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_CenterApp.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers_CenterApp.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Persistence.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Persistence.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Persistence.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Persistence.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/AddToPlaylistView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AddToPlaylistView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AddToPlaylistView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AddToPlaylistView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/BlurView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BlurView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BlurView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BlurView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/CustomSheetMenu.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSheetMenu.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSheetMenu.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSheetMenu.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/DateFormat.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/DateFormat.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/DateFormat.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/DateFormat.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/GarageStatus.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GarageStatus.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GarageStatus.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/GarageStatus.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/ListTemplate.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ListTemplate.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ListTemplate.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ListTemplate.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Model.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Model.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Model.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Model.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/MyVariables.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MyVariables.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MyVariables.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MyVariables.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/NavView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NavView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NavView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NavView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/PullToRefresh.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PullToRefresh.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PullToRefresh.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PullToRefresh.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Song.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Song.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Song.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Song.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Utilities.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Utilities.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Utilities.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Utilities.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumArtworkView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumArtworkView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumArtworkView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumArtworkView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumDetailsView 2.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView 2.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView 2.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView 2.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumDetailsView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/AlbumDetailsView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/BusinessHoursIndicatorView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BusinessHoursIndicatorView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BusinessHoursIndicatorView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/BusinessHoursIndicatorView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CarPlayManager.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayManager.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayManager.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CarPlayManager.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CardView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CardView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CardView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CardView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CompassView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CompassView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CompassView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CompassView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/ContentView 2.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 2.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 2.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 2.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/ContentView 3.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 3.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 3.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/ContentView 3.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CustomSlider.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSlider.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSlider.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/CustomSlider.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/IsCarPlayView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsCarPlayView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsCarPlayView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsCarPlayView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/IsFirst.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsFirst.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsFirst.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/IsFirst.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/LibraryMenuSheet.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LibraryMenuSheet.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LibraryMenuSheet.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/LibraryMenuSheet.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MainView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MainView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MainView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MainView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView2.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView2.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView2.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MapsView2.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/Music.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Music.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Music.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Music.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp 2.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp 2.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp 2.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp 2.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/MusicKitPlaylistApp.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/NotMainView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NotMainView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NotMainView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/NotMainView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/PermissionsView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PermissionsView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PermissionsView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/PermissionsView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/Retrospeed.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Retrospeed.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Retrospeed.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/Retrospeed.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/SpeedometerView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeedometerView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeedometerView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SpeedometerView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/TestView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TestView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TestView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/TestView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/WeatherView.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherView.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherView.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/WeatherView.o"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/SendLocationIntent.swift" : {
+    "index-unit-output-path" : "/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendLocationIntent.o",
+    "llvm-bc" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendLocationIntent.bc",
+    "object" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Build/Intermediates.noindex/ArchiveIntermediates/Drivers Center/IntermediateBuildFilesPath/Drivers Center.build/Release-iphoneos/Drivers Center.build/Objects-normal/arm64/SendLocationIntent.o"
+  }
+}

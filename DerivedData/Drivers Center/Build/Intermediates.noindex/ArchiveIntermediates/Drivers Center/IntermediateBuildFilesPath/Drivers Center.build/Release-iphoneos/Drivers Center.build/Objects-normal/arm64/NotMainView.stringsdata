@@ -1,0 +1,16 @@
+{
+  "source": "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/NotMainView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "App in CarPlay Mode!",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

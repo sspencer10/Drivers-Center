@@ -57,6 +57,37 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
 
 
     private init() {
+        
+        if UserDefaults.standard.bool(forKey: "onboarded") {
+            requestAppleMusicPermissions()
+            
+            
+            self.musicPlayer = MPMusicPlayerController.applicationQueuePlayer
+            NotificationCenter.default.addObserver(self, selector: #selector(nowPlayingItemDidChange), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: musicPlayer)
+            NotificationCenter.default.addObserver(self, selector: #selector(playerStateDidChange), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer)
+            
+            musicPlayer.beginGeneratingPlaybackNotifications()
+            updateCurrentMediaItem()
+            fetchPlaylists()
+            fetchMediaItems { items in
+                self.mediaItems = items
+            }
+            startProgressUpdateTimer()
+            Task {
+                await musicInit()
+            }
+            startObservingNowPlaying()
+            lastSongStoreID = UserDefaults.standard.string(forKey: "lastSongStoreID") ?? ""
+            Task {
+                let song = try await fetchSong(byStoreID: lastSongStoreID ?? "")
+                guard let song = song else { return }
+                try await playSelectedSong(song)
+                musicPlayer.pause()
+            }
+        }
+    }
+    
+    func redo() {
         requestAppleMusicPermissions()
         self.musicPlayer = MPMusicPlayerController.applicationQueuePlayer
         NotificationCenter.default.addObserver(self, selector: #selector(nowPlayingItemDidChange), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: musicPlayer)
@@ -80,6 +111,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
             try await playSelectedSong(song)
             musicPlayer.pause()
         }
+        
     }
         
     func fetchSong(byStoreID storeID: String) async throws -> Song? {
@@ -100,7 +132,9 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     
     func musicInit() async {
         do {
-            try await requestAuthorization()
+            if UserDefaults.standard.bool(forKey: "onboarded") {
+                try await requestAuthorization()
+            }
             let playlists = try await fetchUserPlaylists()
             if let _ = playlists.first(where: { $0.name == "AAA" }) {
                 print("test - playlist exists")
@@ -202,7 +236,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
             }
         }
     }
-    
+   
     func requestAppleMusicPermissions() {
         let status = MPMediaLibrary.authorizationStatus()
         if status == .notDetermined {
@@ -307,6 +341,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
     */
     func fetchPlaylist(by name: String) async -> MPMediaPlaylist? {
+        print("fetchPlaylist")
         // Create a query for playlists in the media library
         let query = MPMediaQuery.playlists()
         
@@ -392,9 +427,11 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
     
     func requestAuthorization() async throws {
-        let status = await MusicAuthorization.request()
-        guard status == .authorized else {
-            throw MusicError.notAuthorized
+        if UserDefaults.standard.bool(forKey: "onboarded") {
+            let status = await MusicAuthorization.request()
+            guard status == .authorized else {
+                throw MusicError.notAuthorized
+            }
         }
     }
     
@@ -773,6 +810,7 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
 
     // Fetch playlists
     func fetchPlaylists() {
+        print("fetchPlaylist")
         let playlistsQuery = MPMediaQuery.playlists()
         if let playlists = playlistsQuery.collections as? [MPMediaPlaylist] {
             DispatchQueue.main.async {
@@ -1001,8 +1039,6 @@ class MediaItemViewModel:  @unchecked Sendable, ObservableObject {
     }
     
     func fetchSimilarTracks2(artist: String, track: String, completion: @escaping ([String]) -> Void) {
-        let cleanTitle = removeParentheses(from: track)
-        let cleanArtist = removeParentheses(from: artist)
 
         let urlString = "https://ws.audioscrobbler.com/2.0/?method=tag.gettoptracks&tag=westcoast%20rap&api_key=\(apiKey)&format=json&limit=1"
         

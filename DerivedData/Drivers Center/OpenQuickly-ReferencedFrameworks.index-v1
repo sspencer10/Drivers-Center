@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<string>AVFoundation</string>
+	<string>CarPlay</string>
+	<string>MediaPlayer</string>
+	<string>Intents</string>
+	<string>AVKit</string>
+	<string>SwiftUI</string>
+	<string>CoreData</string>
+	<string>MusicKit</string>
+	<string>MapKit</string>
+	<string>AppIntents</string>
+	<string>StoreKit</string>
+	<string>Foundation</string>
+	<string>CoreLocation</string>
+	<string>MessageUI</string>
+	<string>Combine</string>
+	<string>UIKit</string>
+	<string>Speech</string>
+</array>
+</plist>

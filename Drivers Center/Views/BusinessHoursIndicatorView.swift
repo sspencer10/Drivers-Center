@@ -1,3 +1,11 @@
+//
+//  BusinessHoursIndicatorView.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 2/10/25.
+//
+
+
 import SwiftUI
 
 struct BusinessHoursIndicatorView: View {
@@ -31,8 +39,6 @@ struct BusinessHoursIndicatorView: View {
                         .font(.headline)
                         .foregroundColor(place.isCurrentlyOpen() ? .green : .red)
                     Spacer()
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundColor(.gray)
                 }
                 .padding(.vertical, 4)
             }

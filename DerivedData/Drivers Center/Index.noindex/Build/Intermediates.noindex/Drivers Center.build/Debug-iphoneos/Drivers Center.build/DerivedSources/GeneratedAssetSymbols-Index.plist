@@ -1,0 +1,1294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colors</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameAccentColor</string>
+			<key>relativePath</key>
+			<string>./AccentColor.colorset</string>
+			<key>swiftSymbol</key>
+			<string>accent</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameAlmostWhite</string>
+			<key>relativePath</key>
+			<string>./almostWhite.colorset</string>
+			<key>swiftSymbol</key>
+			<string>almostWhite</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameCircle</string>
+			<key>relativePath</key>
+			<string>./circle.colorset</string>
+			<key>swiftSymbol</key>
+			<string>circle</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameColor1</string>
+			<key>relativePath</key>
+			<string>./color1.colorset</string>
+			<key>swiftSymbol</key>
+			<string>color1</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameColor2</string>
+			<key>relativePath</key>
+			<string>./color2.colorset</string>
+			<key>swiftSymbol</key>
+			<string>color2</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameDarkGray2</string>
+			<key>relativePath</key>
+			<string>./darkGray2.colorset</string>
+			<key>swiftSymbol</key>
+			<string>darkGray2</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameDarkerGray</string>
+			<key>relativePath</key>
+			<string>./darkerGray.colorset</string>
+			<key>swiftSymbol</key>
+			<string>darkerGray</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameGuageColor</string>
+			<key>relativePath</key>
+			<string>./guageColor.colorset</string>
+			<key>swiftSymbol</key>
+			<string>guage</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameLtGray</string>
+			<key>relativePath</key>
+			<string>./ltGray.colorset</string>
+			<key>swiftSymbol</key>
+			<string>ltGray</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameMedGray</string>
+			<key>relativePath</key>
+			<string>./medGray.colorset</string>
+			<key>swiftSymbol</key>
+			<string>medGray</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameNight</string>
+			<key>relativePath</key>
+			<string>./night.colorset</string>
+			<key>swiftSymbol</key>
+			<string>night</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameText</string>
+			<key>relativePath</key>
+			<string>./text.colorset</string>
+			<key>swiftSymbol</key>
+			<string>text</string>
+		</dict>
+	</array>
+	<key>images</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName113</string>
+			<key>relativePath</key>
+			<string>./night/113.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_113</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName113</string>
+			<key>relativePath</key>
+			<string>./day/113.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_113</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName116</string>
+			<key>relativePath</key>
+			<string>./night/116.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_116</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName116</string>
+			<key>relativePath</key>
+			<string>./day/116.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_116</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName119</string>
+			<key>relativePath</key>
+			<string>./day/119.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_119</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName119</string>
+			<key>relativePath</key>
+			<string>./night/119.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_119</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName122</string>
+			<key>relativePath</key>
+			<string>./day/122.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_122</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName122</string>
+			<key>relativePath</key>
+			<string>./night/122.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_122</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName143</string>
+			<key>relativePath</key>
+			<string>./day/143.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_143</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName143</string>
+			<key>relativePath</key>
+			<string>./night/143.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_143</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName176</string>
+			<key>relativePath</key>
+			<string>./day/176.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_176</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName176</string>
+			<key>relativePath</key>
+			<string>./night/176.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_176</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName179</string>
+			<key>relativePath</key>
+			<string>./day/179.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_179</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName179</string>
+			<key>relativePath</key>
+			<string>./night/179.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_179</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName182</string>
+			<key>relativePath</key>
+			<string>./night/182.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_182</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName182</string>
+			<key>relativePath</key>
+			<string>./day/182.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_182</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName185</string>
+			<key>relativePath</key>
+			<string>./day/185.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_185</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName185</string>
+			<key>relativePath</key>
+			<string>./night/185.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_185</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName200</string>
+			<key>relativePath</key>
+			<string>./day/200.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_200</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName200</string>
+			<key>relativePath</key>
+			<string>./night/200.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_200</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName227</string>
+			<key>relativePath</key>
+			<string>./day/227.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_227</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName227</string>
+			<key>relativePath</key>
+			<string>./night/227.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_227</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName230</string>
+			<key>relativePath</key>
+			<string>./night/230.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_230</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName230</string>
+			<key>relativePath</key>
+			<string>./day/230.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_230</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName248</string>
+			<key>relativePath</key>
+			<string>./day/248.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_248</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName248</string>
+			<key>relativePath</key>
+			<string>./night/248.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_248</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName260</string>
+			<key>relativePath</key>
+			<string>./day/260.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_260</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName260</string>
+			<key>relativePath</key>
+			<string>./night/260.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_260</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName263</string>
+			<key>relativePath</key>
+			<string>./night/263.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_263</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName263</string>
+			<key>relativePath</key>
+			<string>./day/263.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_263</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName266</string>
+			<key>relativePath</key>
+			<string>./day/266.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_266</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName266</string>
+			<key>relativePath</key>
+			<string>./night/266.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_266</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName281</string>
+			<key>relativePath</key>
+			<string>./night/281.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_281</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName281</string>
+			<key>relativePath</key>
+			<string>./day/281.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_281</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName284</string>
+			<key>relativePath</key>
+			<string>./day/284.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_284</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName284</string>
+			<key>relativePath</key>
+			<string>./night/284.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_284</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName293</string>
+			<key>relativePath</key>
+			<string>./day/293.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_293</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName293</string>
+			<key>relativePath</key>
+			<string>./night/293.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_293</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName296</string>
+			<key>relativePath</key>
+			<string>./night/296.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_296</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName296</string>
+			<key>relativePath</key>
+			<string>./day/296.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_296</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName299</string>
+			<key>relativePath</key>
+			<string>./night/299.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_299</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName299</string>
+			<key>relativePath</key>
+			<string>./day/299.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_299</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName302</string>
+			<key>relativePath</key>
+			<string>./night/302.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_302</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName302</string>
+			<key>relativePath</key>
+			<string>./day/302.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_302</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName305</string>
+			<key>relativePath</key>
+			<string>./day/305.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_305</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName305</string>
+			<key>relativePath</key>
+			<string>./night/305.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_305</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName308</string>
+			<key>relativePath</key>
+			<string>./day/308.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_308</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName308</string>
+			<key>relativePath</key>
+			<string>./night/308.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_308</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName311</string>
+			<key>relativePath</key>
+			<string>./day/311.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_311</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName311</string>
+			<key>relativePath</key>
+			<string>./night/311.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_311</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName314</string>
+			<key>relativePath</key>
+			<string>./night/314.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_314</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName314</string>
+			<key>relativePath</key>
+			<string>./day/314.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_314</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName317</string>
+			<key>relativePath</key>
+			<string>./day/317.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_317</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName317</string>
+			<key>relativePath</key>
+			<string>./night/317.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_317</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName320</string>
+			<key>relativePath</key>
+			<string>./day/320.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_320</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName320</string>
+			<key>relativePath</key>
+			<string>./night/320.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_320</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName323</string>
+			<key>relativePath</key>
+			<string>./day/323.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_323</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName323</string>
+			<key>relativePath</key>
+			<string>./night/323.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_323</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName326</string>
+			<key>relativePath</key>
+			<string>./night/326.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_326</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName326</string>
+			<key>relativePath</key>
+			<string>./day/326.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_326</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName329</string>
+			<key>relativePath</key>
+			<string>./night/329.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_329</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName329</string>
+			<key>relativePath</key>
+			<string>./day/329.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_329</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName332</string>
+			<key>relativePath</key>
+			<string>./night/332.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_332</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName332</string>
+			<key>relativePath</key>
+			<string>./day/332.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_332</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName335</string>
+			<key>relativePath</key>
+			<string>./day/335.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_335</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName335</string>
+			<key>relativePath</key>
+			<string>./night/335.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_335</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName338</string>
+			<key>relativePath</key>
+			<string>./night/338.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_338</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName338</string>
+			<key>relativePath</key>
+			<string>./day/338.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_338</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName350</string>
+			<key>relativePath</key>
+			<string>./day/350.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_350</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName350</string>
+			<key>relativePath</key>
+			<string>./night/350.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_350</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName353</string>
+			<key>relativePath</key>
+			<string>./day/353.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_353</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName353</string>
+			<key>relativePath</key>
+			<string>./night/353.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_353</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName356</string>
+			<key>relativePath</key>
+			<string>./night/356.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_356</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName356</string>
+			<key>relativePath</key>
+			<string>./day/356.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_356</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName359</string>
+			<key>relativePath</key>
+			<string>./day/359.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_359</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName359</string>
+			<key>relativePath</key>
+			<string>./night/359.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_359</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName362</string>
+			<key>relativePath</key>
+			<string>./day/362.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_362</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName362</string>
+			<key>relativePath</key>
+			<string>./night/362.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_362</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName365</string>
+			<key>relativePath</key>
+			<string>./night/365.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_365</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName365</string>
+			<key>relativePath</key>
+			<string>./day/365.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_365</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName368</string>
+			<key>relativePath</key>
+			<string>./night/368.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_368</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName368</string>
+			<key>relativePath</key>
+			<string>./day/368.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_368</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName371</string>
+			<key>relativePath</key>
+			<string>./day/371.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_371</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName371</string>
+			<key>relativePath</key>
+			<string>./night/371.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_371</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName374</string>
+			<key>relativePath</key>
+			<string>./day/374.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_374</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName374</string>
+			<key>relativePath</key>
+			<string>./night/374.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_374</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName377</string>
+			<key>relativePath</key>
+			<string>./night/377.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_377</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName377</string>
+			<key>relativePath</key>
+			<string>./day/377.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_377</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName386</string>
+			<key>relativePath</key>
+			<string>./night/386.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_386</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName386</string>
+			<key>relativePath</key>
+			<string>./day/386.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_386</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName389</string>
+			<key>relativePath</key>
+			<string>./day/389.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_389</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName389</string>
+			<key>relativePath</key>
+			<string>./night/389.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_389</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName392</string>
+			<key>relativePath</key>
+			<string>./day/392.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_392</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName392</string>
+			<key>relativePath</key>
+			<string>./night/392.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_392</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName395</string>
+			<key>relativePath</key>
+			<string>./day/395.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_395</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageName395</string>
+			<key>relativePath</key>
+			<string>./night/395.imageset</string>
+			<key>swiftSymbol</key>
+			<string>_395</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameAlbums</string>
+			<key>relativePath</key>
+			<string>./albums.imageset</string>
+			<key>swiftSymbol</key>
+			<string>albums</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameClear</string>
+			<key>relativePath</key>
+			<string>./clear.imageset</string>
+			<key>swiftSymbol</key>
+			<string>clear</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameFf</string>
+			<key>relativePath</key>
+			<string>./ff.imageset</string>
+			<key>swiftSymbol</key>
+			<string>ff</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameLoginImg</string>
+			<key>relativePath</key>
+			<string>./loginImg.imageset</string>
+			<key>swiftSymbol</key>
+			<string>loginImg</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMap</string>
+			<key>relativePath</key>
+			<string>./map.imageset</string>
+			<key>swiftSymbol</key>
+			<string>map</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMenu</string>
+			<key>relativePath</key>
+			<string>./menu.imageset</string>
+			<key>swiftSymbol</key>
+			<string>menu</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMountains</string>
+			<key>relativePath</key>
+			<string>./mountains.imageset</string>
+			<key>swiftSymbol</key>
+			<string>mountains</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMusic</string>
+			<key>relativePath</key>
+			<string>./music.imageset</string>
+			<key>swiftSymbol</key>
+			<string>music</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNamePlay</string>
+			<key>relativePath</key>
+			<string>./play.imageset</string>
+			<key>swiftSymbol</key>
+			<string>play</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNamePlaylist</string>
+			<key>relativePath</key>
+			<string>./playlist.imageset</string>
+			<key>swiftSymbol</key>
+			<string>playlist</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameRedMicrophone</string>
+			<key>relativePath</key>
+			<string>./red_microphone.imageset</string>
+			<key>swiftSymbol</key>
+			<string>redMicrophone</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameRew</string>
+			<key>relativePath</key>
+			<string>./rew.imageset</string>
+			<key>swiftSymbol</key>
+			<string>rew</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSearch</string>
+			<key>relativePath</key>
+			<string>./search.imageset</string>
+			<key>swiftSymbol</key>
+			<string>search</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSongs</string>
+			<key>relativePath</key>
+			<string>./songs.imageset</string>
+			<key>swiftSymbol</key>
+			<string>songs</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed</string>
+			<key>relativePath</key>
+			<string>./speed.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed0</string>
+			<key>relativePath</key>
+			<string>./speed0.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed0</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed100</string>
+			<key>relativePath</key>
+			<string>./speed100.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed100</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed30</string>
+			<key>relativePath</key>
+			<string>./speed30.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed30</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed50</string>
+			<key>relativePath</key>
+			<string>./speed50.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed50</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSpeed70</string>
+			<key>relativePath</key>
+			<string>./speed70.imageset</string>
+			<key>swiftSymbol</key>
+			<string>speed70</string>
+		</dict>
+	</array>
+	<key>symbols</key>
+	<array/>
+</dict>
+</plist>

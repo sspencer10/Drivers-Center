@@ -1,0 +1,32 @@
+{
+  "source": "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/NavView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enter an address...",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 25
+        }
+      },
+      {
+        "comment": "",
+        "key": "Place Details",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 413
+        }
+      }
+    ]
+  },
+  "version": 1
+}

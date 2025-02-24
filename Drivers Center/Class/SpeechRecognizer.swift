@@ -2,6 +2,11 @@ import Speech
 import AVFoundation
 
 class SpeechRecognizer: NSObject {
+    
+    public static let shared = SpeechRecognizer()
+    
+    @Published var recognizedText: String = ""
+    
     private let speechRecognizer = SFSpeechRecognizer()
     private let audioEngine = AVAudioEngine()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -12,6 +17,8 @@ class SpeechRecognizer: NSObject {
     var onRecognitionComplete: ((String?) -> Void)?
     var onError: ((Error?) -> Void)?
     private var lastNonEmptyPartialResult: String = "" // Store the last non-empty partial result
+    
+    override private init() {} // ✅ Private initializer to enforce singleton pattern
 
     func startRecognition() {
         timeoutTask?.cancel() // Cancel any existing timeout task
@@ -47,6 +54,7 @@ class SpeechRecognizer: NSObject {
                 // Update last non-empty partial result
                 if !partialText.isEmpty {
                     self.lastNonEmptyPartialResult = partialText
+                    self.recognizedText = partialText
                 }
 
                 // Reset silence timer on new partial results

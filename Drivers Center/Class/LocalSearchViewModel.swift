@@ -1,4 +1,14 @@
-class LocalSearchViewModel: ObservableObject {
+//
+//  LocalSearchViewModel.swift
+//  Drivers Center
+//
+//  Created by Steven Spencer on 2/9/25.
+//
+
+import SwiftUI
+import MapKit
+
+class LocalSearchViewModel: NSObject, ObservableObject {
     @Published var queryFragment: String = "" {
         didSet {
             completer.queryFragment = queryFragment
@@ -9,21 +19,35 @@ class LocalSearchViewModel: ObservableObject {
     private var completer: MKLocalSearchCompleter
     private var search: MKLocalSearch?
 
-    init() {
+    override init() {
         completer = MKLocalSearchCompleter()
         completer.resultTypes = [.address, .pointOfInterest]
+        super.init()
         completer.delegate = self
     }
 
     func fetchPlace(for suggestion: MKLocalSearchCompletion, completion: @escaping (PlaceDetails?) -> Void) {
+        // This initializer automatically sets up the query and the place identifier.
         let request = MKLocalSearch.Request(completion: suggestion)
-        search = MKLocalSearch(request: request)
-        search?.start { response, error in
-            guard let mapItem = response?.mapItems.first else {
+        request.resultTypes = [.pointOfInterest]
+
+        let search = MKLocalSearch(request: request)
+        search.start { response, error in
+            if let error = error {
+                print("Error fetching place details: \(error.localizedDescription)")
                 completion(nil)
                 return
             }
-            completion(PlaceDetails(mapItem: mapItem))
+
+            guard let mapItem = response?.mapItems.first else {
+                print("No place details found.")
+                completion(nil)
+                return
+            }
+
+            // Create PlaceDetails from the mapItem
+            let placeDetails = PlaceDetails(mapItem: mapItem)
+            completion(placeDetails)
         }
     }
 }

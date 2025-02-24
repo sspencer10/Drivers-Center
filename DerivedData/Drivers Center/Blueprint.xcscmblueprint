@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4115414334648707B16EF4354C4E1E4FFE169879",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C1767A55EF338A34B5773526F7B52B5B48365FD7" : 0,
+    "4115414334648707B16EF4354C4E1E4FFE169879" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "23383FB7-2E76-49FE-B6A2-2100E5A4D1B2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C1767A55EF338A34B5773526F7B52B5B48365FD7" : "Drivers%20Center\/DerivedData\/Drivers%20Center\/SourcePackages\/checkouts\/MusadoraKit\/",
+    "4115414334648707B16EF4354C4E1E4FFE169879" : "Drivers%20Center\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Drivers Center",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Drivers Center.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sspencer10\/Drivers-Center.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4115414334648707B16EF4354C4E1E4FFE169879"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "\/Volumes\/ext\/iOS%20Apps\/Drivers%20Center\/DerivedData\/Drivers%20Center\/SourcePackages\/repositories\/MusadoraKit-630db7af",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C1767A55EF338A34B5773526F7B52B5B48365FD7"
+    }
+  ]
+}

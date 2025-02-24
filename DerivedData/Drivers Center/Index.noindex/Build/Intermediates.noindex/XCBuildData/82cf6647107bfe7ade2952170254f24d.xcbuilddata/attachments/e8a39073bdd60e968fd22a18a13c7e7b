@@ -1,0 +1,192 @@
+{
+  "" : {
+    "dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.d",
+    "diagnostics" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.dia",
+    "emit-module-dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master-emit-module.d",
+    "emit-module-diagnostics" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master-emit-module.dia",
+    "swift-dependencies" : "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/Objects-normal/arm64/Drivers Center-master.swiftdeps"
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Drivers_Center+CoreDataModel.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Item+CoreDataClass.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/DerivedSources/CoreDataGenerated/Drivers_Center/Item+CoreDataProperties.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/DerivedData/Drivers Center/Index.noindex/Build/Intermediates.noindex/Drivers Center.build/Debug-iphoneos/Drivers Center.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/AppStatusHelper.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/AutoplayManager.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/ButtonRowView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarPlayObserver.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarPlaySceneDelegate.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CarplayContentView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/CustomAnnotationView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/ImageCache.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/LocalSearchViewModel.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/LocationManager.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/MarqueeTextController.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/MediaItemViewModel.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SendMsg.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SpeechRecognizer 2.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/SpeechRecognizer.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/TemplateManager.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Class/WeatherViewModel.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Drivers_CenterApp.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Persistence.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/AddToPlaylistView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/BlurView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/CustomSheetMenu.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/DateFormat.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/GarageStatus.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/ListTemplate.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Model.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/MyVariables.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/NavView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/PullToRefresh.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Song.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Struct/Utilities.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumArtworkView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumDetailsView 2.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/AlbumDetailsView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/BusinessHoursIndicatorView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CarPlayManager.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CardView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CompassView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/ContentView 2.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/ContentView 3.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/CustomSlider.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/IsCarPlayView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/IsFirst.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/LibraryMenuSheet.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MainView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MapsView2.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/Music.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp 2.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/MusicKitPlaylistApp.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/NotMainView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/PermissionsView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/Retrospeed.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/SpeedometerView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/TestView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/Drivers Center/Views/WeatherView.swift" : {
+
+  },
+  "/Volumes/ext/iOS Apps/Drivers Center/SendLocationIntent.swift" : {
+
+  }
+}
